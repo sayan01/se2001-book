@@ -1,0 +1,362 @@
+\setchapterpreamble[u]{\margintoc}
+\chapter{Shell Variables}
+\labch{variables}
+
+\section{Creating Variables}
+
+\begin{definition}[Environment Variables]
+  An environment variable is a variable that is accessbile to all
+  processes running in the environment. It is a key-value pair.
+  It is created using the \texttt{export} command. It can be accessed
+  using the \$ followed by the name of the variable (e.g. \$HOME) or
+  using the \texttt{printenv} command.
+  They are part of the environment in which a process runs. For example,
+  a running process can query the value of the
+  TEMP environment variable to discover a suitable location to store
+  temporary files, or the HOME or USER variable
+  to find the directory structure owned by the user running the process.
+\end{definition}
+
+\begin{definition}[Shell Variables]
+  A shell variable is a variable that is only accessible to the shell
+  in which it is created. It is a key-value pair. It is created using
+  the \texttt{=} operator. It can be accessed using the \$ followed by the name
+  of the variable (e.g. \$var).
+  They are local to the shell in which they are created.
+\end{definition}
+
+\begin{qs}
+  How to create a shell variable? How to create an environment variable?
+\end{qs}
+
+\begin{ans}
+  \texttt{var=value} will create a shell variable. \\
+  \texttt{export var=value} will create an environment variable.
+\end{ans}
+
+\begin{qs}
+  How to set the prompt string? How to set the secondary prompt string?
+\end{qs}
+
+\begin{ans}
+  \texttt{PS1="newprompt"} will set the prompt string. \\
+  \texttt{PS2="newprompt"} will set the secondary prompt string.
+  This is useful when writing multi-line commands.
+\end{ans}
+
+\begin{qs}
+  Where are commands searched for? How to add a new path to search for commands?
+  What symbol is used to separate the paths?
+\end{qs}
+
+\begin{ans}
+  The \textbf{PATH} variable stores the paths to search for commands. \\
+  \texttt{export PATH=\$PATH:newpath} will add \texttt{newpath} to the \textbf{PATH} variable.\\
+  The colon \texttt{:} is used to separate the paths.
+\end{ans}
+
+\section{Printing Variables to the Terminal}
+
+\begin{qs}
+  List the frequently used shell variables already existing in your shell.
+\end{qs}
+
+\begin{ans}
+  Frequently used shell variables:
+  \begin{itemize}
+    \item \textbf{USER} stores the currently logged in user.
+    \item \textbf{HOME} stores the home directory of the user.
+    \item \textbf{PWD} stores the current working directory.
+    \item \textbf{SHELL} stores the path of the shell being used.
+    \item \textbf{PATH} stores the paths to search for commands.
+    \item \textbf{PS1} stores the prompt string for the shell.
+    \item \textbf{PS2} stores the secondary prompt string for the shell
+    \item \textbf{HOSTNAME} stores the network name of the system
+  \end{itemize}
+\end{ans}
+
+\begin{qs}
+  List the special shell variables useful in scripts.
+\end{qs}
+
+\begin{ans}
+  Special shell variables useful in scripts:
+  \begin{itemize}
+    \item \textbf{\$0} stores the name of the script.
+    \item \textbf{\$1, \$2, \$3, ...} store the arguments to the script.
+    \item \textbf{\$\#} stores the number of arguments to the script.
+    \item \textbf{\$*} stores all the arguments to the script as a single string.
+    \item \textbf{\$@} stores all the arguments to the script as array of strings.
+    \item \textbf{\$?} stores the exit status of the last command.
+    \item \textbf{\$\$} stores the process id of the current shell.
+    \item \textbf{\$!} stores the process id of the last background command.
+    \item \textbf{\$-} stores the current options set for the shell.
+    \item \textbf{\$IFS} stores the Internal Field Separator.
+    \item \textbf{\$LINENO} stores the current line number of the script.
+    \item \textbf{\$RANDOM} stores a random number.
+    \item \textbf{\$SECONDS} stores the number of seconds the script has been running.
+  \end{itemize}
+\end{ans}
+
+
+\begin{qs}
+  How to print things to the terminal? How to print the value of a variable?
+  How to print escape characters? How to supress the newline?
+\end{qs}
+
+\begin{ans}
+  \texttt{echo "Hello World"} will print \texttt{Hello World} to the terminal. \\
+  \texttt{echo \$var} will print the value of \texttt{var} to the terminal. \\
+  \texttt{echo -e "Hello\textbackslash nWorld"} will print \texttt{Hello} and \texttt{World} in two lines. \\
+  \texttt{echo -n "Hello"} will print \texttt{Hello} without a newline.
+\end{ans}
+
+\begin{qs}
+  How to print all the environment variables? Only some variables?
+\end{qs}
+
+\begin{ans}
+  \texttt{printenv} will print all the environment variables. \\
+  \texttt{env} will also print all the environment variables. \\
+  \texttt{printenv var1 var2 var3} will print only \texttt{var1}, \texttt{var2}, and \texttt{var3}.
+\end{ans}
+
+\begin{qs}
+  How to escape a character in a string? How to escape a variable in a string?
+\end{qs}
+
+\begin{ans}
+  \texttt{echo -e "Hello\textbackslash nWorld"} will print \texttt{Hello} and \texttt{World} in two lines. \\
+  \texttt{echo "Hello \$var"} will print \texttt{Hello} and the value of \texttt{var}.
+\end{ans}
+
+\section{Bash Flags}
+
+\begin{qs}
+  How to list the bash flags set in the shell? How to set or unset them?
+  What does the default flags mean? (himBHs)
+\end{qs}
+
+\begin{ans}
+  \texttt{echo \$-} will list the bash flags set in the shell. \\
+  \texttt{set -o flag} will set the flag. \\
+  \texttt{set +o flag} will unset the flag. \\
+  The default flags are: \\
+  \textbf{h}: locate and remember (hash) commands as they are looked up. \\
+  \textbf{i}: \textbf{interactive} shell \\
+  \textbf{m}: monitor the jobs and report changes \\
+  \textbf{B}: \textbf{braceexpand} - expand the expression in braces \\
+  \textbf{H}: \textbf{histexpand} - expand the history command \\
+  \textbf{s}: Read commands from the standard input. \\
+\end{ans}
+
+\section{Signals}
+
+\begin{remark}
+  If you press \texttt{Ctrl+S} in the terminal, some terminals might
+  stop responding. You can resume it by pressing \texttt{Ctrl+Q}.
+  This is because \texttt{ixoff} is set. You can unset
+  it using \texttt{stty -ixon}. This is a common problem with some
+  terminals, thus it can placed inside the \texttt{~/.bashrc} file.
+\end{remark}
+
+\textbf{Other Ctrl+Key combinations:}
+\begin{itemize}
+  \item \textbf{Ctrl+C}: Interrupt the current process, this sends the SIGINT signal.
+  \item \textbf{Ctrl+D}: End of input, this sends the EOF signal.
+  \item \textbf{Ctrl+L}: Clear the terminal screen.
+  \item \textbf{Ctrl+Z}: Suspend the current process, this sends the SIGTSTP signal.
+  \item \textbf{Ctrl+R}: Search the history of commands using reverse-i-search.
+  \item \textbf{Ctrl+T}: Swap the last two characters
+  \item \textbf{Ctrl+U}: Cut the line before the cursor
+  \item \textbf{Ctrl+V}: Insert the next character literally
+  \item \textbf{Ctrl+W}: Cut the word before the cursor
+  \item \textbf{Ctrl+Y}: Paste the last cut text
+\end{itemize}
+\section{Variable Manipulation}
+
+
+\begin{qs}
+  How to remove a variable that is set? How to check if a variable is present?
+\end{qs}
+
+\begin{ans}
+  \texttt{unset var} will remove the variable \texttt{var}. \\
+  \texttt{echo \$var} will print if the variable \texttt{var} is present.\\
+  \texttt{test -v var} will check if the variable \texttt{var} is present.\\
+  \texttt{test -z \${var+x}} will check if the variable \texttt{var} is present.\\
+\end{ans}
+
+
+\begin{qs}
+  How to print a default value if variable is absent? if present? how to
+  set a default value if variable is absent?
+\end{qs}
+
+\begin{ans}
+  \texttt{echo \${var:-default}} will print \texttt{default} if \texttt{var} is absent. \\
+  \texttt{echo \${var:+default}} will print \texttt{default} if \texttt{var} is present. \\
+  \texttt{echo \${var:=default}} will set \texttt{var} to \texttt{default} if \texttt{var} is absent. \\
+\end{ans}
+
+\begin{remark}
+  \texttt{echo \${var:-default}} will print \texttt{default} if \texttt{var} is absent \textbf{or} empty. \\
+  \texttt{echo \${var-default}} will print \texttt{default} if \texttt{var} is absent, but not if \texttt{var} is empty. \\
+  \texttt{echo \${var:+default}} will print \texttt{default} if \texttt{var} is present \textbf{and} not empty. \\
+  \texttt{echo \${var+default}} will print \texttt{default} if \texttt{var} is present,
+  regardless of whether \texttt{var} is empty or not. \\
+\end{remark}
+
+
+\begin{qs}
+  How to print the number of characters in a variable?
+  How about a substring of the variable?
+\end{qs}
+
+\begin{ans}
+  \texttt{echo \${\#var}} will print the number of characters in \texttt{var}. \\
+  \texttt{echo \${var:0:5}} will print the first 5 characters of \texttt{var}.
+\end{ans}
+
+\begin{remark}
+  The second number in the substring is the length of the substring.
+  Thus, \texttt{echo \${var:5:3}} will print the 3 characters starting from the 5th character.
+  If the length of substring is more than the length of the variable, it will print till the end.
+  Thus, \texttt{echo \${var:5:100}} will print the characters from the 5th character till the end.
+\end{remark}
+
+\begin{definition}[Variable Match and Delete]
+  We can match some part of the variable and delete it from left or right: \\
+  \texttt{\$\{var\%pattern\}} will delete the shortest match of \texttt{pattern} from the end of \texttt{var}. \\
+  \texttt{\$\{var\%\%pattern\}} will delete the longest match of \texttt{pattern} from the end of \texttt{var}. \\
+  \texttt{\$\{var\#pattern\}} will delete the shortest match of \texttt{pattern} from the start of \texttt{var}. \\
+  \texttt{\$\{var\#\#pattern\}} will delete the longest match of \texttt{pattern} from the start of \texttt{var}.
+\end{definition}
+
+\begin{qs}
+  If we have a variable with value "abc.def.ghi.xyz". How can we get the following:
+  \begin{itemize}
+    \item "abc.def.ghi"
+    \item "abc"
+    \item "def.ghi.xyz"
+    \item "xyz"
+  \end{itemize}
+\end{qs}
+
+\begin{ans}
+  The variable is \texttt{var="abc.def.ghi.xyz"}.
+  \begin{itemize}
+    \item \texttt{echo \$\{var\%.*\}} will print "abc.def.ghi".
+    \item \texttt{echo \$\{var\%\%.*\}} will print "abc".
+    \item \texttt{echo \$\{var\#*.\}} will print "def.ghi.xyz".
+    \item \texttt{echo \$\{var\#\#*.\}} will print "xy
+  \end{itemize}
+\end{ans}
+
+
+\begin{qs}
+ How to replace some part of a variable by something else? How to do for all
+  occurences?
+\end{qs}
+
+\begin{ans}
+  \texttt{echo \$\{var/pattern/string\}} will replace the first occurence of \texttt{pattern} with \texttt{string}. \\
+  \texttt{echo \$\{var//pattern/string\}} will replace all occurences of \texttt{pattern} with \texttt{string}.
+\end{ans}
+
+\begin{qs}
+  How to make a variable lowercase? How to make it uppercase?
+  How to do for entire string? How to do for first character?
+  How to make a variable Sentence case? (First letter is capital, rest lower)
+\end{qs}
+
+\begin{ans}
+  The following commands can be used to manipulate the case of a variable:
+  \begin{lstlisting}[language=bash]
+  echo ${var,,} # will make the variable lowercase.
+  echo ${var^^} # will make the variable uppercase.
+  echo ${var,} # will make the first character lowercase.
+  echo ${var^} # will make the first character uppercase.
+  lower=${var,,} # will store the lowercase variable in lower.
+  echo ${lower^} # will make the first character uppercase. (Sentence case) \end{lstlisting}
+\end{ans}
+
+
+
+\begin{qs}
+  How to make a variable integer only? How to make it lowercase only?
+  Uppercase only? Read only?
+\end{qs}
+
+\begin{ans}
+  \texttt{declare -i var} will make the variable integer only. \\
+  \texttt{declare -l var} will make the variable lowercase only. \\
+  \texttt{declare -u var} will make the variable uppercase only. \\
+  \texttt{declare -r var} will make the variable read only.
+\end{ans}
+
+
+\begin{qs}
+  How to remove those restrictions from a variable?
+\end{qs}
+
+\begin{ans}
+  \texttt{declare +i var} will remove the integer only restriction. \\
+  \texttt{declare +l var} will remove the lowercase only restriction. \\
+  \texttt{declare +u var} will remove the uppercase only restriction. \\
+  \texttt{declare +r var} will not work, as read only cannot be removed.
+\end{ans}
+
+\begin{qs}
+  How to store output of a command in a variable?
+\end{qs}
+
+\begin{ans}
+  \texttt{var=\$(command)} will store the output of \texttt{command} in \texttt{var}.
+\end{ans}
+
+\section{Arrays}
+
+\begin{qs}
+  How to create an array? How to access an element of an array?
+  How to print all elements of an array?
+\end{qs}
+
+\begin{ans}
+  \texttt{arr=(1 2 3 4 5)} will create an array. \\
+  \texttt{echo \$\{arr[2]\}} will access the 3rd element of the array. \\
+  \texttt{echo \$\{arr[@]\}} will print all elements of the array.
+\end{ans}
+
+\begin{qs}
+  How to get the number of elements in an array?
+  How to get the indices of the array?
+  How to add an element to the array?
+\end{qs}
+
+\begin{ans}
+  \texttt{echo \$\{\#arr[@]\}} will print the number of elements in the array. \\
+  \texttt{echo \$\{!arr[@]\}} will print the indices of the array. \\
+  \texttt{arr+=(6)} will add the element 6 to the array.
+\end{ans}
+
+
+\begin{qs}
+  What are associative arrays? How to declare and use them?
+\end{qs}
+
+\begin{ans}
+  Associative arrays are arrays with key-value pairs. \\
+  \texttt{declare -A arr} will declare an associative array. \\
+  \texttt{arr[key]=value} will set the value of \texttt{key} to \texttt{value}. \\
+  \texttt{echo \$\{arr[key]\}} will print the value of \texttt{key}.
+\end{ans}
+
+
+\begin{qs}
+  How to store output of a command in an array?
+\end{qs}
+
+\begin{ans}
+  \texttt{arr=(\$(command))} will store the output of \texttt{command} in \texttt{arr}.
+\end{ans}

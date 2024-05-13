@@ -1,0 +1,394 @@
+\setchapterpreamble[u]{\margintoc}
+\chapter{Basic Commands in Linux}
+\labch{basic}
+
+\section{Navigating the File System}
+The file system can be navigated in the Linux command line using the following commands:
+\begin{itemize}
+  \item \textbf{pwd}: Print the current working directory
+  \item \textbf{ls}: List the contents of the current directory
+  \item \textbf{cd}: Change the current working directory
+  \item \textbf{mkdir}: Create a new directory
+  \item \textbf{rmdir}: Remove a directory
+  \item \textbf{touch}: Create a new file
+  \item \textbf{rm}: Remove a file
+  \item \textbf{pushd}: Push the current directory to a stack
+  \item \textbf{popd}: Pop the current directory from a stack\sidenote{\textbf{pushd} and \textbf{popd} are useful for quickly switching between directories in scripts.}
+\end{itemize}
+
+More details about these commands can be found in their respective
+man pages. For example, to find more about the \textbf{ls} command,
+you can type \texttt{man ls}
+
+\begin{qs}
+  What is the command to list the contents of the current directory?
+\end{qs}
+
+\begin{ans}
+  \texttt{ls}
+\end{ans}
+
+
+\begin{qs}
+  What is the command to list the contents of the current directory
+  including hidden files?
+\end{qs}
+
+\begin{ans}
+\texttt{ls -a}
+\end{ans}
+
+\begin{qs}
+  What is the command to list the contents of the current directory
+  in a long list format? (show permissions, owner, group, size, and time)
+\end{qs}
+
+\begin{ans}
+\texttt{ls -l}
+\end{ans}
+
+\begin{qs}
+  What is the command to list the contents of the current directory
+  in a long list format and also show hidden files?
+\end{qs}
+
+\begin{ans}
+\texttt{ls -al} or \texttt{ls -la} or \texttt{ls -l -a} or \texttt{ls -a -l}
+\end{ans}
+
+\begin{qs}
+  The output of \texttt{ls} gives multiple files and directories in a single
+  line. How can you make it print one file or directory per line?
+\end{qs}
+
+\begin{ans}
+  \texttt{ls -1}\\
+  This can also be done by passing the output of \texttt{ls} to \texttt{cat}
+  or storing the output of \texttt{ls} in a file and then using \texttt{cat}
+  to print it. We will see these in later weeks.\sidenote{that is a one, not an L}
+\end{ans}
+
+\section{File Permissions}
+\begin{qs}
+  How to list the permissions of a file?
+\end{qs}
+
+\begin{ans}
+  \texttt{ls -l} \\
+  The permissions are the first 10 characters of the output.\\
+  \texttt{stat -c \%A filename} will list only the permissions of a file.\\
+  There are other format specifiers of \texttt{stat} to show different statistics
+  which can be found in \texttt{man stat}.
+\end{ans}
+
+\begin{qs}
+  How to change permissions of a file?
+  Let's say we want to change \texttt{file1}'s permissions to \texttt{rwxr-xr--}
+  What is the octal form of that?
+\end{qs}
+
+\begin{ans}
+  \texttt{chmod u=rwx,g=rx,o=r file1} will change the permissions of \texttt{file1}\\
+  The octal form of \texttt{rwxr-xr--} is 754.\\
+  So we can also use \texttt{chmod 754 file1}\\
+  Providing the octal is same as using \texttt{=} to set the permissions.\\
+  We can also use \texttt{+} to add permissions and \texttt{-} to remove permissions.
+\end{ans}
+
+\section{Inodes and Links}
+
+\begin{qs}
+  How to list the inodes of a file?
+\end{qs}
+
+\begin{ans}
+  \texttt{ls -i} will list the inodes of a file.
+  The inodes are the first column of the output of \texttt{ls -i}
+  This can be combined with other flags like \texttt{-l} or \texttt{-a} to show more details.
+\end{ans}
+
+\begin{qs}
+  How to create soft link of a file?
+\end{qs}
+
+\begin{ans}
+  \texttt{ln -s sourcefile targetfile} will create a soft link of \texttt{sourcefile}
+  named \texttt{targetfile}.
+  The soft link is a pointer to the original file.
+\end{ans}
+
+\begin{definition}[Soft Links]
+\labdef{softlinks}
+  Soft Links are special kinds of files that just store the path
+  given to them. Thus the path given while making soft links should
+  either be an absolute path, or relative \textbf{from} the location of the
+  soft link \textbf{to} the location of the original file. It should not be
+  relative from current working directory.\footnote{This is a common mistake.}
+\end{definition}
+
+\begin{qs}
+  How to create hard link of a file?
+\end{qs}
+
+\begin{ans}
+  \texttt{ln sourcefile targetfile} will create a hard link of \texttt{sourcefile}
+  named \texttt{targetfile}. The hard link is same as the original file. It does
+  not depend on the original file anymore after creation. They are equals,
+  both are \texttt{hardlinks} of each other. There is no parent-child relationship.
+  The other file can be deleted and the original file will still work.
+\end{ans}
+
+\begin{definition}[Hard Links]
+  Hard Links are just pointers to the same inode. They are the same file.
+  They are not pointers to the path of the file. They are pointers to the
+  file itself. They are not affected by the deletion of the other file.
+  When creating a hard link, you need to provide the path of the original
+  file, and thus it has to be either absolute path, or relative from the
+  current working directory, not relative from the location of the hard link.
+\end{definition}
+
+\begin{qs}
+  How to get the real path of a file?\\
+  Assume three files:
+  \begin{itemize}
+    \item \textbf{file1} is a soft link to \textbf{file2}
+    \item \textbf{file2} is a soft link to \textbf{file3}
+    \item \textbf{file3} is a regular file
+  \end{itemize}
+  Real path of all these three should be the same. How to get that?
+\end{qs}
+
+\begin{ans}
+  \texttt{realpath filename} will give the real path of \texttt{filename}. \\
+  You can also use \texttt{readlink -f filename} to get the real path.
+\end{ans}
+
+\section{System Management and Information}
+
+\begin{qs}
+  How to print the current date and time in some custom format?
+\end{qs}
+
+\begin{ans}
+  \texttt{date -d today +\%Y-\%m-\%d} will print the current date in the format
+  \texttt{YYYY-MM-DD}. The format can be changed by changing the format specifiers.
+  The format specifiers are given in the \texttt{man date} page. The \texttt{-d today} can
+  be dropped, but is mentioned to show that the date can be changed to any date.
+  It can be strings like '2024-01-01' or '5 days ago' or 'yesterday', etc.
+\end{ans}
+
+\begin{qs}
+  How to print the kernel version of your system?
+\end{qs}
+
+\begin{ans}
+  \texttt{uname -r} will print the kernel version of your system.
+  \texttt{uname} is a command to print system information.
+  The \texttt{-r} flag is to print the kernel release.
+  There are other flags to print other system information. \\
+  We can also run \texttt{uname -a} to get all fields and extract only the
+  kernel info using commands taught in later weeks.
+\end{ans}
+
+\begin{qs}
+  How to see how long your system is running for? \\
+  What about the time it was booted up?
+\end{qs}
+
+\begin{ans}
+  \texttt{uptime} will show how long the system is running for.\\
+  \texttt{uptime -s} will show the time the system was booted up. \\
+  The \texttt{-s} flag is to show the time of last boot.
+\end{ans}
+
+\begin{qs}
+  How to see the amount of free memory? What about free hard disk space?
+  If we are unable to understand the big numbers, how to convert them to human readable format?
+  What is difference between MB and MiB?
+\end{qs}
+
+\begin{ans}
+  \texttt{free} will show the amount of free memory. \\
+  \texttt{df} will show the amount of free hard disk space. \\
+  \texttt{df -h} and \texttt{free -h}
+  will convert the numbers to human readable format. \\
+  MB is Megabyte, and MiB is Mebibyte. \\
+  1 MB = 1000 KB, 1 GB = 1000 MB, 1 TB = 1000 GB, this is SI unit. \\
+  1 MiB = 1024 KiB, 1 GiB = 1024 MiB, 1 TiB = 1024 GiB, this is $2^{10}$ unit.
+\end{ans}
+
+\section{Reading and Writing Files using cat}
+
+\begin{qs}
+  Can we print contents of multiple files using a single command?
+\end{qs}
+
+\begin{ans}
+  \texttt{cat file1 file2 file3} will print the contents of \texttt{file1}, \texttt{file2}, and \texttt{file3}
+  in the order given. The contents of the files will be printed one after the other.
+\end{ans}
+
+\begin{qs}
+  Can \texttt{cat} also be used to write to a file?
+\end{qs}
+
+\begin{ans}
+  Yes, \texttt{cat > file1} will write to \texttt{file1}. The input will be taken from the
+  terminal and written to \texttt{file1}. The input will be written to \texttt{file1} until
+  the user presses \texttt{Ctrl+D} to indicate end of input.
+  This is \texttt{redirection}, which we see in later weeks.
+\end{ans}
+
+\begin{qs}
+  \texttt{ls} can only show files and directories in the \textbf{cwd}\sidenote{\textbf{cwd} means \textbf{Current Working Directory}}, not subdirectories.
+  True or False?
+\end{qs}
+
+\begin{ans}
+  False. \texttt{ls} can show files and directories in the cwd, and also in subdirectories.
+  The \texttt{-R} flag can be used to show files and directories in subdirectories, recursively.
+\end{ans}
+
+\section{Types of Files}
+
+\begin{qs}
+  What types of files are possible in a linux file system?
+\end{qs}
+
+\begin{ans}
+  There are 7 types of files in a linux file system:
+  \begin{itemize}
+    \item Regular Files (starts with \texttt{-})
+    \item Directories (starts with \texttt{d})
+    \item Symbolic Links (starts with \texttt{l})
+    \item Character Devices (starts with \texttt{c})
+    \item Block Devices (starts with \texttt{b})
+    \item Named Pipes (starts with \texttt{|})
+    \item Sockets (starts with \texttt{s})
+  \end{itemize}
+\end{ans}
+
+\begin{qs}
+  How to know what kind of file a file is? Can we determine using
+  its extension? Can we determine using its contents? What does
+  \textit{
+  \href{https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types}{MIME} mean?
+}
+How to get that?
+\end{qs}
+
+\begin{ans}
+  The \texttt{file} command can be used to determine the type of a file. \\
+  The extension of a file does not determine its type. \\
+  The contents of a file can be used to determine its type. \\
+  MIME stands for Multipurpose Internet Mail Extensions. \\
+  It is a standard that indicates the nature and format of a document. \\
+  \texttt{file -i filename} will give the MIME type of \texttt{filename}.
+\end{ans}
+\section{Types of Commands}
+
+\begin{qs}
+  How to create aliases? How to make them permanent? How to unset them?
+\end{qs}
+
+\begin{ans}
+  \texttt{alias name='command'} will create an alias. \\
+  \texttt{unalias name} will unset the alias. \\
+  To make them permanent, add the alias to the \texttt{$\sim$/.bashrc} file. \\
+  The \texttt{$\sim$/.bashrc} file is a script that is executed whenever a new terminal is opened.
+\end{ans}
+
+\begin{qs}
+  How to run the normal version of a command if it is aliased?
+\end{qs}
+
+\begin{ans}
+  \texttt{\textbackslash command} will run the normal version of \texttt{command} if it is aliased.
+\end{ans}
+
+\begin{qs}
+  What is the difference between \texttt{which}, \texttt{whatis}, \texttt{whereis}, \texttt{locate}, and \texttt{type}?
+\end{qs}
+
+\begin{ans}
+  Each of the commands serve a different purpose:
+  \begin{itemize}
+    \item \texttt{which} will show the path of the command that will be executed.
+    \item \texttt{whatis} will show a short description of the command.
+    \item \texttt{whereis} will show the location of the command, source files, and man pages.
+    \item \texttt{locate} is used to find files by name.
+    \item \texttt{type} will show how the command will be interpreted by the shell.
+  \end{itemize}
+\end{ans}
+
+\begin{exercise}
+  Find the path of the \texttt{true} command using \texttt{which}.
+  Find a short description of the \texttt{true} command using \texttt{whatis}.
+  Is the executable you found actually the one that is executed when you run \texttt{true}? Check using \texttt{type true}
+\end{exercise}
+
+\begin{definition}[Types of commands]
+  A command can be an alias, a shell built-in, a shell function, keyword, or an executable.
+  The \texttt{type} command will show which type the command is.
+  \begin{itemize}
+    \item \textbf{alias}: A command that is an alias to another command defined
+    by the user or the system.
+    \item \textbf{builtin}: A shell built-in command is a command that is built
+    into the shell itself. It is executed internally by the shell.
+    \item \textbf{file}: An executable file that is stored in the file system.
+      It has to be stored somewhere in the \textbf{PATH} variable.
+    \item \textbf{function}: A shell function is a set of commands that are
+    executed when the function is called.
+    \item \textbf{keyword}: A keyword is a reserved word that is part of the shell
+    syntax. It is not a command, but a part of the shell syntax.
+  \end{itemize}
+\end{definition}
+
+\section{File Manipulation}
+
+\begin{qs}
+  How to list only first 10 lines of a file? How about first 5? Last 5?
+  How about lines 105 to lines 152?
+\end{qs}
+
+\begin{ans}
+  \texttt{head filename} will list the first 10 lines of \texttt{filename}. \\
+  \texttt{head -n 5 filename} will list the first 5 lines of \texttt{filename}. \\
+  \texttt{tail -n 5 filename} will list the last 5 lines of \texttt{filename}. \\
+  \texttt{head -n 152 filename | tail -n 48} will list lines 105 to 152 of \texttt{filename}.
+  This uses \texttt{|} which is a pipe, which we will see in later weeks.
+\end{ans}
+
+\begin{qs}
+  Do you know how many lines a file contains? How can we count it?
+  What about words? Characters?
+\end{qs}
+
+\begin{ans}
+  \texttt{wc filename} will count the number of lines, words, and characters in \texttt{filename}. \\
+  \texttt{wc -l filename} will count the number of lines in \texttt{filename}. \\
+  \texttt{wc -w filename} will count the number of words in \texttt{filename}. \\
+  \texttt{wc -c filename} will count the number of characters in \texttt{filename}.
+\end{ans}
+
+\begin{qs}
+  How to delete an empty directory? What about non-empty directory?
+\end{qs}
+
+\begin{ans}
+  \texttt{rmdir dirname} will delete an empty directory. \\
+  \texttt{rm -r dirname} will delete a non-empty directory.
+\end{ans}
+
+\begin{qs}
+  How to copy an entire folder to another name? What about moving? \\
+  Why the difference in flags?
+\end{qs}
+
+\begin{ans}
+  \texttt{cp -r sourcefolder targetfolder} will copy an entire folder to another name. \\
+  \texttt{mv sourcefolder targetfolder} will move an entire folder to another name. \\
+  The difference in flags is because \texttt{cp} is used to copy, and \texttt{mv} is used to move or rename a file or folder.
+  The \texttt{-r} flag is to copy recursively, and is not needed for \texttt{mv} as it is not recursive
+  and simply changes the name of the folder (or the path).
+\end{ans}

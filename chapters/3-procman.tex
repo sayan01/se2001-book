@@ -1,0 +1,37 @@
+\setchapterpreamble[u]{\margintoc}
+\chapter{Process Management}
+
+\section{What are processes?}
+
+\begin{definition}[Process]
+  A process is an instance of a program that is being executed.
+  It contains the program code and its current activity.
+  Depending on the operating system (OS), a process may be made up of
+  multiple threads of execution that execute instructions concurrently.
+  Several processes may be associated with the same program; for example,
+  opening up several instances of the same program often means more than
+  one process is being executed.
+  Each process has its own `process id` or \textbf{PID} to uniquely identify it.
+\end{definition}
+
+
+\begin{qs}
+  How to get a snapshot of all the processes running?
+  What are the commonly used flags used with it?
+\end{qs}
+
+\begin{ans}
+  The \textbf{ps} command is used to get a snapshot of all the processes running.
+  \begin{itemize}
+    \item \textbf{ps} will get a snapshot of all the processes running.
+    \item \textbf{ps -e} will show all the processes.
+    \item \textbf{ps -f} will show full format listing.
+    \item \textbf{ps -l} will show long format listing.
+    \item \textbf{ps -u} will show user-oriented format listing.
+    \item \textbf{ps -x} will show processes without controlling terminals.
+    \item \textbf{ps -a} will show all processes with a terminal.
+    \item \textbf{ps -A} will show all processes
+    \item \textbf{ps aux} is a common command to see all processes
+    \item \textbf{ps --forest} will show the processes in a tree form
+  \end{itemize}
+\end{ans}
