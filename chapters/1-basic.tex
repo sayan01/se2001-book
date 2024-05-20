@@ -2,7 +2,1414 @@
 \chapter{Basic Commands in Linux}
 \labch{basic}
 
+\section{Introduction}
+
+\subsection{What is Linux?}
+
+\begin{definition}[Linux]
+  Linux is a \textbf{kernel} that is used in many operating systems. It is open source and free to use. Linux is not an operating system unto itself, but the core component of it.
+\end{definition}
+
+So what is \textbf{Ubuntu}? \textbf{Ubuntu} is one of the many \textit{distributions} that use the Linux kernel. It is a complete operating system that is free to use and open source. It is based on the \textbf{Debian} distribution of Linux. There are many other \textit{distributions} of Linux, such as:
+
+\begin{itemize}
+  \item
+    \textbf{Debian} - Used primarily on servers, it is known for its stability.
+    \begin{itemize}
+      \item \textbf{Ubuntu} - A commercial distribution based on Debian which is popular among new users.
+      \item \textbf{Linux Mint} - A distribution based on Ubuntu which is known for its ease of use. It is one of the distributions recommended to new users.
+      \item \textbf{Pop OS} - A distribution based on Ubuntu which is known for its focus on developers, creators, and gamers.
+      \item and many more
+    \end{itemize}
+  \item
+    \textbf{Red Hat Enterprise Linux (RHEL)} - A commercial distribution used primarily in enterprises. It is owned by \textbf{Red Hat} and is targeted primarily to companies with their free OS paid support model.
+    \begin{itemize}
+      \item \textbf{Fedora} - A community-driven distribution sponsored by \textbf{Red Hat}. It is known for its cutting-edge features and is used by developers. It remains on the upstream of \textbf{RHEL}, receiving new features before \textbf{RHEL}.
+      \item \textbf{CentOS} - A discontinued distribution based on \textbf{RHEL}. It was known for its stability and was used in servers. It was downstream from \textbf{RHEL}.
+      \item \textbf{CentOS Stream} - It is a midstream between the upstream development in Fedora Linux and the downstream development for Red Hat Enterprise Linux.
+      \item \textbf{Rocky Linux} - A distribution created by the \textbf{Rocky Enterprise Software Foundation} after the announcement of discontinuation of \textbf{CentOS}. It is a downstream of \textbf{RHEL} that provides feature parity and binary compatibility with \textbf{RHEL}.
+      \item \textbf{Alma Linux} - A distribution created by the \textbf{CloudLinux} team after the announcement of discontinuation of \textbf{CentOS}. It is a downstream of \textbf{RHEL} that provides feature parity and binary compatibility with \textbf{RHEL}.
+    \end{itemize}
+  \item
+    \textbf{Arch Linux} - A community-driven distribution known for its simplicity and customizability. It is a \textit{rolling release} distribution, which means that it is continuously updated. It is a bare-bones distribution that lets the user decide which packages they want to install.
+    \begin{itemize}
+      \item \textbf{Manjaro} - A distribution based on Arch Linux which is known for its user-friendliness. It is a rolling release distribution that is easier to install for new users. It uses a different repository for packages with additional testing.
+      \item \textbf{EndeavourOS} - A distribution based on Arch Linux which is known for its simplicity and minimalism. It is a rolling release distribution that is easier to install for new users. It uses the same repository for packages as \textbf{Arch Linux}.
+      \item \textbf{Artix Linux} - It uses the \textbf{OpenRC} init system instead of \textbf{systemd}. It also offers other \textit{init systems} like \textbf{runit}, \textbf{s6}, \textbf{dinit}.
+    \end{itemize}
+  \item
+    \textbf{openSUSE} - It is a free and open-source Linux distribution developed by the openSUSE project. It is offered in two main variations: \textbf{Tumbleweed}, an upstream rolling release distribution, and \textbf{Leap}, a stable release distribution which is sourced from SUSE Linux Enterprise.
+    \begin{itemize}
+      \item \textbf{Tumbleweed} - Rolling Release upstream.
+      \item \textbf{Leap} - Stable Release downstream.
+    \end{itemize}
+  \item
+    \textbf{Gentoo} - A distribution known for its customizability and performance. It is a source-based distribution, which means that the user compiles the software from source code. It is known for its performance optimizations for the user's hardware.
+  \item
+    \textbf{Void} - It is an independent rolling-release Linux distribution that uses the X Binary Package System package manager, which was designed and implemented from scratch, and the \textbf{runit} init system. Excluding binary kernel blobs, a base install is composed entirely of free\sidenote{
+      “Free software” means software that respects users' freedom and community. Roughly, it means that the users have the freedom to run, copy, distribute, study, change and improve the software. Thus, “free software” is a matter of liberty, not price. To understand the concept, you should think of “free” as in “free speech,” not as in “free beer.” We sometimes call it “libre software,” borrowing the French or Spanish word for “free” as in freedom, to show we do not mean the software is gratis. \\\\ You may have paid money to get copies of a free program, or you may have obtained copies at no charge. But regardless of how you got your copies, you always have the freedom to copy and change the software, even to sell copies. \\\\ - \href{https://www.gnu.org/philosophy/free-sw.en.html}{GNU on Free Software}
+    } software.
+\end{itemize}
+
+\begin{marginfigure}
+	\includegraphics{images/pdf/dist-chart.pdf}
+	\caption[Linux Distributions Usage]{Linux Distributions Usage in 2024}
+	\labfig{dist-chart}
+\end{marginfigure}
+
+\subsection{Desktop Environments}
+\begin{definition}[Desktop Environment]
+  A desktop environment is a collection of software designed to give functionality and a certain look and feel to a desktop operating system. It is a combination of a window manager, a file manager, a panel, and other software that provides a graphical user interface and utilities to a regular desktop user, such as volume and brightness control, multimedia applications, settings panels, etc. This is only required by desktop (and laptop) uses and are not present on server instances.
+\end{definition}
+
+There are many desktop environments available for Linux, but the important ones are:
+
+\begin{itemize}
+  \item
+    \textbf{GNOME} - One of the most popular desktop environments for Linux. It is known for its simplicity and ease of use. It is the default desktop environment for many distributions, including Ubuntu. It is based on the \textbf{GTK} Toolkit.
+    \sidenote{GTK is a free software cross-platform widget toolkit for creating graphical user interfaces.}
+    Popular distros shipping by default with GNOME are Fedora, RHEL, CentOS, Debian, Zorin, and Ubuntu.
+    \sidenote{Ubuntu used to ship with Unity as the default desktop environment, but switched to GNOME in 2017.}
+  \item
+    \textbf{KDE Plasma} - A highly customizable desktop environment based on the \textbf{Qt} Tookit.
+    \sidenote{Qt is cross-platform application development framework for creating graphical user interfaces.}
+    Many distributions like Slackware and OpenSUSE ship with KDE Plasma as the default desktop environment, and most others have the option to install with KDE Plasma. Ubuntu's KDE Plasma variant is called \textbf{Kubuntu}.
+  \item
+    \textbf{Xfce} - A lightweight desktop environment known for its speed and simplicity. It is based on the \textbf{GTK} Toolkit. It is used in many distributions like Xubuntu, Manjaro, and Fedora.
+  \item
+    \textbf{LXQt} - A lightweight desktop environment known for its speed and simplicity. It is based on the \textbf{Qt} Toolkit. It is used in many distributions like Lubuntu.
+  \item
+    \textbf{Cinnamon}
+  \item
+    \textbf{MATE}
+\end{itemize}
+
+\begin{marginfigure}
+	\includegraphics{images/pdf/de-chart.pdf}
+	\caption[Desktop Environment Usage]{Desktop Environment Usage in 2022}
+	\labfig{de-chart}
+\end{marginfigure}
+
+It is important to note that although some distributions come pre-bundled with certain Desktop Environments, it doesn't mean that you cannot use another DE with it. DE are simply packages installed on your distribution, and almost all the popular DEs can be installed on all distributions. Many distributions also come with multiple pre-bundled desktop environments due to user preferences. Most server distributions and some enthusiast distributions come with no pre-bundled desktop environment, and let the user determine which one is required, or if one is required.
+
+\subsection{Window Manager}
+
+\begin{definition}[Window Manager]
+  A window manager is system software that controls the placement and appearance of windows within a windowing system in a graphical user interface. It is a part of the desktop environment, but can also be used standalone. It is responsible for the appearance and placement of windows, and can also provide additional functionality like virtual desktops, window decorations, window title bars, and tiling.
+\end{definition}
+
+Although usually bundled with a desktop environment, many window managers are also standalone and installed separately by the user if they don't want to use all the application from a single desktop environment.
+
+Some popular window managers are:
+
+\begin{itemize}
+  \item
+    \textbf{Openbox} - A lightweight window manager known for its speed and simplicity. It is used in many distributions like Lubuntu.
+  \item
+    \textbf{i3} - It is a tiling window manager
+    \sidenote{A tiling window manager is a window manager that automatically splits the screen into non-overlapping frames, which are used to display windows. Most desktop environments ship with a \textbf{floating} window manager instead, which users of other operating systems are more familiar with.}
+    which is usually one of the first window managers that users try when they want to move away from a desktop environment and to a tiling window manager.
+  \item \textbf{awesome} - A tiling window manager that is highly configurable and extensible. It is written in Lua and is known for its beautiful configurations.
+  \item \textbf{bspwm} - A tiling window manager. It is based on binary space partitioning.
+  \item \textbf{dwm} - A dynamic tiling window manager that is known for its simplicity and minimalism. It is written in C and is highly configurable.
+  \end{itemize}
+
+\subsection{Why Linux?}
+
+You might be wondering
+\textit{
+  "Why should I use Linux?"
+}
+Most people use either \textbf{Windows} or \textbf{Mac} on their personal computers. Although these consumer operating systems get the job done, they don't let the user completely control their own \textit{hardware} and \textit{software}.
+Linux
+\sidenote{
+  Although Linux is just a kernel and not an entire operating system, throughout this book I would be referring to \textbf{GNU/Linux}, the combination of \textbf{GNU core utilities} and the Linux kernel, as \textbf{Linux} in short.
+}
+is a free and open-source operating system that gives the user complete control over their system. It is highly customizable and can be tailored to the user's needs. It is also known for its stability and security. It is used in almost all servers, supercomputers, and embedded systems. It is also used in many consumer devices like Android phones, smart TVs, and smartwatches.
+
+In this course we will be covering how to navigate the linux file system, how to manage files, how to manage the system, and how to write scripts to automate tasks. In the later part of the course we go over concepts such as pattern matching and text processing.
+
+This course does not go into details of the linux kernel, but rather attempts to make the reader familiar with the \textit{GNU core utils} and able to navigate around a linux server easily.
+
+\subsection{What is Shell?}
+
+\begin{marginfigure}
+	\includegraphics{images/png/os-onion.png}
+	\caption[Operating System Onion Rings]{
+	  Operating System Onion Rings - The layers of an operating system
+  }
+	\labfig{os-onion}
+\end{marginfigure}
+
+The \textbf{kernel} is the core of the operating system. It is responsible for managing the hardware and providing services to the user programs. The \textbf{shell} is the interface between the user and the kernel (\reffig{os-onion}). Through the \textbf{shell} we can run many commands and utilities, as well as some inbuilt features of the shell.
+
+\begin{definition}[Shell]
+  A shell is a command-line interpreter that provides a way for the user to interact with the operating system. It takes commands from the user and executes them. It is a program that provides the user with a way to interact with the operating system.
+\end{definition}
+
+The most popular shell in Linux is the \textbf{bash} shell. It is the default shell in most distributions. It is a POSIX-compliant
+\sidenote{
+POSIX, or Portable Operating System Interface, is a set of standards that define the interfaces and environment that operating systems use to access POSIX-compliant applications. POSIX standards are based on the Unix operating system and were released in the late 1980s.
+} shell.
+There are many other shells available, such as \textbf{zsh}, \textbf{fish}
+\sidenote{
+  Fish is a non-POSIX compliant shell that is known for its features like autosuggestion, syntax highlighting, and tab completions. Although a useful alternative to other shells for scripting, it should not be set as the default shell.
+}
+, \textbf{dash}, \textbf{csh}, \textbf{ksh}, and \textbf{tcsh}. Each shell has its own features and syntax, but most of the keywords and syntax are the same. In this course we will be covering only the \textbf{bash} shell and its syntax, but most of what we learn here is also applicable on other shells as well.
+
+\subsection{Shell vs Terminal}
+
+\begin{definition}[Terminal]
+  A terminal is a program that provides a way to interact with the shell. It is a program that provides a text-based interface to the shell. It is also known as a terminal emulator.
+\end{definition}
+
+The terminal is the window that you see when you open a terminal program. It provides a way to interact with the shell. The shell is the program that interprets the commands that you type in the terminal. The terminal is the window that you see, and the shell is the program that runs in that window. Whereas the shell is the application that is parsing your input and running the commands and keywords, the terminal is the application that lets you see the shell graphically. There are multiple different terminal emulators, providing a lot of customization and beautification to the terminal, as well as providing useful features such as \textit{scroll back}, copying and pasting, and so on.
+
+Some popular terminal emulators are:
+
+\begin{itemize}
+  \item
+    \textbf{gnome-terminal} - The default terminal emulator for the GNOME desktop environment.
+  \item
+    \textbf{konsole} - The default terminal emulator for the KDE desktop environment.
+  \item
+    \textbf{xfce4-terminal} - The default terminal emulator for the Xfce desktop environment.
+  \item
+    \textbf{alacritty} - A terminal emulator known for its speed and simplicity.
+  \item
+    \textbf{terminator} - A terminal emulator known for its features like splitting the terminal into multiple panes.
+  \item
+    \textbf{tilix} - A terminal emulator known for its features like splitting the terminal into multiple panes.
+  \item
+    \textbf{st} - A simple terminal emulator known for its simplicity and minimalism.
+  \item \textbf{urxvt}
+  \item \textbf{kitty}
+  \item \textbf{terminology}
+\end{itemize}
+
+\subsection{Why the Command Line?}
+
+Both the command line interface (CLI) and the graphical user interface (GUI) are simply shells over the operating system's kernel.
+They let you interact with the kernel, perform actions and run applications.
+
+\textbf{GUI:}
+
+The GUI requires a mouse and a keyboard, and is more intuitive and easier to use for beginners.
+But it is also slower and less efficient than the CLI.
+The GUI severely limits the user's ability to automate tasks and perform complex operations.
+The user can only perform those operations that the developers of the GUI have thought of and implemented.
+
+\textbf{CLI:}
+
+The CLI is faster and more efficient than the GUI as it lets the user use the keyboard to perform actions.
+Instead of clicking on pre-defined buttons, the CLI lets you construct your instruction to the computer using syntax and semantics.
+The CLI lets you combine simple commands that do one thing well to perform complex operations.
+The biggest advantage of the CLI is that it lets you automate tasks.
+It might be faster for some users to rename a file from \textbf{file1} to \textbf{file01} using the GUI, but it will always be faster to automate this using the CLI if you want to do this for thousands of files in the folder.
+
+In this course we will be learning how to use the CLI to navigate the file system, manage files, manage the system, process text, and write scripts to automate tasks.
+
+\subsection{Command Prompt}
+
+The command prompt is the text that is displayed in the terminal to indicate that the shell is ready to accept commands. It usually ends with a \texttt{\$} or a \texttt{\#} symbol. The \texttt{\$} symbol indicates that the shell is running as a normal user, and the \texttt{\#} symbol indicates that the shell is running as the root user. The root user has complete control over the system and can perform any operation on the system.
+
+An example of a command prompt is:
+
+\begin{lstlisting}[language=bash]
+  username@hostname:~$
+\end{lstlisting}
+
+Here, \texttt{username} is the name of the user, \texttt{hostname} is the name of the computer, and \texttt{\$} indicates that the shell is running as a normal user.
+The $\sim$ symbol indicates that the current working directory is the user's home directory.
+\sidenote{
+  The home directory is the directory where the user's files and settings are stored.
+  It is usually located at \texttt{/home/username}.
+  This can be shorted to \texttt{\textasciitilde} in the shell.
+}
+
+\subsection{Simple Commands in GNU Core Utils}
+
+\begin{figure}[hb]
+	\includegraphics{images/png/gnu.png}
+	\caption[GNU Core Utils Logo]{GNU Core Utils Logo}
+	\labfig{gnu}
+\end{figure}
+
+\begin{definition}[GNU Core Utils]
+  The GNU Core Utilities are the basic file, shell, and text manipulation utilities of the GNU operating system. These are the utilities that are used to interact with the operating system and perform basic operations.
+  \sidenote{
+    \href{https://www.gnu.org/software/coreutils/}{GNU Core Utils}
+  }
+\end{definition}
+
+The shell lets you simply type in the name of the command and press enter to run it.
+The shell then runs the command and displays the output.
+The shell also lets you pass arguments to the command to modify its behavior.
+Although the commands are simple, they are powerful and can be combined to perform complex operations.
+\sidenote{
+  The combination of commands to perform complex operations is called \textit{piping}. This will be covered later.
+}
+Anything that can be done through a GUI can be done through the CLI, and often faster and more efficiently.
+Every GUI primitive has a CLI counterpart, such as copying, moving, renaming, deleting files, going inside a directory, etc.
+
+Some basic commands in the core-utils are listed in \vreftab{basic-commands}.
+
+\vfill
+\pagebreak
+\begin{table}[h!]
+\caption{Basic Commands in GNU Core Utils}
+\labtab{basic-commands}
+\begin{tabular}{ c l }
+  \toprule
+ Command & Description \\
+ \midrule
+  \texttt{ls} & List the contents of a directory \\
+  \texttt{cd} & Change the current working directory \\
+  \texttt{pwd} & Print the current working directory \\
+  \texttt{mkdir} & Create a new directory \\
+  \texttt{rmdir} & Remove a directory \\
+  \texttt{touch} & Create a new file \\
+  \texttt{rm} & Remove a file \\
+  \texttt{cp} & Copy a file \\
+  \texttt{mv} & Move a file \\
+  \texttt{echo} & Print a message \\
+  \texttt{cat} & Concatenate and display the contents of a file \\
+  \texttt{less} & Display the contents of a file one page at a time \\
+  \texttt{head} & Display the first few lines of a file \\
+  \texttt{tail} & Display the last few lines of a file \\
+  \texttt{find} & Find files and directories \\
+  \texttt{locate} & Find files and directories \\
+  \texttt{which} & Find the location of a command \\
+  \texttt{uname} & Print system information \\
+  \texttt{ps} & Display information about running processes \\
+  \texttt{kill} & Terminate a process \\
+  \texttt{chmod} & Change the permissions of a file \\
+  \texttt{chown} & Change the owner of a file \\
+  \texttt{chgrp} & Change the group of a file \\
+  \texttt{date} & Print the current date and time \\
+  \texttt{cal}, \texttt{ncal} & Print a calendar \\
+  \texttt{df} & Display disk space usage \\
+  \texttt{du} & Display disk usage \\
+  \texttt{free} & Display memory usage \\
+  \texttt{top} & Display system information \\
+  \texttt{history} & Display the command history \\
+  \texttt{sleep} & Pause the shell for a specified time \\
+  \texttt{true} & Do nothing, successfully \\
+  \texttt{false} & Do nothing, unsuccessfully \\
+  \texttt{tee} & Read from stdin and write to stdout and files \\
+  \texttt{whoami} & Print the current user \\
+  \texttt{groups} & Print the groups the user belongs to \\
+  \texttt{clear} & Clear the terminal screen \\
+  \texttt{exit} & Exit the shell \\
+  \bottomrule
+\end{tabular}
+\end{table}
+
+\textbf{pwd}:
+
+The \texttt{pwd} command prints the current working directory. The current working directory is the directory that the shell is currently in. The shell starts in the user's home directory when it is opened. The \texttt{pwd} command prints the full path of the current working directory.
+
+\begin{lstlisting}[language=bash]
+  $ pwd
+  /home/username
+\end{lstlisting}
+
+\textbf{ls}:
+
+The \texttt{ls} command lists the contents of a directory. By default, it lists the contents of the current working directory. The \texttt{ls} command can take arguments to list the contents of a different directory.
+
+\begin{lstlisting}[language=bash]
+  $ ls
+  Desktop  Documents  Downloads  Music  Pictures  Videos
+\end{lstlisting}
+
+We can also list hidden files
+\sidenote{
+  Hidden files are files whose names start with a dot. They are hidden by default in the \texttt{ls} command.
+}
+using the \texttt{-a} flag.
+
+\begin{lstlisting}[language=bash]
+  $ ls -a
+  .  ..  .bashrc  Desktop  Documents  Downloads  Music  Pictures  Videos
+\end{lstlisting}
+
+Here, the \texttt{.} and \texttt{..} directories are special directories. The \texttt{.} directory is the current directory, and the \texttt{..} directory is the parent directory.
+The \texttt{.bashrc} file is a configuration file for the shell which is a hidden file.
+
+\texttt{ls} can also list the details of the files using the \texttt{-l} flag.
+
+\begin{lstlisting}[language=bash]
+  $ ls -l
+  total 24
+  drwxr-xr-x 2 username group 4096 Mar  1 12:00 Desktop
+  drwxr-xr-x 2 username group 4096 Mar  1 12:00 Documents
+  drwxr-xr-x 2 username group 4096 Mar  1 12:00 Downloads
+  drwxr-xr-x 2 username group 4096 Mar  1 12:00 Music
+  drwxr-xr-x 2 username group 4096 Mar  1 12:00 Pictures
+  drwxr-xr-x 2 username group 4096 Mar  1 12:00 Videos
+\end{lstlisting}
+
+\begin{marginfigure}
+	\includegraphics{images/png/ls-l.png}
+	\caption[\texttt{ls -l} Output]{\texttt{ls -l} Output}
+	\labfig{ls-l}
+\end{marginfigure}
+
+As seen in \reffig{ls-l}, the first column is the file type and permissions.
+The second column is the number of links to the file or directory.
+The third and fourth columns are the owner and group of the file or directory.
+The fifth column is the size of the file or directory.
+The sixth, seventh, and eighth columns are the last modified date and time of the file or directory.
+The ninth column is the name of the file or directory.
+\sidenote{
+More details about the file permissions and the file types will be covered later in the course.
+}
+
+We can also list the inode numbers
+\sidenote{
+  An inode is a data structure on a filesystem on Linux and other Unix-like operating systems that stores all the information about a file except its name and its actual data. This includes the file type, the file's owner, the file's group, the file's permissions, the file's size, the file's last modified date and time, and the file's location on the disk. The inode is the reference pointer to the data in the disk.
+}
+using the \texttt{-i} flag.
+
+\begin{lstlisting}[language=bash]
+  $ ls -i
+  123456 Desktop  123457 Documents  123458 Downloads  123459 Music  123460 Pictures  123461 Videos
+\end{lstlisting}
+
+Inodes will be discussed in detail later in the course.
+
+\textbf{cd}:
+
+The \texttt{cd} command changes the current working directory. It takes the path to the directory as an argument.
+
+\begin{lstlisting}[language=bash]
+  $ cd Documents
+  $ pwd
+  /home/username/Documents
+\end{lstlisting}
+
+The \texttt{cd} command can also take the \texttt{\textasciitilde} symbol as an argument to change to the user's home directory.
+This is the default behavior of the \texttt{cd} command when no arguments are passed.
+
+\begin{lstlisting}[language=bash]
+  $ cd
+  $ pwd
+  /home/username
+\end{lstlisting}
+
+If we want to go back to the previous directory, we can use the \texttt{-} symbol as an argument to the \texttt{cd} command.
+\sidenote{
+  This internally uses the \texttt{OLDPWD} environment variable to change the directory. More about variables will be covered later in the course.
+}
+
+\begin{lstlisting}[language=bash]
+  $ cd Documents
+  $ pwd
+  /home/username/Documents
+  $ cd -
+  $ pwd
+  /home/username
+\end{lstlisting}
+
+\textbf{man}:
+
+How to remember so many flags and options for each of the commands?
+The \texttt{man} command is used to display the manual pages for a command.
+
+\begin{definition}[Manual Pages]
+  Manual pages are a type of software documentation that provides details about a command, utility, function, or file format. They are usually written in a simple and concise manner and provide information about the command's syntax, options, and usage.
+\end{definition}
+
+\begin{lstlisting}[language=bash]
+  $ man ls
+\end{lstlisting}
+
+This will display the manual page for the \texttt{ls} command. The manual page is divided into sections, and you can navigate through the sections using the arrow keys. Press \texttt{q} to exit the manual page.
+
+Example manual page:
+
+\begin{lstlisting}
+
+LS(1)                                                                                User Commands                                                                               LS(1)
+
+NAME
+       ls - list directory contents
+
+SYNOPSIS
+       ls [OPTION]... [FILE]...
+
+DESCRIPTION
+       List information about the FILEs (the current directory by default).  Sort entries alphabetically if none of -cftuvSUX nor --sort is specified.
+
+       Mandatory arguments to long options are mandatory for short options too.
+
+       -a, --all
+              do not ignore entries starting with .
+
+       -A, --almost-all
+              do not list implied . and ..
+...
+\end{lstlisting}
+
+The manual page provides information about the command, its syntax, options, and usage.
+It is a good practice to refer to the manual page of a command before using it.
+
+To exit the manual page, press \texttt{q}.
+
+There are multiple sections in the manual page, \texttt{man} takes the section number as an argument to display the manual page from that section.
+
+\begin{lstlisting}[language=bash]
+  $ man 1 ls
+\end{lstlisting}
+
+This will display the manual page for the \texttt{ls} command from section 1. The details of the sections can be seen in \vreftab{man-sections}.
+
+\begin{table}[h!]
+\caption{Manual Page Sections}
+\labtab{man-sections}
+\begin{tabular}{ c l }
+  \toprule
+ Section & Description \\
+ \midrule
+  1 & User Commands \\
+  2 & System Calls \\
+  3 & Library Functions \\
+  4 & Special Files usually found in \texttt{/dev} \\
+  5 & File Formats and conventions \\
+  6 & Games \\
+  7 & Miscellaneous \\
+  8 & System Administration \\
+  9 & Kernel Developer's Manual \\
+  \bottomrule
+\end{tabular}
+\end{table}
+
+Man pages only provide information about the commands and utilities that are installed on the system. They do not provide information about the shell builtins or the shell syntax. For that, you can refer to the shell's documentation or use the \textbf{help} command.
+
+Some commands also have a \texttt{-{}-{}help} flag that displays the usage and options of the command.
+
+Some commands have their own \textbf{info} pages, which are more detailed than the \textbf{man} pages.
+
+To be proficient with shell commands, one needs to read the man, info, and help pages.
+\sidenote{
+  An useful video by Robert Elder about the differences between \textbf{man}, \textbf{info}, and \textbf{help} can be found on \href{https://www.youtube.com/watch?v=vnBCnd2L0dY}{YouTube}.
+}
+
+\begin{exercise}
+  Run \texttt{man}, \texttt{info}, and \texttt{-{}-help} on all the commands discussed in this section.
+  Note the differences in the information provided by each of them.
+  Read the documentations carefully and try to understand how each command works, and the pattern in which the documentations are written.
+\end{exercise}
+
+\textbf{uname}:
+
+The \texttt{uname} command prints system information.
+It can take flags to print specific information about the system.
+By default, it prints only the kernel name.
+
+\begin{lstlisting}[language=bash]
+  $ uname
+  Linux
+\end{lstlisting}
+
+The \texttt{-a} flag prints all the system information.
+\sidenote{
+  Here \texttt{rex} is the hostname of the system, \texttt{6.8.2-arch2-1} is the kernel version, \texttt{x86\_64} is the architecture, and \texttt{GNU/Linux} is the operating system.
+}
+
+\begin{lstlisting}[language=bash]
+  $ uname -a
+  Linux rex 6.8.2-arch2-1 #1 SMP PREEMPT_DYNAMIC Thu, 28 Mar 2024 17:06:35 +0000 x86_64 GNU/Linux
+\end{lstlisting}
+
+\textbf{ps}:
+
+The \texttt{ps} command displays information about running processes.
+By default, it displays information about the processes run by the current user that are running from a terminal.
+\sidenote{
+  The \textbf{PID} is the process ID, the \textbf{TTY} is the terminal the process is running from, the \textbf{TIME} is the time the process has been running, and the \textbf{CMD} is the command that is running.
+}
+
+\begin{lstlisting}[language=bash]
+  $ ps
+    PID TTY          TIME CMD
+  12345 pts/0    00:00:00 bash
+  12346 pts/0    00:00:00 ps
+\end{lstlisting}
+
+There are a lot of flags that can be passed to the \texttt{ps} command to display more information about the processes. These will be covered in \refch{procman}.
+
+\textbf{kill}:
+
+The \texttt{kill} command is used to terminate a process.
+It takes the process ID as an argument.
+
+\begin{lstlisting}[language=bash]
+  $ kill 12345
+\end{lstlisting}
+
+The \texttt{kill} command can also take the \textbf{signal} number as an argument to send a signal to the process.
+For example, the \texttt{SIGKILL} signal can be sent to the process to terminate it.
+\sidenote{
+  The \texttt{SIGKILL} signal is used to terminate a process immediately. It cannot be caught or ignored by the process.
+  It is numbered as 9.
+}
+
+\begin{lstlisting}[language=bash]
+  $ kill -9 12345
+\end{lstlisting}
+
+\textbf{mkdir}:
+
+The \texttt{mkdir} command is used to create new directories.
+It can take multiple directory names as arguments.
+
+\begin{lstlisting}[language=bash]
+  $ mkdir a b c
+  $ ls -F
+  a/  b/  c/
+\end{lstlisting}
+
+\begin{exercise}
+  Run \texttt{man ls} to find out what the \texttt{-F} flag does, and why we used it in the above example.
+\end{exercise}
+
+\textbf{touch}:
+
+The \texttt{touch} command is used to create new files.
+It can take multiple file names as arguments.
+If a file is already present, the \texttt{touch} command updates the last modified date and time of the file, but does not modify the contents of the file.
+
+\begin{lstlisting}[language=bash]
+  $ touch file1 file2 file3
+  $ ls -l
+  -rw-r--r-- 1 username group 0 Mar  1 12:00 file1
+  -rw-r--r-- 1 username group 0 Mar  1 12:00 file2
+  -rw-r--r-- 1 username group 0 Mar  1 12:00 file3
+  $ sleep 60
+  $ touch file3
+  $ ls -l
+  -rw-r--r-- 1 username group 0 Mar  1 12:00 file1
+  -rw-r--r-- 1 username group 0 Mar  1 12:00 file2
+  -rw-r--r-- 1 username group 0 Mar  1 12:01 file3
+\end{lstlisting}
+
+\begin{exercise}
+  Notice the difference in the last modified date and time of the \texttt{file3} file from the other files.
+  Also notice the \texttt{sleep} command used to pause the shell for 60 seconds.
+\end{exercise}
+
+\textbf{rmdir}:
+
+The \texttt{rmdir} command is used to remove directories.
+It can take multiple directory names as arguments.
+
+\begin{lstlisting}[language=bash]
+  $ mkdir a b c d
+  $ rmdir a b c
+  $ ls -F
+  d/
+\end{lstlisting}
+
+\begin{remark}
+  The \texttt{rmdir} command can only remove empty directories.
+  This is a safety feature so that users dont accidentally delete directories with files in them.
+  To remove directories with files in them along with those files, use the \texttt{rm} command.
+\end{remark}
+
+\textbf{rm}:
+
+The \texttt{rm} command is used to remove files and directories.
+It can take multiple file and directory names as arguments.
+
+\begin{lstlisting}[language=bash]
+  $ touch file1 file2 file3
+  $ ls -F
+  file1  file2  file3
+  $ rm file1 file2
+  $ ls -F
+  file3
+\end{lstlisting}
+
+However, using \texttt{rm} to delete a directory will give an error.
+
+\begin{lstlisting}[language=bash]
+  $ mkdir a
+  $ rm a
+  rm: cannot remove 'a': Is a directory
+\end{lstlisting}
+
+This is because the \texttt{rm} command does not remove directories by default.
+This is a safety feature to prevent users from accidentally deleting directories with files in them.
+
+To remove directories along with their files, use the \texttt{-r} flag.
+
+\begin{lstlisting}[language=bash]
+  $ rm -r a
+\end{lstlisting}
+
+To force the removal of files and directories without a confirmation, use the \texttt{-f} flag.
+
+\begin{warn}
+  The \texttt{rm} command is a dangerous command.
+  It does not move the files to the trash, but permanently deletes them.
+  Be \textbf{extremely} careful when using the \texttt{rm} command.
+  Only use the \texttt{-f} flag if you are absolutely sure that you want to delete the files.
+\end{warn}
+
+To force \texttt{rm} to always ask for confirmation before deleting files, use the \texttt{-i} flag.
+
+\begin{lstlisting}[language=bash]
+  $ rm -i file3
+  rm: remove regular empty file 'file3'? y
+\end{lstlisting}
+
+\textbf{cp}:
+
+The \texttt{cp} command is used to copy files.
+It takes the source file and the destination file as arguments.
+
+\begin{lstlisting}[language=bash]
+  $ touch file1
+  $ ls -F
+  file1
+  $ cp file1 file2
+  $ ls -F
+  file1  file2
+\end{lstlisting}
+
+The \texttt{cp} command can also take the \texttt{-r} flag to copy directories.
+
+\begin{lstlisting}[language=bash]
+  $ mkdir a
+  $ touch a/file1
+  $ cp -r a b
+  $ ls -R
+  .:
+  a/  b/
+
+  ./a:
+  file1
+
+  ./b:
+  file1
+\end{lstlisting}
+
+\begin{exercise}
+  Why did we use the \texttt{-R} flag in the above example? What does it do?
+\end{exercise}
+
+There are three ways to copy files using \texttt{cp}:
+
+\begin{lstlisting}[language=bash]
+SYNOPSIS
+       cp [OPTION]... [-T] SOURCE DEST
+       cp [OPTION]... SOURCE... DIRECTORY
+       cp [OPTION]... -t DIRECTORY SOURCE...
+\end{lstlisting}
+
+\begin{exercise}
+  There are three ways of running the \texttt{cp} command to copy a file.
+  Here we have demonstrated only one.
+  Read the manual page of the \texttt{cp} command to find out the other two ways and try them out yourself.
+\end{exercise}
+
+\textbf{mv}:
+
+The \texttt{mv} command is used to move files.
+The syntax is similar to the \texttt{cp} command.
+\sidenote{
+  This means that \texttt{mv} also has three ways of running it.
+}
+It is used to move files from one location to another, or to rename files.
+
+\begin{lstlisting}[language=bash]
+  $ touch file1
+  $ ls -F
+  file1
+  $ mv file1 file2
+  $ ls -F
+  file2
+\end{lstlisting}
+
+\begin{exercise}
+  Create a directory \texttt{dir1} using the \texttt{mkdir} command, then create a file \texttt{file1} inside \texttt{dir1}.
+  Now move (rename) the \texttt{dir1} directory to \texttt{dir2} using the \texttt{mv} command.
+  The newly created directory should be named \texttt{dir2} and should contain the \texttt{file1} file.
+  Were you require to use the \texttt{-r} flag with the \texttt{mv} command like you would have in \texttt{cp} command?
+\end{exercise}
+
+\textbf{echo}:
+
+The \texttt{echo} command is used to print a message to the terminal.
+It can take multiple arguments and print them to the terminal.
+
+\begin{lstlisting}[language=bash]
+  $ echo Hello, World!
+  Hello, World!
+\end{lstlisting}
+
+The \texttt{echo} command can also take the \texttt{-e} flag to interpret backslash escapes.
+
+\begin{lstlisting}[language=bash]
+  $ echo -e "Hello, \nWorld!"
+  Hello,
+  World!
+\end{lstlisting}
+
+Some escape characters in \textbf{echo} are listed in \vreftab{echo-escapes}.
+
+\begin{table}[h!]
+\caption{Escape Characters in \texttt{echo}}
+\labtab{echo-escapes}
+\begin{tabular}{ c l }
+  \toprule
+ Escape & Description \\
+ \midrule
+  \texttt{\textbackslash\textbackslash} & backslash \\
+  \texttt{\textbackslash a} & alert (BEL) \\
+  \texttt{\textbackslash b} & backspace \\
+  \texttt{\textbackslash c} & produce no further output \\
+  \texttt{\textbackslash e} & escape \\
+  \texttt{\textbackslash f} & form feed \\
+  \texttt{\textbackslash n} & new line \\
+  \texttt{\textbackslash r} & carriage return \\
+  \texttt{\textbackslash t} & horizontal tab \\
+  \texttt{\textbackslash v} & vertical tab \\
+  \texttt{\textbackslash 0NNN} & byte with octal value NNN (1 to 3 digits) \\
+  \texttt{\textbackslash xHH} & byte with hexadecimal value HH (1 to 2 digits) \\
+  \bottomrule
+\end{tabular}
+\end{table}
+
+\begin{exercise}
+  Run the command
+  \lstinline[language=bash]{ echo -e "\x41=\0101" } and try to understand the output and the escape characters used.
+\end{exercise}
+
+\textbf{cat}:
+
+The \texttt{cat} command is used to concatenate and display the contents of files.
+
+\begin{lstlisting}[language=bash]
+  $ cat file1
+  Hello, World! from file1
+\end{lstlisting}
+
+The \texttt{cat} command can take multiple files as arguments and display their contents one after another.
+
+\begin{lstlisting}[language=bash]
+  $ cat file1 file2
+  Hello, World! from file1
+  Hello, World! from file2
+\end{lstlisting}
+
+\textbf{less}:
+
+Sometimes the contents of a file are too large to be displayed at once.
+Nowadays modern terminal emulators can scroll up and down to view the contents of the file,
+but actual \textbf{tty}s cannot do that.
+To view the contents of a file one page at a time, use the \texttt{less} command.
+\textbf{less} is a pager program that displays the contents of a file one page at a time.
+\sidenote{
+  \textbf{more} is another pager program that displays the contents of a file one page at a time.
+  It is older than \textbf{less} and has fewer features.
+  \textbf{less} is an improved version of \textbf{more} and is more commonly used.
+  Due to this, it is colloquially said that
+  \textit{"\textbf{less} is more"}, as it has more features.
+}
+
+\begin{lstlisting}[language=bash]
+  $ less file1
+\end{lstlisting}
+
+To scroll up and down, use the arrow keys, or the \texttt{j} and \texttt{k} keys.
+\sidenote{
+  Using \texttt{j} and \texttt{k} to move the cursor up and down is a common keybinding in many terminal applications.
+  This originates from the \textit{vi} text editor which will be covered later in the course.
+}
+Press \texttt{q} to exit the \texttt{less} command.
+
+\textbf{head}:
+
+The \texttt{head} command is used to display the first few lines of a file.
+By default, it displays the first 10 lines of a file.
+
+\begin{lstlisting}[language=bash]
+  $ head /etc/passwd
+  root:x:0:0:root:/root:/usr/bin/bash
+  bin:x:1:1::/:/usr/bin/nologin
+  daemon:x:2:2::/:/usr/bin/nologin
+  mail:x:8:12::/var/spool/mail:/usr/bin/nologin
+  ftp:x:14:11::/srv/ftp:/usr/bin/nologin
+  http:x:33:33::/srv/http:/usr/bin/nologin
+  nobody:x:65534:65534:Kernel Overflow User:/:/usr/bin/nologin
+  dbus:x:81:81:System Message Bus:/:/usr/bin/nologin
+  systemd-coredump:x:984:984:systemd Core Dumper:/:/usr/bin/nologin
+  systemd-network:x:982:982:systemd Network Management:/:/usr/bin/nologin
+\end{lstlisting}
+
+The \texttt{head} command can take the \texttt{-n} flag to display the first \textit{n} lines of a file.
+\sidenote{
+  We can also directly run \texttt{ head -5 /etc/passwd } to display the first 5 lines of the file.
+}
+
+\begin{lstlisting}[language=bash]
+  $ head -n 5 /etc/passwd
+  root:x:0:0:root:/root:/usr/bin/bash
+  bin:x:1:1::/:/usr/bin/nologin
+  daemon:x:2:2::/:/usr/bin/nologin
+  mail:x:8:12::/var/spool/mail:/usr/bin/nologin
+  ftp:x:14:11::/srv/ftp:/usr/bin/nologin
+\end{lstlisting}
+
+\begin{remark}
+  Here we are listing the file \texttt{/etc/passwd} which contains information about the users on the system.
+  The file will usually be present on all Unix-like systems and have a lot of system users.
+  \sidenote{
+    A system user is a user that is used by the system to run services and daemons.
+    It does not belong to any human and usually is not logged into.
+    System users have a user ID less than 1000.
+  }
+\end{remark}
+
+\textbf{tail}:
+
+The \texttt{tail} command is used to display the last few lines of a file.
+By default, it displays the last 10 lines of a file.
+
+\begin{lstlisting}[language=bash]
+  $ tail /etc/passwd
+  rtkit:x:133:133:RealtimeKit:/proc:/usr/bin/nologin
+  sddm:x:964:964:SDDM Greeter Account:/var/lib/sddm:/usr/bin/nologin
+  usbmux:x:140:140:usbmux user:/:/usr/bin/nologin
+  sayan:x:1000:1001:Sayan:/home/sayan:/bin/bash
+  qemu:x:962:962:QEMU user:/:/usr/bin/nologin
+  cups:x:209:209:cups helper user:/:/usr/bin/nologin
+  dhcpcd:x:959:959:dhcpcd privilege separation:/:/usr/bin/nologin
+  saned:x:957:957:SANE daemon user:/:/usr/bin/nologin
+\end{lstlisting}
+
+The \texttt{tail} command can take the \texttt{-n} flag to display the last \textit{n} lines of a file.
+
+\begin{lstlisting}[language=bash]
+  $ tail -n 5 /etc/passwd
+  sayan:x:1000:1001:Sayan:/home/sayan:/bin/bash
+  qemu:x:962:962:QEMU user:/:/usr/bin/nologin
+  cups:x:209:209:cups helper user:/:/usr/bin/nologin
+  dhcpcd:x:959:959:dhcpcd privilege separation:/:/usr/bin/nologin
+  saned:x:957:957:SANE daemon user:/:/usr/bin/nologin
+\end{lstlisting}
+
+\begin{exercise}
+  Notice that the UID (3rd column) of the \texttt{sayan} user is 1000.
+  The last column is \texttt{/bin/bash} instead of \texttt{/usr/bin/nologin} like others.
+  This is because it is a regular user and not a system user.
+\end{exercise}
+
+\textbf{alias}:
+
+The \texttt{alias} command is used to create an alias for a command.
+An alias is a custom name given to a command that can be used to run the command.
+\sidenote{
+  Aliases are used to create shortcuts for long commands.
+  They can also be used to create custom commands.
+}
+
+\begin{lstlisting}[language=bash]
+  $ alias ll='ls -l'
+  $ ll
+  total 24
+  drwxr-xr-x 2 username group 4096 Mar  1 12:00 Desktop
+  drwxr-xr-x 2 username group 4096 Mar  1 12:00 Documents
+  drwxr-xr-x 2 username group 4096 Mar  1 12:00 Downloads
+  drwxr-xr-x 2 username group 4096 Mar  1 12:00 Music
+  drwxr-xr-x 2 username group 4096 Mar  1 12:00 Pictures
+  drwxr-xr-x 2 username group 4096 Mar  1 12:00 Videos
+\end{lstlisting}
+
+The alias \texttt{ll} is created for the \texttt{ls -l} command.
+
+\begin{warn}
+  Be careful when creating aliases.
+  Do not create aliases for existing commands.
+  This can lead to confusion and errors.
+\end{warn}
+
+But this alias is temporary and will be lost when the shell is closed.
+To make the alias permanent, add it to the shell configuration file.
+For \textbf{bash}, this is the \texttt{.bashrc} file in the home directory.
+
+\begin{lstlisting}[language=bash]
+  $ echo "alias ll='ls -l'" >> ~/.bashrc
+\end{lstlisting}
+
+This will add the alias to the \texttt{.bashrc} file.
+To make the changes take effect, either close the terminal and open a new one, or run the \texttt{source} command.
+
+\begin{lstlisting}[language=bash]
+  $ source ~/.bashrc
+\end{lstlisting}
+
+
+\begin{warn}
+  Be careful when editing the shell configuration files.
+  A small mistake can lead to the shell not working properly.
+  Always keep a backup of the configuration files before editing them.
+\end{warn}
+
+We can see the aliases that are currently set using the \texttt{alias} command.
+
+\begin{lstlisting}[language=bash]
+  $ alias
+  alias ll='ls -l'
+\end{lstlisting}
+
+We can also see what a particular alias expands to using the \texttt{alias} command with the alias name as an argument.
+
+\begin{lstlisting}[language=bash]
+  $ alias ll
+  alias ll='ls -l'
+\end{lstlisting}
+
+To remove an alias, use the \texttt{unalias} command.
+
+\begin{lstlisting}[language=bash]
+  $ unalias ll
+\end{lstlisting}
+
+\begin{exercise}
+  Create an alias \texttt{la} for the \texttt{ls -a} command.
+  Make it permanent by adding it to the \texttt{.bashrc} file.
+  Check if the alias is set using the \texttt{alias} command.
+\end{exercise}
+
+\begin{exercise}
+  Create an alias \texttt{rm} for the \texttt{rm -i} command.
+  Make it permanent by adding it to the \texttt{.bashrc} file.
+  Check if the alias is set using the \texttt{alias} command.
+  Try to delete a file using the \texttt{rm} command.
+  What happens?
+\end{exercise}
+
+\textbf{whoami}:
+
+The \texttt{whoami} command is used to print the username of the current user.
+
+\begin{lstlisting}[language=bash]
+  $ whoami
+  sayan
+\end{lstlisting}
+
+\textbf{date}:
+
+The \texttt{date} command is used to print formatted date and time information.
+Without any arguments, it prints the current date and time.
+
+\begin{lstlisting}[language=bash]
+  $ date
+  Mon May 20 06:23:07 PM IST 2024
+\end{lstlisting}
+
+We can specify the date and time to be printed using the \texttt{-d} flag.
+
+\begin{lstlisting}[language=bash]
+  $ date -d "2020-05-20 00:30:45"
+  Wed May 20 12:30:45 AM IST 2020
+  $ date -d "2019-02-29"
+  date: invalid date '2019-02-29'
+  $ date -d "2020-02-29"
+  Sat Feb 29 12:00:00 AM IST 2020
+\end{lstlisting}
+
+\begin{exercise}
+  Why did we get an error when trying to print the date \texttt{2019-02-29}?
+\end{exercise}
+
+We can also modify the format of the date and time using the \texttt{+} flag and different \textbf{format specifiers}.
+Some of the important format specifiers are listed in \vreftab{date-format-specifiers}.
+Rest of the format specifiers can be found in the \texttt{date} manual page.
+
+\begin{lstlisting}[language=bash]
+  $ date +"%Y-%m-%d %H:%M:%S"
+  2024-05-20 18:23:07
+  $ date +"%A, %B %d, %Y"
+  Monday, May 20, 2024
+\end{lstlisting}
+
+\begin{table}[h]
+\caption{Date Format Specifiers}
+\labtab{date-format-specifiers}
+\begin{tabular}{ c l }
+  \toprule
+ Specifier & Description \\
+ \midrule
+  \texttt{\%Y} & Year \\
+  \texttt{\%m} & Month \\
+  \texttt{\%d} & Day \\
+  \texttt{\%H} & Hour \\
+  \texttt{\%M} & Minute \\
+  \texttt{\%S} & Second \\
+  \texttt{\%A} & Full weekday name \\
+  \texttt{\%B} & Full month name \\
+  \texttt{\%a} & Abbreviated weekday name \\
+  \texttt{\%b} & Abbreviated month name \\
+  \bottomrule
+\end{tabular}
+\end{table}
+
+We can even mention relative dates and times using the \texttt{date} command.
+
+\begin{lstlisting}[language=bash]
+  $ date -d "next year"
+  Tue May 19 06:23:07 PM IST 2025
+  $ date -d "next month"
+  Thu Jun 20 06:23:07 PM IST 2024
+  $ date -d "tomorrow"
+  Tue May 21 06:23:07 PM IST 2024
+  $ date -d "yesterday"
+  Sun May 19 06:23:07 PM IST 2024
+\end{lstlisting}
+
+\textbf{cal}:
+
+The \texttt{cal} command is used to print a calendar.
+By default, it prints the calendar of the current month.
+
+\begin{lstlisting}[language=bash]
+  $ cal
+     May 2024
+  Su Mo Tu We Th Fr Sa
+            1  2  3  4
+   5  6  7  8  9 10 11
+  12 13 14 15 16 17 18
+  19 20 21 22 23 24 25
+  26 27 28 29 30 31
+\end{lstlisting}
+
+We can specify the month and year to print the calendar of that month and year.
+
+\begin{lstlisting}[language=bash]
+  $ cal 2 2024
+   February 2024
+  Su Mo Tu We Th Fr Sa
+               1  2  3
+   4  5  6  7  8  9 10
+  11 12 13 14 15 16 17
+  18 19 20 21 22 23 24
+  25 26 27 28 29
+\end{lstlisting}
+
+There are multiple flags that can be passed to the \texttt{cal} command to display different types of calendars and of multiple months or of entire year.
+
+\begin{remark}
+  In Linux, there are sometimes multiple implementations of the same command.
+  For example, there are two implementations of the \texttt{cal} command, one in the \textbf{bsdmainutils} package, which is the \textbf{BSD} implementation and also includes another binary named \textbf{ncal} for printing the calendar in vertical format.
+  The other implementation is in the \textbf{util-linux} package, which does not contain a \textbf{ncal} binary.
+  The flags and the output of the \texttt{cal} command can differ between the two implementations.
+\end{remark}
+
+\textbf{free}:
+
+The \texttt{free} command is used to display the amount of free and used memory in the system.
+
+\begin{lstlisting}[language=bash]
+  $ free
+                total        used        free      shared  buff/cache   available
+  Mem:        8167840     1234560     4567890      123456     2367890     4567890
+  Swap:       2097148           0     2097148
+\end{lstlisting}
+
+The \texttt{free} command can take the \texttt{-h} flag to display the memory in human-readable format.
+
+\begin{lstlisting}[language=bash]
+  $ free -h
+                total        used        free      shared  buff/cache   available
+  Mem:          7.8Gi       1.2Gi       4.3Gi       120Mi       2.3Gi       4.3Gi
+  Swap:         2.0Gi          0B       2.0Gi
+\end{lstlisting}
+
+\textbf{df}:
+
+The \texttt{df} command is used to display the amount of disk space available on the filesystems.
+
+\begin{lstlisting}[language=bash]
+  $ df
+  Filesystem     1K-blocks     Used Available Use% Mounted on
+  /dev/sda1       12345678  1234567  11111111  10% /
+  /dev/sda2       12345678  1234567  11111111  10% /home
+\end{lstlisting}
+
+The \texttt{df} command can take the \texttt{-h} flag to display the disk space in human-readable format.
+
+\begin{lstlisting}[language=bash]
+  $ df -h
+  Filesystem      Size  Used Avail Use% Mounted on
+  /dev/sda1        12G  1.2G  9.9G  11% /
+  /dev/sda2        12G  1.2G  9.9G  11% /home
+\end{lstlisting}
+
+\textbf{du}:
+
+The \texttt{du} command is used to display the disk usage of directories and files.
+By default, it displays the disk usage of the current directory.
+
+\begin{lstlisting}[language=bash]
+  $ du
+  4       ./Desktop
+  4       ./Documents
+  4       ./Downloads
+  4       ./Music
+  4       ./Pictures
+  4       ./Videos
+  28
+\end{lstlisting}
+
+The \texttt{du} command can take the \texttt{-h} flag to display the disk usage in human-readable format.
+The \texttt{-s} flag displays the total disk usage of the directory.
+
+\begin{lstlisting}[language=bash]
+  $ du -sh
+  28K     .
+\end{lstlisting}
+
+\textbf{file}:
+
+The \texttt{file} command is used to determine the type of a file.
+It can take multiple file names as arguments.
+
+\begin{lstlisting}[language=bash]
+  $ file file1
+  file1: ASCII text
+  $ file /bin/bash
+  /bin/bash: ELF 64-bit LSB shared object, x86-64, version 1 (SYSV), dynamically linked, interpreter /lib64/ld-linux-x86-64.so.2, for GNU/Linux 3.2.0, BuildID[sha1]=1234567890abcdef, stripped
+\end{lstlisting}
+
+\textbf{groups}:
+
+The \texttt{groups} command is used to display the groups that the current user belongs to.
+
+\begin{lstlisting}[language=bash]
+  $ groups
+  sys wheel rfkill autologin sayan
+\end{lstlisting}
+
+\vspace{5mm}
+\hrule
+\vspace{3mm}
+
+These are some of the basic commands that are used in the terminal.
+Each of these commands has many more options and flags that can be used to customize their behavior.
+It is left as an exercise to the reader to explore the manual pages of these commands and try out the different options and flags.
+
+In most terminal emulators, there are some basic shortcuts that can be used to make the terminal experience more efficient.
+Some of the basic shortcuts are listed in \vreftab{basic-shortcuts}.
+
+\begin{table}[h!]
+\caption{Basic Shortcuts in Terminal}
+\labtab{basic-shortcuts}
+\begin{tabular}{ c l }
+  \toprule
+ Shortcut & Description \\
+ \midrule
+  \texttt{Ctrl + C} & Terminate the current process\\
+  \texttt{Ctrl + D} & Exit the shell \\
+  \texttt{Ctrl + L} & Clear the terminal screen \\
+  \texttt{Ctrl + A} & Move the cursor to the beginning of the line \\
+  \texttt{Ctrl + E} & Move the cursor to the end of the line \\
+  \texttt{Ctrl + U} & Delete from the cursor to the beginning of the line \\
+  \texttt{Ctrl + K} & Delete from the cursor to the end of the line \\
+  \texttt{Ctrl + W} & Delete the word before the cursor \\
+  \texttt{Ctrl + Y} & Paste the last deleted text \\
+  \texttt{Ctrl + R} & Search the command history \\
+  \texttt{Ctrl + Z} & Suspend the current process \\
+  \texttt{Ctrl + \textbackslash} & Terminate the current process \\
+  \texttt{Ctrl + S} & Pause the terminal output \\
+  \texttt{Ctrl + Q} & Resume the terminal output \\
+  \bottomrule
+\end{tabular}
+\end{table}
+
+\vfill
+\pagebreak
 \section{Navigating the File System}
+
+\subsection{What is a File System?}
+
+Unlike Windows which has different drive letters for different partitions, Linux follows a unified file structure. The filesystem hierarchy is a tree of directories and files\sidenote{A non-directory is a leaf node of a tree.}. The root\sidenote{The root of a tree is the first node from which the tree originates. A tree can have only one root.} of the filesystem tree is the directory \texttt{/}. The basic filesystem hierarchy structure can be seen in \reffig{linuxfs} and \vreftab{linuxfs-table}.
+
+But what does so many directories mean? What do they do? What is the purpose of each directory?
+
+\begin{table}[h!]
+\caption{Linux Filesystem Hierarchy}
+\labtab{linuxfs-table}
+\begin{tabular}{ c l }
+  \toprule
+ Directory Path & Description \\
+ \midrule
+  / & Root directory \\
+  /bin & Essential command binaries \\
+  /boot & Static files of the bootloader \\
+  /dev & Device files \\
+  /etc & Host-specific system configuration \\
+  /home & User home directories \\
+  /lib & Essential shared libraries and kernel modules \\
+  /media & Mount point for removable media \\
+  /mnt & Mount point for mounting a filesystem temporarily \\
+  /opt & Add-on application software packages \\
+  /proc & Virtual filesystem providing process information \\
+  /root & Home directory for the root user \\
+  /run & Run-time variable data \\
+  /sbin & Essential system binaries \\
+  /srv & Data for services provided by the system \\
+  /sys & Kernel and system information \\
+  /tmp & Temporary files \\
+  /usr & Secondary hierarchy \\
+  /var & Variable data \\
+  \bottomrule
+\end{tabular}
+\end{table}
+
+\begin{marginfigure}
+	\includegraphics[width=0.9\marginparwidth]{images/pdf/linuxfs.pdf}
+	\caption[Linux Filesystem Hierarchy]{Linux Filesystem Hierarchy}
+	\labfig{linuxfs}
+\end{marginfigure}
+
+Some directories do not store data on the disk, but are used to store information about the system.
+These directories are called \textit{virtual} directories.
+For example, the \textbf{/proc} directory is a virtual directory that provides information about the running processes.
+The \textbf{/sys} directory is another virtual directory that provides information about the system.
+The \textbf{/tmp} is a \textit{volatile} directory whose data is deleted as soon as the system is turned off.
+The \textbf{/run} directory is another volatile directory that stores runtime data.
+
+Rest directories are stored on the disk.
+The reason for having so many directories is to categorize the type of files they store.
+For example, all the executable binaries of different applications and utilities installed in the system is stored in \textbf{/bin} and \textbf{/sbin} directories.
+All the shared libraries installed on the system are stored in \textbf{/lib} directory.
+Sometimes some applications are installed in \textbf{/opt} directory which are not installed directly by the package manager.
+\sidenote{
+  In Linux, you do not install applications by downloading them from the internet and running an installer like in Windows. You use a package manager to install applications. The package manager downloads the application from the internet and installs it on your system automatically. This way the package manager can also keep track of the installed applications and their dependencies and whether they should be updated. This is similar to the \textit{Play Store} on mobile phones.
+}
+
+We also need to store the user's documents and files.
+This is done in the \textbf{/home} directory.
+Each user has their own directory in the \textbf{/home} directory.
+The root user's directory is \textbf{/root}.
+All the application's configuration files are stored in the user's home directory in the \textbf{/home} directory itself.
+This separation of application binary and per-user application settings helps people to easily change systems but keep their own \textbf{/home} directory constant and in turn, also all their application settings.
+
+Some settings however needs to be applied system-wide and for all users.
+These settings are stored in the \textbf{/etc} directory.
+This directory contains all the system-wide configuration files.
+
+To boot up the system, the bootloader needs some files. These files are stored in the \textbf{/boot} directory.
+\sidenote{
+  Modern systems use \textbf{UEFI} instead of \textbf{BIOS} to boot up the system. The bootloader is stored in the \textbf{/boot/EFI} directory or in the \textbf{/efi} directory directly.
+}
+The bootloader is the first program that runs when the computer is turned on. It loads the operating system into memory and starts it.
+
+Although the file system is a unified tree hierarchy, this doesn't mean that we cannot have multiple partitions on Linux: au contraire, it is easier to manage partitions on Unix.
+We simply need to mention which empty directory in the hierarchy should be used to mount a partition.
+As soon as that partition is mounted, it gets populated with the data stored on that disk with all the files and subdirectories, and when the device is unmounted the directory again becomes empty.
+Although a partition can be mounted on any directory, there are some dedicated folders in \texttt{/} as well for this purpose.
+For example, the \texttt{/mnt} directory is used to mount a filesystem temporarily, and the \texttt{/media} directory is used to mount removable media like USB drives, however it is not required to strictly follow this.
+
+Finally, the biggest revelation in Linux is that, everything is a file.
+Not only are all the system configurations stored as \textbf{plain text} files which can be read by humans, but the processes running on your system are also stored as files in proc.
+Your kernel's interfaces to the applications or users are also simple files stored in sys.
+Biggest of all, even your hardware devices are stored as files in dev.
+\sidenote{
+  Device files are not stored as normal files on the disk, but are special files that the kernel uses to communicate with the hardware devices.
+  These are either \textbf{block} or \textbf{character} devices.
+  They are used to read and write data to and from the hardware devices.
+}
+
+The \textbf{/usr} directory is a secondary hierarchy that contains subdirectories similar to those present in \textbf{/}.
+This was created as the olden system had started running out of disk space for the \textbf{/bin} and \textbf{/lib} directories.
+Thus another directory named \textbf{usr} was made, and subdirectiores like \textbf{/usr/bin} and \textbf{/usr/lib} were made to store half of the binaries and libraries.
+There wasn't however any rigid definition of which binary should go where.
+Modern day systems have more than enough disk space to store everything on one partition, thus the \textbf{/bin} and \textbf{/lib} dont really exist any more. If they do, they are simply shortcuts
+\sidenote{
+  Shortcuts in Linux are called \textit{symbolic links} or \textit{symlinks}.
+}
+to the \textbf{/usr/bin} and \textbf{/usr/lib} directories which are still kept for \textit{backwards compatibility}.
+
+These can also be loosely classified into \textit{sharable} and \textit{non-sharable} directories and \textit{static} and \textit{variable} directories as shown in \vreftab{linuxfsclass-table}.
+
+\begin{table}[h!]
+\caption{Linux Filesystem Directory Classification}
+\labtab{linuxfsclass-table}
+\begin{tabular}{ c | c c }
+  \toprule
+  & Sharable & Non-sharable \\
+ \midrule
+  Static & /usr, /opt & /etc, /boot \\
+  Variable & /var/spool & /tmp, /var/log \\
+ \bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Why do we have proc and sys directories?}
+
+The \texttt{/proc} tree originated in System V Unix
+\sidenote{
+  Unix System V is one of the first commercial versions of the Unix operating system. It was originally developed by AT\&T and first released in 1983.
+}
+, where it only gave information about each running process, using a
+\texttt{/proc/\$PID/} format. Linux greatly extended that, adding all sorts of information about the running kernel's status. In addition to these read-only information files, Linux's \texttt{/proc} also has writable virtual files that can change the state of the running kernel.
+BSD
+\sidenote{
+  BSD, or Berkeley Software Distribution, is a Unix-like operating system that was developed at the University of California, Berkeley. It was first released in 1977 and was based on the original Unix source code from AT\&T. BSD is not linux, it is a totally different kernel, with similar core utils to GNU.
+}
+type OSes generally do not have \texttt{/proc} at all, so much of what you find under proc is non-portable.
+
+The intended solution for this mess in Linux's \texttt{/proc} is \texttt{/sys}. Ideally, all the non-process information that got crammed into the \texttt{/proc} tree should have moved to \texttt{/sys} by now, but historical inertia has kept a lot of stuff in \texttt{/proc}.
+Often there are two ways to effect a change in the running kernel: the old \texttt{/proc} way, kept for backwards compatibility, and the new \texttt{/sys} way that you're supposed to be using now.
+% \sidecite{sysvproc}
+
+
+\subsection{Paths}
+
+Whenever we open a terminal on a Linux system, we are placed in a directory.
+This is called the \textit{current working directory}.
+All shells and applications have a current working directory from where they are launched.
+
+To refer to and identify the directory you are talking about, we use a \textbf{path}.
+
+\begin{definition}[Path]
+  Path is a traversal in the filesystem tree.
+  It is a way to refer to a file or directory.
+\end{definition}
+
+\textbf{Absolute Path:}
+
+The traversal to the directory from the root directory is called the \textbf{absolute path}. For example, if we want to refer to the directory named \textbf{alex} inside the directory \textbf{home} in the root of the file system, then it is qualified as:
+
+\begin{lstlisting}[language=bash]
+  /home/alex
+\end{lstlisting}
+
+\textbf{Relative Path:}
+
+\begin{marginfigure}
+	\includegraphics{images/pdf/relpath.pdf}
+	\caption[Relative Path]{Relative Path}
+	\labfig{relpath}
+\end{marginfigure}
+
+The traversal to the directory from the current working directory is called the \textbf{relative path}. For example, if we want to refer to the directory named \textbf{alex} inside the directory \textbf{home} from the \textbf{/usr/share} directory, then it will be qualified as:
+
+\begin{lstlisting}[language=bash]
+  ../../home/alex
+\end{lstlisting}
+
+\begin{remark}
+  The \textbf{..} in the path refers to the parent directory. It is used in relative paths to refer to directories whose path requires travelling up the tree.
+\end{remark}
+
+\subsection{Basic Commands for Navigation}
 The file system can be navigated in the Linux command line using the following commands:
 \begin{itemize}
   \item \textbf{pwd}: Print the current working directory
@@ -18,7 +1425,7 @@ The file system can be navigated in the Linux command line using the following c
 
 More details about these commands can be found in their respective
 man pages. For example, to find more about the \textbf{ls} command,
-you can type \texttt{man ls}
+you can type \texttt{man ls}.
 
 \begin{qs}
   What is the command to list the contents of the current directory?
@@ -263,7 +1670,7 @@ you can type \texttt{man ls}
     \item Symbolic Links (starts with \texttt{l})
     \item Character Devices (starts with \texttt{c})
     \item Block Devices (starts with \texttt{b})
-    \item Named Pipes (starts with \texttt{|})
+    \item Named Pipes (starts with \texttt{p})
     \item Sockets (starts with \texttt{s})
   \end{itemize}
 \end{ans}

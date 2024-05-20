@@ -20,6 +20,7 @@
 \newcommand{\kaotheorems@exebg}{JungleGreen!45!white}
 \newcommand{\kaotheorems@quebg}{Periwinkle!45!white}
 \newcommand{\kaotheorems@ansbg}{CarnationPink!45!white}
+\newcommand{\kaotheorems@warbg}{WildStrawberry!45!white}
 \DeclareStringOption[\kaotheorems@defaultbg]{background}
 \DeclareStringOption[\kaotheorems@thebg]{theorembackground}
 \DeclareStringOption[\kaotheorems@probg]{propositionbackground}
@@ -32,9 +33,11 @@
 \DeclareStringOption[\kaotheorems@exebg]{exercisebackground}
 \DeclareStringOption[\kaotheorems@quebg]{questionbackground}
 \DeclareStringOption[\kaotheorems@ansbg]{answerbackground}
+\DeclareStringOption[\kaotheorems@warbg]{warningbackground}
 
 \newenvironment{qs}{\begin{lemma}}{\end{lemma}}
-  \newenvironment{ans}{\begin{corollary}}{\end{corollary}}
+\newenvironment{ans}{\begin{corollary}}{\end{corollary}}
+\newenvironment{warn}{\begin{proposition}}{\end{proposition}}
 
 \ProcessKeyvalOptions{kaotheorems}
 
@@ -161,14 +164,18 @@
     	},
     ]{theorem}
     \declaretheorem[
-    	name=Proposition,
+    	name=Warning,
     	%refname={proposition,propositions},
-    	refname={Proposition,Propositions},
-    	Refname={Proposition,Propositions},
+    	refname={Warning,Warnings},
+    	Refname={Warning,Warnings},
     	numberwithin=section,
     	mdframed={
     		style=mdfkao,
-            backgroundcolor=\kaotheorems@propositionbackground,
+        backgroundcolor=\kaotheorems@warningbackground,
+    	  topline=false,
+    	  bottomline=false,
+    	  rightline=false,
+    	  leftline=false,
     		%frametitlebackgroundcolor=\@theorembackground,
     	},
     ]{proposition}
@@ -393,9 +400,9 @@
     	numberwithin=section,
     ]{theorem}
     \declaretheorem[
-    	name=Proposition,
-    	refname={proposition,propositions},
-    	Refname={Proposition,Propositions},
+    	name=Warning,
+    	refname={warning,Warnings},
+    	Refname={Warning,Warnings},
     	sibling=theorem,
     ]{proposition}
     \declaretheorem[
