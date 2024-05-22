@@ -1,5 +1,5 @@
 \setchapterpreamble[u]{\margintoc}
-\chapter{Basic Commands in Linux}
+\chapter{Essentials of Linux}
 \labch{basic}
 
 \section{Introduction}
@@ -92,7 +92,7 @@ There are many desktop environments available for Linux, but the important ones 
 
 It is important to note that although some distributions come pre-bundled with certain Desktop Environments, it doesn't mean that you cannot use another DE with it. DE are simply packages installed on your distribution, and almost all the popular DEs can be installed on all distributions. Many distributions also come with multiple pre-bundled desktop environments due to user preferences. Most server distributions and some enthusiast distributions come with no pre-bundled desktop environment, and let the user determine which one is required, or if one is required.
 
-\subsection{Window Manager}
+\subsection{Window Managers}
 
 \begin{definition}[Window Manager]
   A window manager is system software that controls the placement and appearance of windows within a windowing system in a graphical user interface. It is a part of the desktop environment, but can also be used standalone. It is responsible for the appearance and placement of windows, and can also provide additional functionality like virtual desktops, window decorations, window title bars, and tiling.
@@ -187,6 +187,35 @@ Some popular terminal emulators are:
   \item \textbf{terminology}
 \end{itemize}
 
+In most terminal emulators, there are some basic shortcuts that can be used to make the terminal experience more efficient.
+Some of the basic shortcuts are listed in \vreftab{basic-shortcuts}.
+
+\begin{table}[h!]
+\caption{Basic Shortcuts in Terminal}
+\labtab{basic-shortcuts}
+\begin{tabular}{ c l }
+  \toprule
+ Shortcut & Description \\
+ \midrule
+  \texttt{Ctrl + C} & Terminate the current process\\
+  \texttt{Ctrl + D} & Exit the shell \\
+  \texttt{Ctrl + L} & Clear the terminal screen \\
+  \texttt{Ctrl + A} & Move the cursor to the beginning of the line \\
+  \texttt{Ctrl + E} & Move the cursor to the end of the line \\
+  \texttt{Ctrl + U} & Delete from the cursor to the beginning of the line \\
+  \texttt{Ctrl + K} & Delete from the cursor to the end of the line \\
+  \texttt{Ctrl + W} & Delete the word before the cursor \\
+  \texttt{Ctrl + Y} & Paste the last deleted text \\
+  \texttt{Ctrl + R} & Search the command history \\
+  \texttt{Ctrl + Z} & Suspend the current process \\
+  \texttt{Ctrl + \textbackslash} & Terminate the current process \\
+  \texttt{Ctrl + S} & Pause the terminal output \\
+  \texttt{Ctrl + Q} & Resume the terminal output \\
+  \bottomrule
+\end{tabular}
+\end{table}
+
+
 \subsection{Why the Command Line?}
 
 Both the command line interface (CLI) and the graphical user interface (GUI) are simply shells over the operating system's kernel.
@@ -225,37 +254,34 @@ The $\sim$ symbol indicates that the current working directory is the user's hom
   The home directory is the directory where the user's files and settings are stored.
   It is usually located at \texttt{/home/username}.
   This can be shorted to \texttt{\textasciitilde} in the shell.
-}
+} This prompt can be changed and customized according to the user's preferences using the \texttt{PS1} variable discussed in \refch{variables}.
 
-\subsection{Simple Commands in GNU Core Utils}
+\vfill
+\pagebreak
+\section{Simple Commands in GNU Core Utils}
 
-\begin{figure}[hb]
+\begin{marginfigure}
 	\includegraphics{images/png/gnu.png}
 	\caption[GNU Core Utils Logo]{GNU Core Utils Logo}
 	\labfig{gnu}
-\end{figure}
+\end{marginfigure}
 
 \begin{definition}[GNU Core Utils]
   The GNU Core Utilities are the basic file, shell, and text manipulation utilities of the GNU operating system. These are the utilities that are used to interact with the operating system and perform basic operations.
-  \sidenote{
+  \footnote{
     \href{https://www.gnu.org/software/coreutils/}{GNU Core Utils}
   }
 \end{definition}
 
 The shell lets you simply type in the name of the command and press enter to run it.
-The shell then runs the command and displays the output.
-The shell also lets you pass arguments to the command to modify its behavior.
+You can also pass arguments to the command to modify its behavior.
 Although the commands are simple, they are powerful and can be combined to perform complex operations.
 \sidenote{
   The combination of commands to perform complex operations is called \textit{piping}. This will be covered later.
 }
-Anything that can be done through a GUI can be done through the CLI, and often faster and more efficiently.
-Every GUI primitive has a CLI counterpart, such as copying, moving, renaming, deleting files, going inside a directory, etc.
 
 Some basic commands in the core-utils are listed in \vreftab{basic-commands}.
 
-\vfill
-\pagebreak
 \begin{table}[h!]
 \caption{Basic Commands in GNU Core Utils}
 \labtab{basic-commands}
@@ -304,6 +330,8 @@ Some basic commands in the core-utils are listed in \vreftab{basic-commands}.
   \bottomrule
 \end{tabular}
 \end{table}
+
+\subsection{File System Navigation}
 
 \textbf{pwd}:
 
@@ -412,6 +440,21 @@ If we want to go back to the previous directory, we can use the \texttt{-} symbo
   /home/username
 \end{lstlisting}
 
+% --- Questions and Answers ---
+
+\begin{qs}
+  \texttt{ls} can only show files and directories in the \textbf{cwd}\sidenote{\textbf{cwd} means \textbf{Current Working Directory}}, not subdirectories.
+  True or False?
+\end{qs}
+
+\begin{ans}
+  False. \texttt{ls} can show files and directories in the cwd, and also in subdirectories.
+  The \texttt{-R} flag can be used to show files and directories in subdirectories, recursively.
+\end{ans}
+
+
+\subsection{Manuals}
+
 \textbf{man}:
 
 How to remember so many flags and options for each of the commands?
@@ -502,6 +545,8 @@ To be proficient with shell commands, one needs to read the man, info, and help 
   Read the documentations carefully and try to understand how each command works, and the pattern in which the documentations are written.
 \end{exercise}
 
+\subsection{System Information}
+
 \textbf{uname}:
 
 The \texttt{uname} command prints system information.
@@ -540,6 +585,26 @@ By default, it displays information about the processes run by the current user 
 
 There are a lot of flags that can be passed to the \texttt{ps} command to display more information about the processes. These will be covered in \refch{procman}.
 
+\begin{remark}
+  \textbf{ps} has three types of options:
+  \begin{itemize}
+    \item UNIX options
+    \item BSD options
+    \item GNU options
+  \end{itemize}
+  The UNIX options are the preceded by a hyphen (-{}) and may be grouped.
+  The BSD options can be grouped, but should not be preceded by a hyphen (-{}).
+  The GNU options are preceded by two hyphens (--).
+  These are also called long options.
+
+  The same action can be performed by using different options, for example, \texttt{ps -ef} and \texttt{ps aux} are equivalent, although first is using \textbf{UNIX} options, and the latter is using \textbf{BSD} options.
+
+  Another difference in \textbf{GNU core utils} and \textbf{BSD utils} is that the \textbf{GNU} utils have long options, whereas the \textbf{BSD} utils do not.
+
+  \textbf{BSD} utils also usually do not support having flags after the positional arguments, whereas most \textbf{GNU} utils are fine with this.
+\end{remark}
+
+
 \textbf{kill}:
 
 The \texttt{kill} command is used to terminate a process.
@@ -559,6 +624,127 @@ For example, the \texttt{SIGKILL} signal can be sent to the process to terminate
 \begin{lstlisting}[language=bash]
   $ kill -9 12345
 \end{lstlisting}
+
+\textbf{free}:
+
+The \texttt{free} command is used to display the amount of free and used memory in the system.
+
+\begin{lstlisting}[language=bash]
+  $ free
+                total        used        free      shared  buff/cache   available
+  Mem:        8167840     1234560     4567890      123456     2367890     4567890
+  Swap:       2097148           0     2097148
+\end{lstlisting}
+
+The \texttt{free} command can take the \texttt{-h} flag to display the memory in human-readable format.
+
+\begin{lstlisting}[language=bash]
+  $ free -h
+                total        used        free      shared  buff/cache   available
+  Mem:          7.8Gi       1.2Gi       4.3Gi       120Mi       2.3Gi       4.3Gi
+  Swap:         2.0Gi          0B       2.0Gi
+\end{lstlisting}
+
+\textbf{df}:
+
+The \texttt{df} command is used to display the amount of disk space available on the filesystems.
+
+\begin{lstlisting}[language=bash]
+  $ df
+  Filesystem     1K-blocks     Used Available Use% Mounted on
+  /dev/sda1       12345678  1234567  11111111  10% /
+  /dev/sda2       12345678  1234567  11111111  10% /home
+\end{lstlisting}
+
+The \texttt{df} command can take the \texttt{-h} flag to display the disk space in human-readable format.
+
+\begin{lstlisting}[language=bash]
+  $ df -h
+  Filesystem      Size  Used Avail Use% Mounted on
+  /dev/sda1        12G  1.2G  9.9G  11% /
+  /dev/sda2        12G  1.2G  9.9G  11% /home
+\end{lstlisting}
+
+\textbf{du}:
+
+The \texttt{du} command is used to display the disk usage of directories and files.
+By default, it displays the disk usage of the current directory.
+
+\begin{lstlisting}[language=bash]
+  $ du
+  4       ./Desktop
+  4       ./Documents
+  4       ./Downloads
+  4       ./Music
+  4       ./Pictures
+  4       ./Videos
+  28
+\end{lstlisting}
+
+The \texttt{du} command can take the \texttt{-h} flag to display the disk usage in human-readable format.
+The \texttt{-s} flag displays the total disk usage of the directory.
+
+\begin{lstlisting}[language=bash]
+  $ du -sh
+  28K     .
+\end{lstlisting}
+
+% --- Questions and Answers ---
+
+\begin{qs}
+  How to print the kernel version of your system?
+\end{qs}
+
+\begin{ans}
+  \texttt{uname -r} will print the kernel version of your system.
+  \texttt{uname} is a command to print system information.
+  The \texttt{-r} flag is to print the kernel release.
+  There are other flags to print other system information. \\
+  We can also run \texttt{uname -a} to get all fields and extract only the
+  kernel info using commands taught in later weeks.
+\end{ans}
+
+\begin{qs}
+  How to see how long your system is running for? \\
+  What about the time it was booted up?
+\end{qs}
+
+\begin{ans}
+  \texttt{uptime} will show how long the system is running for.\\
+  \texttt{uptime -s} will show the time the system was booted up. \\
+  The \texttt{-s} flag is to show the time of last boot.
+\end{ans}
+
+\begin{qs}
+  How to see the amount of free memory? What about free hard disk space?
+  If we are unable to understand the big numbers, how to convert them to human readable format?
+  What is difference between MB and MiB?
+\end{qs}
+
+\begin{ans}
+  \texttt{free} will show the amount of free memory. \\
+  \texttt{df} will show the amount of free hard disk space. \\
+  \texttt{df -h} and \texttt{free -h}
+  will convert the numbers to human readable format. \\
+  MB is Megabyte, and MiB is Mebibyte. \\
+  1 MB = 1000 KB, 1 GB = 1000 MB, 1 TB = 1000 GB, this is SI unit. \\
+  1 MiB = 1024 KiB, 1 GiB = 1024 MiB, 1 TiB = 1024 GiB, this is $2^{10}$ unit.
+\end{ans}
+
+\subsection{File Management}
+
+\textbf{file}:
+
+The \texttt{file} command is used to determine the type of a file.
+It can take multiple file names as arguments.
+
+\begin{lstlisting}[language=bash]
+  $ file file1
+  file1: ASCII text
+  $ file /bin/bash
+  /bin/bash: ELF 64-bit LSB shared object, x86-64, version 1 (SYSV), dynamically linked, interpreter /lib64/ld-linux-x86-64.so.2, for GNU/Linux 3.2.0, BuildID[sha1]=1234567890abcdef, stripped
+\end{lstlisting}
+
 
 \textbf{mkdir}:
 
@@ -740,6 +926,8 @@ It is used to move files from one location to another, or to rename files.
   Were you require to use the \texttt{-r} flag with the \texttt{mv} command like you would have in \texttt{cp} command?
 \end{exercise}
 
+\subsection{Text Processing and Pagers}
+
 \textbf{echo}:
 
 The \texttt{echo} command is used to print a message to the terminal.
@@ -908,6 +1096,94 @@ The \texttt{tail} command can take the \texttt{-n} flag to display the last \tex
   This is because it is a regular user and not a system user.
 \end{exercise}
 
+\textbf{wc}:
+
+The \texttt{wc} command is used to count the number of lines, words, and characters in a file.
+By default, it displays the number of lines, words, and characters in a file.
+
+\begin{lstlisting}[language=bash]
+$ wc /etc/passwd
+  43  103 2426 /etc/passwd
+\end{lstlisting}
+
+We can also use the \texttt{-l}, \texttt{-w}, and \texttt{-c} flags to display only the number of lines, words, and characters respectively.
+
+\begin{lstlisting}[language=bash]
+$ wc -l /etc/passwd
+43 /etc/passwd
+\end{lstlisting}
+
+% --- Questions and Answers ---
+
+\begin{qs}
+  Can we print contents of multiple files using a single command?
+\end{qs}
+
+\begin{ans}
+  \texttt{cat file1 file2 file3} will print the contents of \texttt{file1}, \texttt{file2}, and \texttt{file3}
+  in the order given. The contents of the files will be printed one after the other.
+\end{ans}
+
+\begin{qs}
+  Can \texttt{cat} also be used to write to a file?
+\end{qs}
+
+\begin{ans}
+  Yes, \texttt{cat > file1} will write to \texttt{file1}. The input will be taken from the
+  terminal and written to \texttt{file1}. The input will be written to \texttt{file1} until
+  the user presses \texttt{Ctrl+D} to indicate end of input.
+  This is \texttt{redirection}, which we see in later weeks.
+\end{ans}
+
+\begin{qs}
+  How to list only first 10 lines of a file? How about first 5? Last 5?
+  How about lines 105 to lines 152?
+\end{qs}
+
+\begin{ans}
+  \texttt{head filename} will list the first 10 lines of \texttt{filename}. \\
+  \texttt{head -n 5 filename} will list the first 5 lines of \texttt{filename}. \\
+  \texttt{tail -n 5 filename} will list the last 5 lines of \texttt{filename}. \\
+  \texttt{head -n 152 filename | tail -n 48} will list lines 105 to 152 of \texttt{filename}.
+  This uses \texttt{|} which is a pipe, which we will see in later weeks.
+\end{ans}
+
+\begin{qs}
+  Do you know how many lines a file contains? How can we count it?
+  What about words? Characters?
+\end{qs}
+
+\begin{ans}
+  \texttt{wc filename} will count the number of lines, words, and characters in \texttt{filename}. \\
+  \texttt{wc -l filename} will count the number of lines in \texttt{filename}. \\
+  \texttt{wc -w filename} will count the number of words in \texttt{filename}. \\
+  \texttt{wc -c filename} will count the number of characters in \texttt{filename}.
+\end{ans}
+
+\begin{qs}
+  How to delete an empty directory? What about non-empty directory?
+\end{qs}
+
+\begin{ans}
+  \texttt{rmdir dirname} will delete an empty directory. \\
+  \texttt{rm -r dirname} will delete a non-empty directory.
+\end{ans}
+
+\begin{qs}
+  How to copy an entire folder to another name? What about moving? \\
+  Why the difference in flags?
+\end{qs}
+
+\begin{ans}
+  \texttt{cp -r sourcefolder targetfolder} will copy an entire folder to another name. \\
+  \texttt{mv sourcefolder targetfolder} will move an entire folder to another name. \\
+  The difference in flags is because \texttt{cp} is used to copy, and \texttt{mv} is used to move or rename a file or folder.
+  The \texttt{-r} flag is to copy recursively, and is not needed for \texttt{mv} as it is not recursive
+  and simply changes the name of the folder (or the path).
+\end{ans}
+
+\subsection{Aliases and Types of Commands}
+
 \textbf{alias}:
 
 The \texttt{alias} command is used to create an alias for a command.
@@ -993,6 +1269,8 @@ To remove an alias, use the \texttt{unalias} command.
   What happens?
 \end{exercise}
 
+\subsection{User Management}
+
 \textbf{whoami}:
 
 The \texttt{whoami} command is used to print the username of the current user.
@@ -1001,6 +1279,67 @@ The \texttt{whoami} command is used to print the username of the current user.
   $ whoami
   sayan
 \end{lstlisting}
+
+\textbf{groups}:
+
+The \texttt{groups} command is used to display the groups that the current user belongs to.
+
+\begin{lstlisting}[language=bash]
+  $ groups
+  sys wheel rfkill autologin sayan
+\end{lstlisting}
+
+\textbf{passwd}
+
+The \texttt{passwd} command is used to change the password of the current user.
+The root user can also change the password of other users.
+\sidenote{
+  This executable is a special one, as it is a setuid program.
+  This will be discussed in detail in \refsubsec{special-permissions}.
+}
+
+\textbf{who}:
+
+The \texttt{who} command is used to display the users who are currently logged in.
+
+\begin{lstlisting}[language=bash]
+$ who
+sayan    tty2         2024-05-22 13:49
+sayan    pts/0        2024-05-22 15:58 (:0)
+sayan    pts/1        2024-05-22 15:58 (tmux(1082933).%2)
+sayan    pts/2        2024-05-22 15:58 (tmux(1082933).%1)
+sayan    pts/3        2024-05-22 15:58 (tmux(1082933).%3)
+sayan    pts/4        2024-05-22 15:58 (tmux(1082933).%4)
+sayan    pts/5        2024-05-22 15:58 (tmux(1082933).%5)
+sayan    pts/6        2024-05-22 15:58 (tmux(1082933).%6)
+sayan    pts/7        2024-05-22 15:58 (tmux(1082933).%7)
+sayan    pts/8        2024-05-22 15:58 (tmux(1082933).%8)
+sayan    pts/9        2024-05-22 15:58 (tmux(1082933).%9)
+sayan    pts/10       2024-05-22 17:58 (:0)
+sayan    pts/11       2024-05-22 18:24 (tmux(1082933).%10)
+sayan    pts/12       2024-05-22 18:24 (tmux(1082933).%11)
+\end{lstlisting}
+
+\begin{exercise}
+  Run the \texttt{who} command on the system commands VM.
+  What is the output?
+\end{exercise}
+
+\textbf{w}:
+
+The \texttt{w} command is used to display the users who are currently logged in and what they are doing.
+
+\begin{lstlisting}[language=bash]
+$ w
+ 19:47:07 up  5:57,  1 user,  load average: 0.77, 0.80, 0.68
+USER     TTY       LOGIN@   IDLE   JCPU   PCPU  WHAT
+sayan    tty2      13:49    5:57m 19:10  21.82s dwm
+\end{lstlisting}
+
+This is different from the \texttt{who} command as it only considers the login shell.
+Here \textbf{dwm} is the window manager running on the \texttt{tty2} terminal.
+
+\subsection{Date and Time}
 
 \textbf{date}:
 
@@ -1110,90 +1449,17 @@ There are multiple flags that can be passed to the \texttt{cal} command to displ
   The flags and the output of the \texttt{cal} command can differ between the two implementations.
 \end{remark}
 
-\textbf{free}:
+\begin{qs}
+  How to print the current date and time in some custom format?
+\end{qs}
 
-The \texttt{free} command is used to display the amount of free and used memory in the system.
-
-\begin{lstlisting}[language=bash]
-  $ free
-                total        used        free      shared  buff/cache   available
-  Mem:        8167840     1234560     4567890      123456     2367890     4567890
-  Swap:       2097148           0     2097148
-\end{lstlisting}
-
-The \texttt{free} command can take the \texttt{-h} flag to display the memory in human-readable format.
-
-\begin{lstlisting}[language=bash]
-  $ free -h
-                total        used        free      shared  buff/cache   available
-  Mem:          7.8Gi       1.2Gi       4.3Gi       120Mi       2.3Gi       4.3Gi
-  Swap:         2.0Gi          0B       2.0Gi
-\end{lstlisting}
-
-\textbf{df}:
-
-The \texttt{df} command is used to display the amount of disk space available on the filesystems.
-
-\begin{lstlisting}[language=bash]
-  $ df
-  Filesystem     1K-blocks     Used Available Use% Mounted on
-  /dev/sda1       12345678  1234567  11111111  10% /
-  /dev/sda2       12345678  1234567  11111111  10% /home
-\end{lstlisting}
-
-The \texttt{df} command can take the \texttt{-h} flag to display the disk space in human-readable format.
-
-\begin{lstlisting}[language=bash]
-  $ df -h
-  Filesystem      Size  Used Avail Use% Mounted on
-  /dev/sda1        12G  1.2G  9.9G  11% /
-  /dev/sda2        12G  1.2G  9.9G  11% /home
-\end{lstlisting}
-
-\textbf{du}:
-
-The \texttt{du} command is used to display the disk usage of directories and files.
-By default, it displays the disk usage of the current directory.
-
-\begin{lstlisting}[language=bash]
-  $ du
-  4       ./Desktop
-  4       ./Documents
-  4       ./Downloads
-  4       ./Music
-  4       ./Pictures
-  4       ./Videos
-  28
-\end{lstlisting}
-
-The \texttt{du} command can take the \texttt{-h} flag to display the disk usage in human-readable format.
-The \texttt{-s} flag displays the total disk usage of the directory.
-
-\begin{lstlisting}[language=bash]
-  $ du -sh
-  28K     .
-\end{lstlisting}
-
-\textbf{file}:
-
-The \texttt{file} command is used to determine the type of a file.
-It can take multiple file names as arguments.
-
-\begin{lstlisting}[language=bash]
-  $ file file1
-  file1: ASCII text
-  $ file /bin/bash
-  /bin/bash: ELF 64-bit LSB shared object, x86-64, version 1 (SYSV), dynamically linked, interpreter /lib64/ld-linux-x86-64.so.2, for GNU/Linux 3.2.0, BuildID[sha1]=1234567890abcdef, stripped
-\end{lstlisting}
-
-\textbf{groups}:
-
-The \texttt{groups} command is used to display the groups that the current user belongs to.
-
-\begin{lstlisting}[language=bash]
-  $ groups
-  sys wheel rfkill autologin sayan
-\end{lstlisting}
+\begin{ans}
+  \texttt{date -d today +\%Y-\%m-\%d} will print the current date in the format
+  \texttt{YYYY-MM-DD}. The format can be changed by changing the format specifiers.
+  The format specifiers are given in the \texttt{man date} page. The \texttt{-d today} can
+  be dropped, but is mentioned to show that the date can be changed to any date.
+  It can be strings like '2024-01-01' or '5 days ago' or 'yesterday', etc.
+\end{ans}
 
 \vspace{5mm}
 \hrule
@@ -1203,33 +1469,11 @@ These are some of the basic commands that are used in the terminal.
 Each of these commands has many more options and flags that can be used to customize their behavior.
 It is left as an exercise to the reader to explore the manual pages of these commands and try out the different options and flags.
 
-In most terminal emulators, there are some basic shortcuts that can be used to make the terminal experience more efficient.
-Some of the basic shortcuts are listed in \vreftab{basic-shortcuts}.
-
-\begin{table}[h!]
-\caption{Basic Shortcuts in Terminal}
-\labtab{basic-shortcuts}
-\begin{tabular}{ c l }
-  \toprule
- Shortcut & Description \\
- \midrule
-  \texttt{Ctrl + C} & Terminate the current process\\
-  \texttt{Ctrl + D} & Exit the shell \\
-  \texttt{Ctrl + L} & Clear the terminal screen \\
-  \texttt{Ctrl + A} & Move the cursor to the beginning of the line \\
-  \texttt{Ctrl + E} & Move the cursor to the end of the line \\
-  \texttt{Ctrl + U} & Delete from the cursor to the beginning of the line \\
-  \texttt{Ctrl + K} & Delete from the cursor to the end of the line \\
-  \texttt{Ctrl + W} & Delete the word before the cursor \\
-  \texttt{Ctrl + Y} & Paste the last deleted text \\
-  \texttt{Ctrl + R} & Search the command history \\
-  \texttt{Ctrl + Z} & Suspend the current process \\
-  \texttt{Ctrl + \textbackslash} & Terminate the current process \\
-  \texttt{Ctrl + S} & Pause the terminal output \\
-  \texttt{Ctrl + Q} & Resume the terminal output \\
-  \bottomrule
-\end{tabular}
-\end{table}
+\marginnote{
+  Many of the commands that we have discussed here are
+  also explained in the form of short videos on
+  \href{https://www.youtube.com/@RobertElderSoftware/shorts}{Robert Elder's Youtube Channel}.
+}
 
 \vfill
 \pagebreak
@@ -1475,7 +1719,394 @@ you can type \texttt{man ls}.
   to print it. We will see these in later weeks.\sidenote{that is a one, not an L}
 \end{ans}
 
+\vfill
+\pagebreak
 \section{File Permissions}
+\labsec{file-permissions}
+
+\begin{figure}[hb]
+  \includegraphics{images/png/perms.png}
+  \caption[File Permissions]{File Permissions}
+  \labfig{perms}
+\end{figure}
+
+\begin{definition}[File Permissions]
+  File permissions define the access rights of a file or directory.
+  There are three basic permissions: read, write, and execute.
+  These permissions can be set for the owner of the file, the group of the file, and others.
+\end{definition}
+
+We have already briefly seen how to see the permissions of a file using the \lstinline[language=bash]{ls -l} command.
+
+\begin{lstlisting}[language=bash]
+  $ touch hello.txt
+  $ mkdir world
+  $ ls -l
+  total 4
+  -rw-r--r-- 1 sayan sayan    0 May 21 15:20 hello.txt
+  drwxr-xr-x 2 sayan sayan 4096 May 21 15:21 world
+\end{lstlisting}
+
+Here, the first column of the output of \texttt{ls -l} shows the permissions of the file or directory.
+As seen in \reffig{perms}, the permissions are divided into four parts:
+
+\begin{itemize}
+  \item The first character shows the type of the file. \texttt{-} for a regular file and \texttt{d} for a directory and more.
+    \sidenote{
+      There are other types of files as well, like \texttt{l} for a symbolic link, \texttt{c} for a character device, \texttt{b} for a block device, \texttt{s} for a socket, and \texttt{p} for a pipe. These will be discussed later.
+    }
+  \item The next three characters show the permissions for the owner of the file.
+  \item The next three characters show the permissions for the group of the file.
+  \item The last three characters show the permissions for others.
+\end{itemize}
+
+\begin{definition}[Owner]
+  Although this can be changed, the owner of a file is usually the user who created it.
+  All files in the filesystem have an owner.
+  This is symbolically coded as \textbf{u}.
+\end{definition}
+
+\begin{definition}[Group]
+  The group of a file is usually the group of the user who created it.
+  But it can also be changed to any other existing group in the system.
+  All users in the group
+  \footnote{
+    except the owner of the file
+  }
+  have the same permissions on the file.
+  This is symbolically coded as \textbf{g}.
+\end{definition}
+
+\begin{definition}[Others]
+  Others are all the users who are not the owner of the file and are not in the group of the file.
+  This is symbolically coded as \textbf{o}.
+\end{definition}
+
+There are three actions that can be performed on a file: read, write, and execute.
+
+\begin{itemize}
+  \item \textbf{Read}: The read permission allows the file to be read.
+    This is symbolically coded as \textbf{r}.
+  \item \textbf{Write}: The write permission allows the file to be modified.
+    This is symbolically coded as \textbf{w}.
+  \item \textbf{Execute}: The execute permission allows the file to be executed.
+    \sidenote{
+      Executing a file means running the file as a program.
+      For a directory, the execute permission allows the directory to be traversed into.
+    }
+    This is symbolically coded as \textbf{x}.
+\end{itemize}
+
+These however, have different meanings for files and directories.
+
+\subsection{Read}
+
+\begin{itemize}
+  \item For a file, the read permission allows the file to be read.
+    You can use commands like \texttt{cat} or \texttt{less} to read the contents of the file if the user has \textbf{read} permissions.
+  \item For a directory, the read permission allows the directory to be listed using \texttt{ls}.
+\end{itemize}
+
+\subsection{Write}
+
+\begin{itemize}
+  \item For a file, the write permission allows the file to be modified.
+    You can use commands like \texttt{echo} along with redirection
+    \sidenote{
+      Redirection is a way to send the output of a command to a file.
+    }
+    or a text editor like \texttt{vim} or \texttt{nano}
+      to write to the file if the user has \textbf{write} permissions.
+  \item For a directory, the write permission allows the directory to be modified.
+    You can create, delete, or rename files in the directory if the user has \textbf{write} permissions.
+\end{itemize}
+
+\subsection{Execute}
+
+\begin{itemize}
+  \item For a file, the execute permission allows the file to be executed.
+    This is usually only needed for special files like executables,
+    scripts, or libraries.
+    You can run the file as a program if the user has \textbf{execute} permissions.
+  \item For a directory, the execute permission allows the directory to be traversed into.
+    You can change to the directory if the user has \textbf{execute} permissions using \texttt{cd}.
+    You can also only long-list the contents of the directory if the user has \textbf{execute} permissions on that directory.
+\end{itemize}
+
+\subsection{Interesting Caveats}
+
+This causes some interesting edge-cases that one needs to be familiar with.
+
+\textbf{Cannot modify a file? Think again!}
+
+If you have \textbf{write} and \textbf{execute} permissions on a directory, even if you do not have \textbf{write} permission on a file inside the directory, you can \textbf{delete} the file due to your \textbf{write} permission on the directory, and then re-create the modified version of the file with the same name.
+But if you try to simply modify the file directly, you will get permission error.
+
+\begin{lstlisting}[language=bash]
+  $ mkdir test
+  $ cd test
+  $ echo "hello world" > file1
+  $ chmod 400 file1     # 400 means read permission only
+  $ cat file1
+  hello world
+  $ echo "hello universe" > file1  # unable to write
+  -bash: file1: Permission denied
+  $ rm file1  # can remove as we have write permission on folder
+  rm: remove write-protected regular file 'file1'? y
+  $ echo "hello universe" > file1 # can create new file
+  $ cat file1
+  hello universe
+\end{lstlisting}
+
+However, this only works on files.
+You cannot remove a directory if you do not have \textbf{write} permission on the directory, even if you have \textbf{write} permission on its parent directory.
+
+\textbf{Can list names but not metadata?}
+
+If you have \textbf{read} permission on a directory but not \textbf{execute} permission, you cannot traverse into the directory, but you can still use \texttt{ls} to list the contents of the directory.
+However, you cannot use \texttt{ls -l} to long-list the contents of the directory.
+That is, you only have access to the name of the files inside, not their metadata.
+
+\begin{lstlisting}[language=bash]
+  $ mkdir test
+  $ touch test/1 test/2
+  $ chmod 600 test # removing execute permission from folder
+  $ ls test # we can still list the files due to read permission
+  1  2
+  $ ls -l test # but cannot long-list the files
+  ls: cannot access 'test/2': Permission denied
+  ls: cannot access 'test/1': Permission denied
+  total 0
+  -????????? ? ? ? ?            ? 1
+  -????????? ? ? ? ?            ? 2
+\end{lstlisting}
+
+\textbf{Cannot list names but can traverse?}
+
+If you have \textbf{execute} permission on a directory but not \textbf{read} permission, you can traverse into the directory but you cannot list the contents of the directory.
+
+\begin{lstlisting}[language=bash]
+  $ mkdir test
+  $ touch test/1 test/2
+  $ chmod 300 test # removing read permission from folder
+  $ ls test # we cannot list the files
+  ls: cannot open directory 'test': Permission denied
+  $ cd test # but we can traverse into the folder
+  $ pwd
+  /home/sayan/test
+\end{lstlisting}
+
+\textbf{Subdirectories with all permissions, still cannot access?}
+
+If you have all the permissions to a directory, but dont have
+\textbf{execute} permission on its parent directory,
+you cannot access the subdirectory, or even list its contents.
+
+\begin{lstlisting}[language=bash]
+  $ mkdir test
+  $ mkdir test/test2 # subdirectory
+  $ touch test/test2/1 # file inside subdirectory
+  $ chmod 700 test/test2 # all permissions to subdirectory
+  $ chmod 600 test # removing execute permission from parent directory
+  $ ls test
+  test2
+  $ cd test/test2 # cannot access subdirectory
+  -bash: cd: test/test2: Permission denied
+  $ ls test/test2 # cannot even list contents of subdirectory
+  ls: cannot access 'test/test2': Permission denied
+\end{lstlisting}
+
+\subsection{Changing Permissions}
+
+The permissions of a file can be changed using the \textbf{chmod} command.
+
+\textbf{Synopsis:}
+
+\begin{lstlisting}[language=bash]
+  chmod [OPTION]... MODE[,MODE]... FILE...
+  chmod [OPTION]... OCTAL-MODE FILE...
+\end{lstlisting}
+
+\textbf{OCTAL-MODE} is a 3 or 4 digit octal number where the first digit is for the owner, the second digit is for the group, and the third digit is for others.
+We will discuss how the octal representation of permissions is calculated in the next section.
+
+The \textbf{MODE} can be in the form of \textbf{ugoa+-=rwxXst} where:
+
+\begin{itemize}
+  \item \textbf{u} is the user who owns the file
+  \item \textbf{g} is the group of the file
+  \item \textbf{o} is others
+  \item \textbf{a} is all
+  \item \textbf{+} adds the permission
+  \item \textbf{-} removes the permission
+  \item \textbf{={}} sets the permission
+  \item \textbf{r} is read
+  \item \textbf{w} is write
+  \item \textbf{x} is execute
+  \item \textbf{X} is execute only if its a directory or already has execute permission.
+  \item \textbf{s} is setuid/setgid
+  \item \textbf{t} is restricted deletion flag or sticky bit
+\end{itemize}
+
+We are already familiar with what
+\textbf{r},
+\textbf{w}, and
+\textbf{x}
+permissions mean, but what are the other permissions?
+
+\subsection{Special Permissions}
+\labsubsec{special-permissions}
+
+\begin{definition}[SetUID/SetGID]
+  The setuid and setgid bits are special permissions that can be set on executable files.
+  When an executable file has the setuid bit set, the file will be executed with the privileges of the owner of the file.
+  When an executable file has the setgid bit set, the file will be executed with the privileges of the group of the files.
+\end{definition}
+
+\textbf{SetUID}:
+
+This is useful for programs that need to access system resources that are only available to the owner or group of the file.
+
+A very notable example is the \texttt{passwd} command.
+This command is used to set the password of an user.
+Although changing password of a user is a priviledged action that only the root user can do, the \texttt{passwd} command can be run by any user to change \textit{their} password.
+This is possible due to the setuid bit set on the \texttt{passwd} command.
+When the \texttt{passwd} command is run, it is run with the privileges of the root user, and thus can change the password of that user.
+
+You can check this out by running \texttt{ls -l /usr/bin/passwd} and seeing the \texttt{s} in the permissions.
+
+\begin{lstlisting}[language=bash]
+  $ ls -l /usr/bin/passwd
+  -rwsr-xr-x 1 root root 80912 Apr  1 15:49 /usr/bin/passwd
+\end{lstlisting}
+
+\textbf{SetGID}:
+
+The behaviour of \textbf{SetGID} is similar to \textbf{SetUID}, but the file is executed with the privileges of the group of the file.
+
+However, \textbf{SetGID} can also be applied to a directory.
+When a directory has the \textbf{SetGID} bit set, all the files and directories created inside that directory will inherit the group of the directory, not the group of the user who created the file or directory.
+This is highly useful when you have a directory where multiple users need to work on the same files and directories, but you want to restrict the access to only a certain group of users.
+The primary group of each user is different from each other, but since they are also part of another group (which is the group owner of the directory) they are able to read and write the files present in the directory.
+However, if the user creates a file in the directory, the file will be owned by the user's primary group, not the group of the directory.
+So other users would not be able to access the file.
+This is fixed by the \textbf{SetGID} bit on the directory.
+
+\begin{lstlisting}[language=bash]
+  $ mkdir test
+  $ ls -ld test # initially the folder is owned by the user's primary group
+  drwxr-xr-x 2 sayan sayan 4096 May 22 16:27 test
+  $ chgrp wheel test # we change the group of the folder to wheel, which is a group that the user is part of
+  $ ls -ld test
+  drwxr-xr-x 2 sayan wheel 4096 May 22 16:27 test
+  $ whoami # this is the current user
+  sayan
+  $ groups # this is the users groups, first one is its primary group
+  sayan wheel
+  $ touch test/file1 # before setting the SetGID bit, a new file will have group owner as the primary group of the user creating it
+  $ ls -l test/file1 # notice the group owner is sayan
+  -rw-r--r-- 1 sayan sayan 0 May 22 16:29 test/file1
+  $ chmod g+s test # we set the SetGID bit on the directory
+  $ ls -ld test # now the folder has a s in the group permissions
+  drwxr-sr-x 2 sayan wheel 4096 May 22 16:29 test
+  $ touch test/file2 # now if we create another new file, it will have the group owner as the group of the directory
+  $ ls -l test/file2 # notice the group owner is wheel
+  -rw-r--r-- 1 sayan wheel 0 May 22 16:29 test/file2
+\end{lstlisting}
+
+\textbf{Restricted Deletion Flag or Sticky Bit}:
+
+The restricted deletion flag or sticky bit is a special permission that can be set on directories.
+
+Historically, this bit was to be applied on executable files to keep the program in memory after it has finished executing.
+This was done to speed up the execution of the program as the program would not have to be loaded into memory again.
+This was called \textbf{sticky bit} because the program would stick in memory.
+\sidenote{
+  The part of memory where the program's text segment is stored is called the \textit{swap}.
+}
+
+However, this is no longer how this bit is used.
+
+When the sticky bit is set on a directory, only the owner of the file, the owner of the directory, or the root user can delete or rename files in the directory.
+
+This is useful when you have a directory where multiple users need to write files, but you want to restrict the deletion of files to only the owner of the file or the owner of the directory.
+
+The most common example of this is the \texttt{/tmp} directory.
+The \texttt{/tmp} directory is a directory where temporary files are stored.
+You want to let any user create files in the \texttt{/tmp} directory, but you do not want any user to delete files created by other users.
+
+\begin{lstlisting}[language=bash]
+  $ ls -ld /tmp
+  drwxrwxrwt 20 root root 600 May 22 16:43 /tmp
+\end{lstlisting}
+
+\begin{exercise}
+  Log into the system commands VM and cd into the \texttt{/tmp} directory.
+  Create a file in the \texttt{/tmp} directory.
+  Try to find if there are files created by other users in the \texttt{/tmp} directory using \texttt{ls -l} command.
+  If there are files created by other users, try to delete them.
+  \footnote{
+    You can create a file normally, or using the \textbf{mktemp} command.
+  }
+\end{exercise}
+
+\subsection{Octal Representation of Permissions}
+
+\begin{figure}
+  \includegraphics{images/png/octal-permissions.png}
+  \caption[Octal Permissions]{Octal Permissions}
+  \labfig{octal-permissions}
+\end{figure}
+
+The permissions of a file for the file's owner, group, and others can be represented as a 3 or 4 digit octal number.
+\sidenote{
+  If the octal is 4 digits, the first digit is for special permissions like setuid, setgid, and sticky bit.
+}
+Each of the octal digits is the sum of the permissions for the owner, group, and others.
+
+\begin{itemize}
+  \item \textbf{Read} permission is represented by 4
+  \item \textbf{Write} permission is represented by 2
+  \item \textbf{Execute} permission is represented by 1
+\end{itemize}
+
+Thus if a file has read, write, and execute permissions for the owner, read and execute permissions for the group, and only read permission for others, the octal representation of the permissions would be 751.
+
+\begin{table*}
+\caption{Octal Representation of Permissions}
+\labtab{octal-permissions-table}
+\begin{tabular}{ c c c c c c }
+  \toprule
+  Octal & Read & Write & Execute & Symbolic Representation & Description \\
+ \midrule
+  0 & 0 & 0 & 0 & --- & No permissions \\
+  1 & 0 & 0 & 1 & --x & Execute only \\
+  2 & 0 & 1 & 0 & -w- & Write only \\
+  3 & 0 & 1 & 1 & -wx & Write and execute \\
+  4 & 1 & 0 & 0 & r-- & Read only \\
+  5 & 1 & 0 & 1 & r-x & Read and execute \\
+  6 & 1 & 1 & 0 & rw- & Read and write \\
+  7 & 1 & 1 & 1 & rwx & Read, write, and execute \\
+ \bottomrule
+\end{tabular}
+\end{table*}
+
+The octal format is usually used more than the symbolic format as it is easier to understand and remember and it is more concise.
+
+\begin{lstlisting}
+$ chmod 754 myscript.sh # this sets the permissions of myscript.sh to rwxr-xr--
+$ ./myscript.sh
+Hello World!
+\end{lstlisting}
+
+However, if you want to add or remove a permission without changing the other permissions, the symbolic format is more useful.
+
+\begin{lstlisting}
+$ chmod u+x myscript.sh # this adds execute permission to the owner of myscript.sh
+$ ./myscript.sh
+Hello World!
+\end{lstlisting}
+
 \begin{qs}
   How to list the permissions of a file?
 \end{qs}
@@ -1502,7 +2133,297 @@ you can type \texttt{man ls}.
   We can also use \texttt{+} to add permissions and \texttt{-} to remove permissions.
 \end{ans}
 
+% ----------------------------
+
+\vfill
+\pagebreak
+\section{Types of Files}
+
+We had briefly seen that the output of \texttt{ls -l} shows the type of the file as the first character of the permissions.
+
+There are 7 types of files in a linux file system as shown in \vreftab{file-types-table}.
+
+\begin{margintable}
+\caption{Types of Files}
+\labtab{file-types-table}
+\begin{tabular}{ c c }
+  \toprule
+  Type & Symbol \\
+ \midrule
+  Regular Files & -{} \\
+  Directories & d \\
+  Symbolic Links & l \\
+  Character Devices & c \\
+  Block Devices & b \\
+  Named Pipes & p \\
+  Sockets & s \\
+ \bottomrule
+\end{tabular}
+\end{margintable}
+
+\subsection{Regular Files}
+
+Regular files are the most common type of file.
+Almost all files are regular files.
+Scripts and executable binaries are also regular files.
+All the configuration files of the system are regular files as well.
+The regular files are actually the only files that contain data and are stored on the disk.
+
+\subsection{Directories}
+
+Directories are files that contain a list of other files.
+Directories do not contain data, they contain references to other files.
+Usually the size of a directory is equal to the block size of the filesystem.
+Directories have some special permissions that are different from regular files as discussed in \refsec{file-permissions}.
+
+\subsection{Symbolic Links}
+
+Symbolic links are files that point to other files.
+They only consume the space of the path they are pointing to.
+Symlinks
+\sidenote{
+  Symlinks is short for symbolic links.
+}
+are useful to create shortcuts to files or directories.
+They are dependent on the original file and will stop working if the original file is deleted or moved.
+They are discussed in detail in \refsec{inodes-links}.
+
+\marginnote{
+  There are another type of links called \textbf{hard links}.
+  However, hard links are not files, they are pointers to the same inode.
+  They do not consume extra space, and are not dependent on the original file.
+  Hard links do not have a separate type, they are just regular files.
+}
+
+\subsection{Character Devices}
+
+Character devices are files that represent devices that are accessed as a stream of bytes.
+For example the keyboard, mouse, webcams, and most USB devices are character devices.
+These are not real files stored on the disk, but are files that represent devices.
+They can interacted with like a file using the \texttt{read} and \texttt{write} system calls to interact with the hardware directly.
+These files are made available by the kernel and are stored in the \texttt{/dev} directory.
+Any read/write operation on a character device is monitored by the kernel and the data is sent to the device.
+
+\begin{lstlisting}
+$ cd /dev/input
+$ ls -l
+total 0
+drwxr-xr-x 2 root root     220 May 22 13:49 by-id
+drwxr-xr-x 2 root root     420 May 22 13:49 by-path
+crw-rw---- 1 root input 13, 64 May 22 13:49 event0
+crw-rw---- 1 root input 13, 65 May 22 13:49 event1
+crw-rw---- 1 root input 13, 74 May 22 13:49 event10
+crw-rw---- 1 root input 13, 75 May 22 13:49 event11
+crw-rw---- 1 root input 13, 76 May 22 13:49 event12
+crw-rw---- 1 root input 13, 77 May 22 13:49 event13
+crw-rw---- 1 root input 13, 78 May 22 13:49 event14
+crw-rw---- 1 root input 13, 79 May 22 13:49 event15
+crw-rw---- 1 root input 13, 80 May 22 13:49 event16
+crw-rw---- 1 root input 13, 81 May 22 13:49 event17
+crw-rw---- 1 root input 13, 82 May 22 13:49 event18
+crw-rw---- 1 root input 13, 83 May 22 13:49 event19
+crw-rw---- 1 root input 13, 66 May 22 13:49 event2
+crw-rw---- 1 root input 13, 84 May 22 13:49 event20
+crw-rw---- 1 root input 13, 67 May 22 13:49 event3
+crw-rw---- 1 root input 13, 68 May 22 13:49 event4
+crw-rw---- 1 root input 13, 69 May 22 13:49 event5
+crw-rw---- 1 root input 13, 70 May 22 13:49 event6
+crw-rw---- 1 root input 13, 71 May 22 13:49 event7
+crw-rw---- 1 root input 13, 72 May 22 13:49 event8
+crw-rw---- 1 root input 13, 73 May 22 13:49 event9
+crw-rw---- 1 root input 13, 63 May 22 13:49 mice
+crw-rw---- 1 root input 13, 32 May 22 13:49 mouse0
+crw-rw---- 1 root input 13, 33 May 22 13:49 mouse1
+\end{lstlisting}
+
+Here the \texttt{event} and \texttt{mouse} files are character devices that represent input devices like the keyboard and mouse.
+Note the \textbf{c} in the permissions, which indicates that these are character devices.
+
+\subsection{Block Devices}
+
+Block devices are files that represent devices that are accessed as a block of data.
+For example hard drives, SSDs, and USB drives are block devices.
+These files also do not store actual data on the disk, but represent devices.
+Any block file can be mounted as a filesystem.
+We can interact with block devices using the \texttt{read} and \texttt{write} system calls to interact with the hardware directly.
+For example, the \texttt{/dev/sda} file represents the first hard drive in the system.
+
+This makes it easy to write an image to a disk directly using the \texttt{dd} command.
+\sidenote{
+  The \texttt{dd} command is a powerful tool that can be used to copy and convert files.
+  It is acronym of \textit{data duplicator}.
+  However, it is also known as the \textit{disk destroyer} command, as it can be used to overwrite the entire disk if you are not careful with which disk you are writing the image to.
+}
+
+The following example shows how we can use the \texttt{dd} command to write an image
+\sidenote{
+  ISO file
+}
+to a USB drive.
+It is this easy to create a bootable USB drive for linux.
+
+\begin{lstlisting}[language=bash]
+  $ dd if=~/Downloads/archlinux.iso of=/dev/sdb bs=4M status=progress
+\end{lstlisting}
+
+Here \texttt{if} is the input file, \texttt{of} is the output file, \texttt{bs} is the block size, and \texttt{status} is to show the progress of the operation.
+
+\begin{warn}
+  Be very careful when using the \texttt{dd} command.
+  Make sure you are writing to the correct disk.
+  Writing to the wrong disk can cause data loss.
+\end{warn}
+
+\textbf{Example of how /sys works:}
+
+Try running the following code snippet in a terminal if you have a caps lock key on your keyboard and are running linux directly on your bare-metal.
+\sidenote{
+  This will only work on your own system, not on the system commands VM, since you do not have the priviledge to modify the files there.
+  Make sure you have the ability to run commands as root and are able to use \texttt{sudo}.
+  It is also unlikely to work on a virtual machine.
+  It will also not work on linux systems older than 2.6.
+}
+
+\begin{lstlisting}[language=bash]
+  $ cd /sys/class/leds
+  $ echo 1 | sudo tee *capslock/brightness
+\end{lstlisting}
+
+If you are running a linux system directly on your hardware, you will see the caps lock key light up.
+Most modern keyboards will quickly turn off the light again as the capslock is technically not turned on, only the led was turned on manually by you.
+
+\subsection{Named Pipes}
+
+Named pipes
+\sidenote{
+  Also known as FIFOs
+}
+are files that are used for inter-process communication.
+They do not store the data that you write to them, but instead pass the data to another process.
+A process can only write data to a named pipe if another process is reading from the named pipe.
+\sidenote{
+  and vice versa
+}
+
+\begin{lstlisting}
+$ mkfifo pipe1
+$ ls -l pipe1
+prw-r--r-- -1 sayan sayan 0 May 22 18:22 pipe1
+\end{lstlisting}
+
+Here the \texttt{p} in the permissions indicates that this is a named pipe.
+If you now try to write to the named pipe, the command will hang until another process reads from the named pipe.
+Try the following in two different terminals:
+
+\textbf{Terminal 1}:
+\begin{lstlisting}
+$ echo "hello" > pipe1
+\end{lstlisting}
+
+\textbf{Terminal 2}:
+\begin{lstlisting}
+$ cat pipe1
+\end{lstlisting}
+
+You will notice that whichever command you run first will hang until the other command is run.
+
+\subsection{Sockets}
+
+Sockets are a special file type, similar to TCP/IP sockets, providing inter-process networking protected by the file system's access control.
+
+This is similar to named pipes, but the difference is that named pipes are meant for IPC between processes in the same machine, whereas sockets can be used for communication across machines.
+
+Try out the following in two different terminals:
+
+\textbf{Terminal 1}:
+\begin{lstlisting}
+$ nc -lU socket.sock
+\end{lstlisting}
+
+\textbf{Terminal 2}:
+\begin{lstlisting}
+$ echo "hello" | nc -U socket.sock
+\end{lstlisting}
+
+Notice here, that if you run the command in terminal 2 first, it will error out with the text:
+\begin{lstlisting}
+nc: socket.sock: Connection refused
+\end{lstlisting}
+
+Only if we run them in correct order can you see the message "hello" being printed in terminal 1.
+\sidenote{
+  The \texttt{nc} command is the netcat command.
+  It is a powerful tool for network debugging and exploration.
+  It can be used to create sockets, listen on ports, and send and receive data over the network.
+  This will be discussed in more detail in the networking section and in the
+  \textbf{Modern Application Development} course.
+}
+
+You can press \texttt{Ctrl+C} to stop the \texttt{nc} command in both terminals.
+
+\subsection{Types of Regular Files}
+
+Regular files can be further classified into different types based on the data they contain.
+In Linux systems, the type of a file is determined by its \textbf{
+  \href{https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types}{MIME}
+} type.
+The extension of a file does not determine its type, the contents of the file do.
+It is thus common to have files without extensions in Linux systems, as they provide no value.
+
+\marginnote{
+  The bytes at the start of a file used to identify the type of file are called the \textbf{magic bytes}. \\
+  More details can be found at:
+  \url{https://en.wikipedia.org/wiki/List_of_file_signatures}
+}
+
+The \texttt{file} command can be used to determine the type of a file.
+
+\begin{lstlisting}[language=bash]
+$ file /etc/passwd
+/etc/passwd: ASCII text
+$ file /bin/bash
+/bin/bash: ELF 64-bit LSB pie executable, x86-64, version 1 (SYSV), dynamically linked, interpreter /lib64/ld-linux-x86-64.so.2, BuildID[sha1]=165d3a5ffe12a4f1a9b71c84f48d94d5e714d3db, for GNU/Linux 4.4.0, stripped
+\end{lstlisting}
+
+\begin{qs}
+  What types of files are possible in a linux file system?
+\end{qs}
+
+\begin{ans}
+  There are 7 types of files in a linux file system:
+  \begin{itemize}
+    \item Regular Files (starts with \texttt{-})
+    \item Directories (starts with \texttt{d})
+    \item Symbolic Links (starts with \texttt{l})
+    \item Character Devices (starts with \texttt{c})
+    \item Block Devices (starts with \texttt{b})
+    \item Named Pipes (starts with \texttt{p})
+    \item Sockets (starts with \texttt{s})
+  \end{itemize}
+\end{ans}
+
+\begin{qs}
+  How to know what kind of file a file is? Can we determine using
+  its extension? Can we determine using its contents? What does
+  \textit{MIME} mean?
+How to get that?
+\end{qs}
+
+\begin{ans}
+  The \texttt{file} command can be used to determine the type of a file. \\
+  The extension of a file does not determine its type. \\
+  The contents of a file can be used to determine its type. \\
+  MIME stands for Multipurpose Internet Mail Extensions. \\
+  It is a standard that indicates the nature and format of a document. \\
+  \texttt{file -i filename} will give the MIME type of \texttt{filename}.
+\end{ans}
+
+% ----------------------------
+
+\vfill
+\pagebreak
 \section{Inodes and Links}
+\labsec{inodes-links}
 
 \begin{qs}
   How to list the inodes of a file?
@@ -1570,128 +2491,6 @@ you can type \texttt{man ls}.
   You can also use \texttt{readlink -f filename} to get the real path.
 \end{ans}
 
-\section{System Management and Information}
-
-\begin{qs}
-  How to print the current date and time in some custom format?
-\end{qs}
-
-\begin{ans}
-  \texttt{date -d today +\%Y-\%m-\%d} will print the current date in the format
-  \texttt{YYYY-MM-DD}. The format can be changed by changing the format specifiers.
-  The format specifiers are given in the \texttt{man date} page. The \texttt{-d today} can
-  be dropped, but is mentioned to show that the date can be changed to any date.
-  It can be strings like '2024-01-01' or '5 days ago' or 'yesterday', etc.
-\end{ans}
-
-\begin{qs}
-  How to print the kernel version of your system?
-\end{qs}
-
-\begin{ans}
-  \texttt{uname -r} will print the kernel version of your system.
-  \texttt{uname} is a command to print system information.
-  The \texttt{-r} flag is to print the kernel release.
-  There are other flags to print other system information. \\
-  We can also run \texttt{uname -a} to get all fields and extract only the
-  kernel info using commands taught in later weeks.
-\end{ans}
-
-\begin{qs}
-  How to see how long your system is running for? \\
-  What about the time it was booted up?
-\end{qs}
-
-\begin{ans}
-  \texttt{uptime} will show how long the system is running for.\\
-  \texttt{uptime -s} will show the time the system was booted up. \\
-  The \texttt{-s} flag is to show the time of last boot.
-\end{ans}
-
-\begin{qs}
-  How to see the amount of free memory? What about free hard disk space?
-  If we are unable to understand the big numbers, how to convert them to human readable format?
-  What is difference between MB and MiB?
-\end{qs}
-
-\begin{ans}
-  \texttt{free} will show the amount of free memory. \\
-  \texttt{df} will show the amount of free hard disk space. \\
-  \texttt{df -h} and \texttt{free -h}
-  will convert the numbers to human readable format. \\
-  MB is Megabyte, and MiB is Mebibyte. \\
-  1 MB = 1000 KB, 1 GB = 1000 MB, 1 TB = 1000 GB, this is SI unit. \\
-  1 MiB = 1024 KiB, 1 GiB = 1024 MiB, 1 TiB = 1024 GiB, this is $2^{10}$ unit.
-\end{ans}
-
-\section{Reading and Writing Files using cat}
-
-\begin{qs}
-  Can we print contents of multiple files using a single command?
-\end{qs}
-
-\begin{ans}
-  \texttt{cat file1 file2 file3} will print the contents of \texttt{file1}, \texttt{file2}, and \texttt{file3}
-  in the order given. The contents of the files will be printed one after the other.
-\end{ans}
-
-\begin{qs}
-  Can \texttt{cat} also be used to write to a file?
-\end{qs}
-
-\begin{ans}
-  Yes, \texttt{cat > file1} will write to \texttt{file1}. The input will be taken from the
-  terminal and written to \texttt{file1}. The input will be written to \texttt{file1} until
-  the user presses \texttt{Ctrl+D} to indicate end of input.
-  This is \texttt{redirection}, which we see in later weeks.
-\end{ans}
-
-\begin{qs}
-  \texttt{ls} can only show files and directories in the \textbf{cwd}\sidenote{\textbf{cwd} means \textbf{Current Working Directory}}, not subdirectories.
-  True or False?
-\end{qs}
-
-\begin{ans}
-  False. \texttt{ls} can show files and directories in the cwd, and also in subdirectories.
-  The \texttt{-R} flag can be used to show files and directories in subdirectories, recursively.
-\end{ans}
-
-\section{Types of Files}
-
-\begin{qs}
-  What types of files are possible in a linux file system?
-\end{qs}
-
-\begin{ans}
-  There are 7 types of files in a linux file system:
-  \begin{itemize}
-    \item Regular Files (starts with \texttt{-})
-    \item Directories (starts with \texttt{d})
-    \item Symbolic Links (starts with \texttt{l})
-    \item Character Devices (starts with \texttt{c})
-    \item Block Devices (starts with \texttt{b})
-    \item Named Pipes (starts with \texttt{p})
-    \item Sockets (starts with \texttt{s})
-  \end{itemize}
-\end{ans}
-
-\begin{qs}
-  How to know what kind of file a file is? Can we determine using
-  its extension? Can we determine using its contents? What does
-  \textit{
-  \href{https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types}{MIME} mean?
-}
-How to get that?
-\end{qs}
-
-\begin{ans}
-  The \texttt{file} command can be used to determine the type of a file. \\
-  The extension of a file does not determine its type. \\
-  The contents of a file can be used to determine its type. \\
-  MIME stands for Multipurpose Internet Mail Extensions. \\
-  It is a standard that indicates the nature and format of a document. \\
-  \texttt{file -i filename} will give the MIME type of \texttt{filename}.
-\end{ans}
 \section{Types of Commands}
 
 \begin{qs}
@@ -1751,51 +2550,3 @@ How to get that?
   \end{itemize}
 \end{definition}
 
-\section{File Manipulation}
-
-\begin{qs}
-  How to list only first 10 lines of a file? How about first 5? Last 5?
-  How about lines 105 to lines 152?
-\end{qs}
-
-\begin{ans}
-  \texttt{head filename} will list the first 10 lines of \texttt{filename}. \\
-  \texttt{head -n 5 filename} will list the first 5 lines of \texttt{filename}. \\
-  \texttt{tail -n 5 filename} will list the last 5 lines of \texttt{filename}. \\
-  \texttt{head -n 152 filename | tail -n 48} will list lines 105 to 152 of \texttt{filename}.
-  This uses \texttt{|} which is a pipe, which we will see in later weeks.
-\end{ans}
-
-\begin{qs}
-  Do you know how many lines a file contains? How can we count it?
-  What about words? Characters?
-\end{qs}
-
-\begin{ans}
-  \texttt{wc filename} will count the number of lines, words, and characters in \texttt{filename}. \\
-  \texttt{wc -l filename} will count the number of lines in \texttt{filename}. \\
-  \texttt{wc -w filename} will count the number of words in \texttt{filename}. \\
-  \texttt{wc -c filename} will count the number of characters in \texttt{filename}.
-\end{ans}
-
-\begin{qs}
-  How to delete an empty directory? What about non-empty directory?
-\end{qs}
-
-\begin{ans}
-  \texttt{rmdir dirname} will delete an empty directory. \\
-  \texttt{rm -r dirname} will delete a non-empty directory.
-\end{ans}
-
-\begin{qs}
-  How to copy an entire folder to another name? What about moving? \\
-  Why the difference in flags?
-\end{qs}
-
-\begin{ans}
-  \texttt{cp -r sourcefolder targetfolder} will copy an entire folder to another name. \\
-  \texttt{mv sourcefolder targetfolder} will move an entire folder to another name. \\
-  The difference in flags is because \texttt{cp} is used to copy, and \texttt{mv} is used to move or rename a file or folder.
-  The \texttt{-r} flag is to copy recursively, and is not needed for \texttt{mv} as it is not recursive
-  and simply changes the name of the folder (or the path).
-\end{ans}
