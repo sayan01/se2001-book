@@ -545,6 +545,64 @@ To be proficient with shell commands, one needs to read the man, info, and help 
   Read the documentations carefully and try to understand how each command works, and the pattern in which the documentations are written.
 \end{exercise}
 
+\textbf{info}:
+
+The \texttt{info} command is used to display the info pages for a command.
+The info pages are more detailed than the \textbf{man} pages for some commands.
+It is navigable like a hypertext document.
+There are links to chapters inside the info pages that can be followed using the arrow keys and entered using the enter key.
+The \vreftab{info-keys} lists some of the keys that can be used to navigate the info pages.
+
+\begin{table}[h!]
+\caption{Keys in Info Pages}
+\labtab{info-keys}
+\begin{tabular}{ c l }
+  \toprule
+ Key & Description \\
+ \midrule
+  \texttt{h} & Display the help page \\
+  \texttt{q} & Exit the info page \\
+  \texttt{n} & Move to the next node \\
+  \texttt{p} & Move to the previous node \\
+  \texttt{u} & Move up one level \\
+  \texttt{d} & Move down one level \\
+  \texttt{l} & Move to the last node \\
+  \texttt{t} & Move to the top node \\
+  \texttt{g} & Move to a specific node \\
+  \texttt{<enter>} & Follow the link \\
+  \texttt{m} & Display the menu \\
+  \texttt{s} & Search for a string \\
+  \texttt{S} & Search for a string (case-sensitive) \\
+  \bottomrule
+\end{tabular}
+\end{table}
+
+\textbf{help}:
+
+The \texttt{help} command is a shell builtin that displays information about the shell builtins and the shell syntax.
+
+\begin{lstlisting}[language=bash]
+$ help read
+\end{lstlisting}
+
+This will list the information about the \texttt{read} builtin command.
+
+The \texttt{help} command can also be used to display information about the shell syntax.
+
+\begin{lstlisting}[language=bash]
+$ help for
+\end{lstlisting}
+
+This will list the information about the \texttt{for} loop in the shell.
+
+Help pages are not paged, and the output is displayed in the terminal.
+To page the output, one can use the \texttt{less} command.
+
+\begin{lstlisting}[language=bash]
+$ help read | less
+\end{lstlisting}
+
+
 \subsection{System Information}
 
 \textbf{uname}:
@@ -1269,6 +1327,169 @@ To remove an alias, use the \texttt{unalias} command.
   What happens?
 \end{exercise}
 
+\textbf{which}:
+
+The \texttt{which} command is used to show the path of the command that will be executed.
+
+\begin{lstlisting}[language=bash]
+$ which ls
+/sbin/ls
+\end{lstlisting}
+
+We can also list all the paths where the command is present using the \texttt{-a} flag.
+
+\begin{lstlisting}[language=bash]
+$ which -a ls
+/sbin/ls
+/bin/ls
+/usr/bin/ls
+/usr/sbin/ls
+\end{lstlisting}
+
+This means that if we delete the \texttt{/sbin/ls} file, the \texttt{/bin/ls} file will be executed when we run the \texttt{ls} command.
+
+\textbf{whatis}:
+
+The \texttt{whatis} command is used to show a short description of the command.
+
+\begin{lstlisting}[language=bash]
+$ whatis ls
+ls (1)               - list directory contents
+ls (1p)              - list directory contents
+\end{lstlisting}
+
+Here the brackets show the section of the manual where the command is present.
+This short exerpt is taken from its man page itself.
+
+\textbf{whereis}:
+
+The \texttt{whereis} command is used to show the location of the command, source
+files, and man pages.
+
+\begin{lstlisting}[language=bash]
+$ whereis ls
+ls: /usr/bin/ls /usr/share/man/man1/ls.1.gz /usr/share/man/man1p/ls.1p.gz
+\end{lstlisting}
+
+Here we can see that the \texttt{ls} command is present in \texttt{/usr/bin/ls},
+and its man pages are present in \texttt{/usr/share/man/man1/ls.1.gz} and
+\texttt{/usr/share/man/man1p/ls.1p.gz}.
+
+\textbf{locate}:
+
+The \texttt{locate} command is used to find files by name.
+The file can be present anywhere in the system and if it is
+indexed by the \texttt{mlocate} database, it can be found using the \texttt{locate} command.
+
+\begin{lstlisting}[language=bash]
+$ touch tmp/48/hellohowareyou
+$ pwd
+/home/sayan
+$ locate hellohowareyou
+/home/sayan/tmp/48/hellohowareyou
+\end{lstlisting}
+
+Note: you may have to run \texttt{updatedb} to update the database before using \texttt{locate}.
+This can only be run by the root user or using \texttt{sudo}.
+
+\textbf{type}:
+
+The \texttt{type} command is used to show how the shell will interpret a command.
+Usually some commands are both an executable and a shell built-in.
+The \texttt{type} command will show which one will be executed.
+
+\begin{lstlisting}[language=bash]
+$ type ls
+ls is hashed (/sbin/ls)
+$ type cd
+cd is a shell builtin
+\end{lstlisting}
+
+This shows that the \texttt{ls} command is an executable, and the \texttt{cd} command is a shell built-in.
+
+We can also use the \texttt{-a} flag to show all the ways the command can be interpreted.
+
+\begin{lstlisting}[language=bash]
+$ type -a pwd
+pwd is a shell builtin
+pwd is /sbin/pwd
+pwd is /bin/pwd
+pwd is /usr/bin/pwd
+pwd is /usr/sbin/pwd
+\end{lstlisting}
+
+Here we can see that the \texttt{pwd} command is a shell built-in, and is also present in multiple locations in the system.
+But if we run the \texttt{pwd} command, the shell built-in will be executed.
+
+\texttt{type} is also useful when you are not sure whether to use \texttt{man} or \texttt{help} for a command.
+Generally for a shell built-in, \texttt{help} is used, and for an executable
+the \texttt{info} and the \texttt{man} pages are used.
+
+
+\textbf{Types of Commands}:
+A command can be an \textbf{alias}, a \textbf{shell built-in},
+a \textbf{shell function}, \textbf{keyword},
+or an \textbf{executable}.
+
+The \texttt{type} command will show which type the command is.
+\begin{itemize}
+  \item \textbf{alias}: A command that is an alias to another command defined
+    by the user or the system.
+  \item \textbf{builtin}: A shell built-in command is a command that is built
+    into the shell itself. It is executed internally by the shell.
+    This is usually faster than an external command.
+  \item \textbf{file}: An executable file that is stored in the file system.
+    It has to be stored somewhere in the \textbf{PATH} variable.
+  \item \textbf{function}: A shell function is a set of commands that are
+    executed when the function is called.
+  \item \textbf{keyword}: A keyword is a reserved word that is part of the shell
+    syntax. It is not a command, but a part of the shell syntax.
+\end{itemize}
+
+\begin{exercise}
+  Find the path of the \texttt{true} command using \texttt{which}.
+  Find a short description of the \texttt{true} command using \texttt{whatis}.
+  Is the executable you found actually the one that is executed when you run \texttt{true}? Check using \texttt{type true}
+\end{exercise}
+
+
+% --- Questions and Answers ---
+
+\begin{qs}
+  How to create aliases? How to make them permanent? How to unset them?
+\end{qs}
+
+\begin{ans}
+  \texttt{alias name='command'} will create an alias. \\
+  \texttt{unalias name} will unset the alias. \\
+  To make them permanent, add the alias to the \texttt{$\sim$/.bashrc} file. \\
+  The \texttt{$\sim$/.bashrc} file is a script that is executed whenever a new terminal is opened.
+\end{ans}
+
+\begin{qs}
+  How to run the normal version of a command if it is aliased?
+\end{qs}
+
+\begin{ans}
+  \texttt{\textbackslash command} will run the normal version of \texttt{command} if it is aliased.
+\end{ans}
+
+\begin{qs}
+  What is the difference between \texttt{which}, \texttt{whatis}, \texttt{whereis}, \texttt{locate}, and \texttt{type}?
+\end{qs}
+
+\begin{ans}
+  Each of the commands serve a different purpose:
+  \begin{itemize}
+    \item \texttt{which} will show the path of the command that will be executed.
+    \item \texttt{whatis} will show a short description of the command.
+    \item \texttt{whereis} will show the location of the command, source files, and man pages.
+    \item \texttt{locate} is used to find files by name.
+    \item \texttt{type} will show how the command will be interpreted by the shell.
+  \end{itemize}
+\end{ans}
+
+
 \subsection{User Management}
 
 \textbf{whoami}:
@@ -1595,7 +1816,150 @@ These can also be loosely classified into \textit{sharable} and \textit{non-shar
 \end{tabular}
 \end{table}
 
-\subsection{Why do we have proc and sys directories?}
+\subsection{In Memory File System}
+
+Some file systems like \textbf{proc}, \textbf{sys}, \textbf{dev}, \textbf{run}, and \textbf{tmp} are not stored on the disk, but are stored in memory.
+
+They have a special purpose and are used to store information about the system.
+These are called \textit{virtual} directories.
+
+These cannot be stored in a disk as it would be too slow to access them.
+Many of these files are very short lived yet are accessed very frequently.
+So these are stored in memory to speed up the access.
+
+\textbf{/dev} and \textbf{/run} are mounted as \textbf{tmpfs} filesystems.
+
+This can be seen by running the \texttt{mount} command or the \texttt{df} command.
+
+\begin{lstlisting}[language=bash]
+  $ mount
+/dev/sda1 on / type ext4 (rw,noatime)
+devtmpfs on /dev type devtmpfs (rw,nosuid,size=4096k,nr_inodes=990693,mode=755,inode64)
+tmpfs on /dev/shm type tmpfs (rw,nosuid,nodev,inode64)
+devpts on /dev/pts type devpts (rw,nosuid,noexec,relatime,gid=5,mode=620,ptmxmode=000)
+sysfs on /sys type sysfs (rw,nosuid,nodev,noexec,relatime)
+securityfs on /sys/kernel/security type securityfs (rw,nosuid,nodev,noexec,relatime)
+cgroup2 on /sys/fs/cgroup type cgroup2 (rw,nosuid,nodev,noexec,relatime,nsdelegate,memory_recursiveprot)
+pstore on /sys/fs/pstore type pstore (rw,nosuid,nodev,noexec,relatime)
+efivarfs on /sys/firmware/efi/efivars type efivarfs (rw,nosuid,nodev,noexec,relatime)
+bpf on /sys/fs/bpf type bpf (rw,nosuid,nodev,noexec,relatime,mode=700)
+configfs on /sys/kernel/config type configfs (rw,nosuid,nodev,noexec,relatime)
+proc on /proc type proc (rw,nosuid,nodev,noexec,relatime)
+tmpfs on /run type tmpfs (rw,nosuid,nodev,size=1590108k,nr_inodes=819200,mode=755,inode64)
+systemd-1 on /proc/sys/fs/binfmt_misc type autofs (rw,relatime,fd=36,pgrp=1,timeout=0,minproto=5,maxproto=5,direct,pipe_ino=5327)
+hugetlbfs on /dev/hugepages type hugetlbfs (rw,nosuid,nodev,relatime,pagesize=2M)
+mqueue on /dev/mqueue type mqueue (rw,nosuid,nodev,noexec,relatime)
+debugfs on /sys/kernel/debug type debugfs (rw,nosuid,nodev,noexec,relatime)
+tracefs on /sys/kernel/tracing type tracefs (rw,nosuid,nodev,noexec,relatime)
+fusectl on /sys/fs/fuse/connections type fusectl (rw,nosuid,nodev,noexec,relatime)
+systemd-1 on /data type autofs (rw,relatime,fd=47,pgrp=1,timeout=60,minproto=5,maxproto=5,direct,pipe_ino=2930)
+tmpfs on /tmp type tmpfs (rw,noatime,inode64)
+/dev/sda4 on /efi type vfat (rw,relatime,fmask=0137,dmask=0027,codepage=437,iocharset=ascii,shortname=mixed,utf8,errors=remount-ro)
+/dev/sda2 on /home type ext4 (rw,noatime)
+binfmt_misc on /proc/sys/fs/binfmt_misc type binfmt_misc (rw,nosuid,nodev,noexec,relatime)
+tmpfs on /run/user/1000 type tmpfs (rw,nosuid,nodev,relatime,size=795052k,nr_inodes=198763,mode=700,uid=1000,gid=1001,inode64)
+portal on /run/user/1000/doc type fuse.portal (rw,nosuid,nodev,relatime,user_id=1000,group_id=1001)
+/dev/sdb3 on /data type ext4 (rw,noatime,x-systemd.automount,x-systemd.idle-timeout=1min)
+\end{lstlisting}
+
+Here we can see that the \textbf{/dev} directory is mounted as a \textbf{devtmpfs} filesystem.
+The \textbf{/run} directory is mounted as a \textbf{tmpfs} filesystem.
+The \textbf{/proc} directory is mounted as a \textbf{proc} filesystem.
+The \textbf{/sys} directory is mounted as a \textbf{sysfs} filesystem.
+
+These are all virtual filesystems that are stored in memory.
+
+\textbf{proc}:
+
+Proc is an old filesystem that is used to store information about the running processes.
+The \textbf{/proc} directory contains a directory for each running process.
+The directories are named as the process id of the process.
+
+\begin{lstlisting}[language=bash]
+$ ls -l /proc | head
+total 0
+dr-xr-xr-x  9 root  root  0 May 23 13:01 1
+dr-xr-xr-x  9 root  root  0 May 23 13:01 100
+dr-xr-xr-x  9 sayan sayan 0 May 23 13:06 1004
+dr-xr-xr-x  9 sayan sayan 0 May 23 13:06 1009
+dr-xr-xr-x  9 root  root  0 May 23 13:01 102
+dr-xr-xr-x  9 root  sayan 0 May 23 13:06 1029
+dr-xr-xr-x  9 sayan sayan 0 May 23 13:06 1038
+dr-xr-xr-x  9 sayan sayan 0 May 23 13:06 1039
+dr-xr-xr-x  9 sayan sayan 0 May 23 13:06 1074
+\end{lstlisting}
+
+These folders are simply for information and do not store any data.
+This is why they have a size of 0.
+Each folder is owned by the user who started the process.
+
+Inside each of these directories, there are files that contain information about the process.
+
+You can enter the folder of a process that is started by you and see the information about the process.
+
+\begin{lstlisting}[language=bash]
+$ cd /proc/301408
+$ ls -l | head -n15
+total 0
+-r--r--r--  1 sayan sayan 0 May 23 16:55 arch_status
+dr-xr-xr-x  2 sayan sayan 0 May 23 16:55 attr
+-rw-r--r--  1 sayan sayan 0 May 23 16:55 autogroup
+-r--------  1 sayan sayan 0 May 23 16:55 auxv
+-r--r--r--  1 sayan sayan 0 May 23 16:55 cgroup
+--w-------  1 sayan sayan 0 May 23 16:55 clear_refs
+-r--r--r--  1 sayan sayan 0 May 23 16:55 cmdline
+-rw-r--r--  1 sayan sayan 0 May 23 16:55 comm
+-rw-r--r--  1 sayan sayan 0 May 23 16:55 coredump_filter
+-r--r--r--  1 sayan sayan 0 May 23 16:55 cpu_resctrl_groups
+-r--r--r--  1 sayan sayan 0 May 23 16:55 cpuset
+lrwxrwxrwx  1 sayan sayan 0 May 23 16:55 cwd -> /home/sayan/docs/projects/sc-handbook
+-r--------  1 sayan sayan 0 May 23 16:55 environ
+lrwxrwxrwx  1 sayan sayan 0 May 23 13:41 exe -> /usr/bin/entr
+\end{lstlisting}
+
+Here you can see that the command line of the process is stored in the \textbf{cmdline} file.
+Here the process is of a command called \textbf{entr}.
+
+You can also see the \textbf{current working directory} (cwd) of the process.
+
+There are some other files in the \textbf{/proc} directory that contain information about the system.
+
+\begin{itemize}
+  \item \textbf{cpuinfo} - stores cpu information.
+  \item \textbf{version} - stores system information, content similar to \texttt{uname -a} command.
+  \item \textbf{meminfo} - Diagnostic information about memory. Check \texttt{free} command.
+  \item \textbf{partitions} - Disk partition information. Check \texttt{df}.
+  \item \textbf{kcore} - The astronomical size ( $2^{47}$ bits) tells the maximum virtual memory (47 bits) the current Linux OS is going to handle.
+\end{itemize}
+
+\textbf{sys}:
+
+Sys is a newer filesystem that is used to store information about the system.
+It is neatly organized and is easier to navigate than proc.
+This highly uses symlinks to organize the folders while maintaining redundancy as well.
+\sidenote{
+  A symlink is a special type of file that points to another file or directory.
+  It is similar to a shortcut in Windows.
+  This will be discussed in detail in \refsubsec{inodes-links}.
+}
+
+Try running the following code snippet in a terminal if you have a caps lock key on your keyboard and are running linux directly on your bare-metal.
+\sidenote{
+  This will only work on your own system, not on the system commands VM, since you do not have the priviledge to modify the files there.
+  Make sure you have the ability to run commands as root and are able to use \texttt{sudo}.
+  It is also unlikely to work on a virtual machine.
+  It will also not work on linux systems older than 2.6.
+}
+
+\begin{lstlisting}[language=bash]
+  $ cd /sys/class/leds
+  $ echo 1 | sudo tee *capslock/brightness
+\end{lstlisting}
+
+If you are running a linux system directly on your hardware, you will see the caps lock key light up.
+Most modern keyboards will quickly turn off the light again as the capslock is technically not turned on, only the led was turned on manually by you.
+
+\textbf{/sys vs /proc}:
 
 The \texttt{/proc} tree originated in System V Unix
 \sidenote{
@@ -1612,7 +1976,6 @@ type OSes generally do not have \texttt{/proc} at all, so much of what you find 
 The intended solution for this mess in Linux's \texttt{/proc} is \texttt{/sys}. Ideally, all the non-process information that got crammed into the \texttt{/proc} tree should have moved to \texttt{/sys} by now, but historical inertia has kept a lot of stuff in \texttt{/proc}.
 Often there are two ways to effect a change in the running kernel: the old \texttt{/proc} way, kept for backwards compatibility, and the new \texttt{/sys} way that you're supposed to be using now.
 % \sidecite{sysvproc}
-
 
 \subsection{Paths}
 
@@ -2274,23 +2637,6 @@ Here \texttt{if} is the input file, \texttt{of} is the output file, \texttt{bs} 
   Writing to the wrong disk can cause data loss.
 \end{warn}
 
-\textbf{Example of how /sys works:}
-
-Try running the following code snippet in a terminal if you have a caps lock key on your keyboard and are running linux directly on your bare-metal.
-\sidenote{
-  This will only work on your own system, not on the system commands VM, since you do not have the priviledge to modify the files there.
-  Make sure you have the ability to run commands as root and are able to use \texttt{sudo}.
-  It is also unlikely to work on a virtual machine.
-  It will also not work on linux systems older than 2.6.
-}
-
-\begin{lstlisting}[language=bash]
-  $ cd /sys/class/leds
-  $ echo 1 | sudo tee *capslock/brightness
-\end{lstlisting}
-
-If you are running a linux system directly on your hardware, you will see the caps lock key light up.
-Most modern keyboards will quickly turn off the light again as the capslock is technically not turned on, only the led was turned on manually by you.
 
 \subsection{Named Pipes}
 
@@ -2425,6 +2771,403 @@ How to get that?
 \section{Inodes and Links}
 \labsec{inodes-links}
 
+\subsection{Inodes}
+
+\begin{definition}[Inodes]
+  An inode is an index node.
+  It serves as a unique identifier for a specific piece of metadata on a given filesystem.
+\end{definition}
+
+Whenever you run \texttt{ls -l} and see all the details of a file, you are seeing the metadata of the file.
+These metadata, however, are not stored in the file itself.
+These data about the files are stored in a special data structure called an \textbf{inode}.
+
+Each inode is stored in a common table and each filesystem mounted to your computer has its own inodes.
+An inode number may be used more than once but never by the same filesystem.
+The filesystem id combines with the inode number to create a unique identification label.
+
+You can check how many inodes are used in a filesystem using the \texttt{df -i} command.
+
+\begin{lstlisting}
+$ df -i
+Filesystem       Inodes   IUsed    IFree IUse% Mounted on
+/dev/sda1       6397952  909213  5488739   15% /
+/dev/sda4             0       0        0     - /efi
+/dev/sda2      21569536 2129841 19439695   10% /home
+/dev/sdb3      32776192    2380 32773812    1% /data
+$ df
+Filesystem     1K-blocks      Used Available Use% Mounted on
+/dev/sda1      100063312  63760072  31174076  68% /
+/dev/sda4        1021952    235760    786192  24% /efi
+/dev/sda2      338553420 273477568  47805068  86% /home
+/dev/sdb3      514944248 444194244  44518760  91% /data
+\end{lstlisting}
+
+You can notice the number of inodes present, number of inodes used, and number of inodes that are free.
+The \textbf{IUse\%} column shows the percentage of inodes used.
+This however, does not mean how much of space is used, but how many files can be created.
+
+Observe that although the \texttt{/data} partition has only 1\% of inodes used, it has 91\% of space used.
+This is because the files in the \texttt{/data} partition are large files, and thus the number of inodes used is less.
+Remember that a file will take up one inode, no matter how large it is.
+But the space it takes up will be the size of the file.
+
+We can also see the inode number of a file using the \texttt{ls -i} command.
+
+\begin{lstlisting}[language=bash]
+$ ls -i
+  1234567 file1
+  1234568 file2
+  1234569 file3
+\end{lstlisting}
+
+Here the first column is the \textbf{inode} number of the file.
+
+\begin{remark}
+  The inode number is unique only within the filesystem.
+  If you copy a file from one filesystem to another, the inode number will change.
+\end{remark}
+
+\subsection{Separation of Data, Metadata, and Filename}
+
+In UNIX systems, the data of a file and the metadata of a file are stored separately.
+The inodes are stored in a inode-array or table, and contain the metadata of the file and the pointer to it in the storage block.
+These metadata can be retrieved using the \texttt{stat} system call.
+\sidenote{
+  A system call is a request in a operating system made via a software interrupt by an active process for a service performed by the kernel.
+  The diagram in \reffig{system-calls} shows how system calls work.
+}
+
+\begin{marginfigure}
+  \includegraphics{images/png/syscall.png}
+  \caption[System Calls]{System Calls}
+  \labfig{system-calls}
+\end{marginfigure}
+
+Conveniently, a userland utility to list the metadata of a file is also called \texttt{stat}.
+
+\begin{lstlisting}[language=bash]
+$ stat /etc/profile
+  File: /etc/profile
+  Size: 993       	Blocks: 8          IO Block: 4096   regular file
+Device: 8,1	Inode: 2622512     Links: 1
+Access: (0644/-rw-r--r--)  Uid: (    0/    root)   Gid: (    0/    root)
+Access: 2024-05-21 18:30:27.000000000 +0530
+Modify: 2024-04-07 23:32:30.000000000 +0530
+Change: 2024-05-21 18:30:27.047718323 +0530
+ Birth: 2024-05-21 18:30:27.047718323 +0530
+\end{lstlisting}
+
+We can also specify the format of the output of the \texttt{stat} command using the \texttt{--format} or \texttt{-c} flag to print only the metadata we want.
+
+The data of the file is stored in the storage block.
+The inode number indexes a table of inodes on the file system.
+From the inode number, the kernel's file system driver can access the inode contents, including the location of the file, thereby allowing access to the file.
+
+On many older file systems, inodes are stored in one or more fixed-size areas that are set up at file system creation time, so the maximum number of inodes is fixed at file system creation, limiting the maximum number of files the file system can hold.
+
+Some Unix-style file systems such as JFS, XFS, ZFS, OpenZFS, ReiserFS, btrfs, and APFS omit a fixed-size inode table, but must store equivalent data in order to provide equivalent capabilities. Common alternatives to the fixed-size table include B-trees and the derived B+ trees.
+
+\begin{remark}
+  Although the inodes store the metadata of the file, the filename is not stored in the inode.
+  It is stored in the directory entry.
+  Thus the filename, file metdata, and file data are stored separately.
+\end{remark}
+
+\begin{table}
+\caption{Metadata of a File}
+\labtab{metadata-file}
+\begin{tabular}{ c c }
+  \toprule
+  Metadata & Description \\
+ \midrule
+  Size & Size of the file in bytes \\
+  Blocks & Number of blocks used by the file \\
+  IO Block & Block size of the file system \\
+  Device & Device ID of the file system \\
+  Inode & Inode number of the file \\
+  Links & Number of hard links to the file \\
+  Access & Access time of the file (\texttt{atime}) \\
+  Modify & Modification time of the file (\texttt{mtime}) \\
+  Change & Change time of the inode (\texttt{ctime}) \\
+  Birth & Creation time of the file \\
+ \bottomrule
+ \end{tabular}
+\end{table}
+
+
+\subsection{Directory Entries}
+
+\begin{figure*}[ht]
+  \includegraphics{images/png/inodes.png}
+  \caption[Inode and Directory Entry]{Inodes and Directory Entry}
+  \labfig{inode-directory}
+\end{figure*}
+
+Unix directories are lists of association structures, each of which contains one filename and one inode number.
+The file system driver must search a directory for a particular filename and then convert the filename to the correct corresponding inode number.
+
+Thus to read a file from a directory, first the directory's directory entry is read which stores the name of the file and its inode number.
+The kernel then follows the inode number to find the inode of the file.
+The inode stores all the metadata of the file, and the location of the data of the file.
+The kernel then follows the inode to find the data of the file.
+This is shown in \reffig{inode-directory}.
+
+So what happens if two directory entries point to the same inode?
+This is called a \textbf{hard link}.
+
+\subsection{Hard Links}
+
+If multiple entries of the directory entry points to the same inode, they are called hard links.
+Hard links can have different names, but they are the same file.
+As they point to the same inode, they also have the same metadata.
+
+This is useful if you want to have the same file in multiple directories without taking up more space.
+It is also useful if you want to keep a backup of a important file which is accessed by many people.
+If someone accidentally deletes the file, the other hard links will still be there and able to access the file.
+
+\begin{definition}[Hard Links]
+  Hard Links are just pointers to the same inode. They are the same file.
+  They are not pointers to the path of the file. They are pointers to the
+  file itself. They are not affected by the deletion of the other file.
+  When creating a hard link, you need to provide the path of the original
+  file, and thus it has to be either absolute path, or relative from the
+  current working directory, not relative from the location of the hard link.
+\end{definition}
+
+Hard links can be created for files only, and not directories.
+It can be created using the \texttt{ln} command.
+
+\begin{lstlisting}[language=bash]
+$ ln file1 file2
+\end{lstlisting}
+
+This will create a hard link named \texttt{file2} that points to the same inode as \texttt{file1}.
+
+\begin{remark}
+  Hard links are not dependent on the original file.
+  They are the same file and equivalent.
+  The first link to be created has no special status.
+\end{remark}
+
+\begin{marginfigure}
+  \includegraphics{images/png/dag.png}
+  \caption[Directed Acyclic Graph]{Directed Acyclic Graph}
+  \labfig{dag}
+\end{marginfigure}
+
+Historically directories could also have hard links, but this would cause the file tree to stop being a Directed Acyclic Graph
+\sidenote{
+  A Directed Acyclic Graph is a graph that has no cycles as seen in \reffig{dag}.
+}
+and become a Directed Cyclic Graph if a hardlink of an ancestor was put as a subdirectory.
+This would create confusions and infinite walks in the file system.
+Modern systems generally prohibit this confusing state, except that the parent of root is still defined as root.
+\sidenote{
+The most notable exception to this prohibition is found in Mac OS X (versions 10.5 and higher) which allows hard links of directories to be created by the superuser.
+}
+
+As hard links depend on the inode, they can only exist in the same filesystem as inodes are unique to a filesystem only.
+
+If we want to create shortcuts across filesystems, or if we want to create a link to a directory, we can use \textbf{symbolic links}.
+
+\subsection{Symbolic Links}
+
+A symbolic link contains a text string that is automatically interpreted and followed by the operating system as a path to another file or directory.
+This other file or directory is called the "target".
+The symbolic link is a second file that exists independently of its target.
+If a symbolic link is deleted, its target remains unaffected.
+If a symbolic link points to a target, and sometime later that target is moved, renamed or deleted, the symbolic link is not automatically updated or deleted, but continues to exist and still points to the old target, now a non-existing location or file.
+Symbolic links pointing to moved or non-existing targets are sometimes called broken, orphaned, dead, or dangling.
+
+\begin{definition}[Soft Links]
+\labdef{softlinks}
+  Soft Links are special kinds of files that just store the path
+  given to them. Thus the path given while making soft links should
+  either be an absolute path, or relative \textbf{from} the location of the
+  soft link \textbf{to} the location of the original file. It should not be
+  relative from current working directory.\footnote{This is a common mistake.}
+\end{definition}
+
+Symlinks are created using the \texttt{symlink} system call.
+This can be done using the \texttt{ln -s} command.
+
+\begin{lstlisting}[language=bash]
+$ echo "hello" > file1
+$ ln -s file1 file2
+$ ls -l
+total 4
+-rw-r--r-- 1 sayan sayan 6 May 23 15:27 file1
+lrwxrwxrwx 1 sayan sayan 5 May 23 15:27 file2 -> file1
+$ cat file2
+hello
+\end{lstlisting}
+
+\textbf{Interesting Observation:}
+
+Usually we have seen that if we use \texttt{ls -l} with a directory as its argument,
+it lists the contents of the directory.
+
+The only way to list the directory itself is to use \texttt{ls -ld}.
+
+But if a symlink is made to a directory, then \texttt{ls -l} on that symlink will list only the symlink.
+
+To list the contents of the symlinked directory we have to append a \texttt{/} to the symlink.
+
+\begin{lstlisting}[language=bash]
+$ ln -s /etc /tmp/etc
+$ ls -l /tmp/etc
+lrwxrwxrwx 1 sayan sayan 4 May 23 15:30 /tmp/etc -> /etc
+$ ls -l /tmp/etc/ | head -n5
+total 1956
+-rw-r--r--  1 root root      44 Mar 18 21:50 adjtime
+drwxr-xr-x  3 root root    4096 Nov 17  2023 alsa
+-rw-r--r--  1 root root     541 Apr  8 20:53 anacrontab
+drwxr-xr-x  4 root root    4096 May 19 00:44 apparmor.d
+\end{lstlisting}
+
+Here I used \texttt{head} to limit the number of lines shown as the directory is large.
+\sidenote{
+  This way of combining commands will be discussed later.
+}
+
+The symlink file stores only the path provided to it while creating it.
+This was historically stored in the data block which was pointed to by the inode.
+But this made it slower to access the symlink.
+
+Modern systems store the symlink value in the inode itself if its not too large.
+Inodes usually have a limited space allocated for each of them, so a symlink with a small target path is stored directly in the inode.
+This is called a \textbf{fast symlink}.
+
+However if the target path is too large, it is stored in the data block pointed to by the inode.
+This is retroactively called a \textbf{slow symlink}.
+
+This act of storing the target path in the inode is called \textbf{inlining}.
+
+Symlinks do not have a permission set, thus they always report \texttt{lrwxrwxrwx} as their permissions.
+
+The size reported of a symlink file is independent of the actual file's size.
+
+\begin{lstlisting}[language=bash]
+$ echo "hello" > file1
+$ ln -s file1 file2
+$ ls -l
+-rw-r--r-- 1 sayan sayan 6 May 23 15:27 file1
+lrwxrwxrwx 1 sayan sayan 5 May 23 15:27 file2 -> file1
+$ echo "a very big file" > file2
+$ ls -l
+-rw-r--r-- 1 sayan sayan 16 May 23 15:40 file1
+lrwxrwxrwx 1 sayan sayan 5 May 23 15:27 file2 -> file1
+\end{lstlisting}
+
+Rather, the size of a symlink is the length of the target path.
+
+\begin{lstlisting}[language=bash]
+$ ln -s /a/very/long/and/non-existant/path link1
+$ ln -s small link2
+$ ls -l
+total 0
+lrwxrwxrwx 1 sayan sayan 34 May 23 15:41 link1 -> /a/very/long/and/non-existant/path
+lrwxrwxrwx 1 sayan sayan  5 May 23 15:41 link2 -> small
+\end{lstlisting}
+
+Notice that the size of \texttt{link1} is 34, the length of the target path, and the size of \texttt{link2} is 5, the length of the target path.
+
+\subsection{Symlink vs Hard Links}
+
+\begin{marginfigure}
+  \includegraphics{images/png/soft-and-hard.png}
+  \caption[Abstract Representation of Symbolic Links and Hard Links]{Abstract Representation of Symbolic Links and Hard Links}
+  \labfig{soft-and-hard}
+\end{marginfigure}
+
+\begin{figure}[hb]
+  \includegraphics{images/png/soft-and-hard2.png}
+  \caption[Symbolic Links and Hard Links]{Symbolic Links and Hard Links}
+  \labfig{soft-and-hard2}
+\end{figure}
+
+The difference between a symlink and a hard link is that a symlink is a pointer to the original file, while a hard link is the same file.
+Other differences are listed in \reftab{symlink-hardlink}.
+
+\begin{table*}[hb]
+\caption{Symlink vs Hard Link}
+\labtab{symlink-hardlink}
+\begin{tabular}{ l l l }
+  \toprule
+  Property & Symlink & Hard Link \\
+ \midrule
+  File Type & Special File & Regular File \\
+  Size & Length of the target path & Size of the file \\
+  Permissions & lrwxrwxrwx & Same as the original file \\
+  Inode & Different & Same \\
+  Dependency & Dependent on the original file & Independent of the original file \\
+  Creation & Can be created across filesystems & Can only be created in the same filesystem \\
+  Target & Can point to directories & Can only point to files \\
+ \bottomrule
+ \end{tabular}
+\end{table*}
+
+\subsection{Identifying Links}
+
+\textbf{Soft Links}:
+
+To identify if a file is a symlink or a hard link, you can use the \texttt{ls -l} command.
+If the file is a symlink, the first character of the permissions will be \texttt{l}.
+\texttt{ls -l} will also show the target of the symlink after a \texttt{->} symbol.
+However, you cannot acertain if a file has a sofy link pointing to it somewhere else or not.
+
+\textbf{Hard Links}:
+
+To identify if a file is a hard link, you can use the \texttt{ls -i} command.
+Hard links will have the same inode number as each other.
+The inode number is the first column of the output of \texttt{ls -i}.
+
+Also the number of links to the file will be more than 1.
+The number of links is the second
+\sidenote{
+  third if using \texttt{ls -li}
+}
+column of the output of \texttt{ls -l}.
+
+Even if a hard link is not present in current directory, you can acertain that a file has a hard link pointing to it somewhere else using the \textbf{number of hardlinks} column of \texttt{ls -l}.
+
+\begin{lstlisting}[language=bash]
+$ touch file1
+$ ln -s file1 file2
+$ ln file1 file3
+$ ls -li
+total 0
+4850335 -rw-r--r-- 2 sayan sayan 0 May 23 15:56 file1
+4851092 lrwxrwxrwx 1 sayan sayan 5 May 23 15:56 file2 -> file1
+4850335 -rw-r--r-- 2 sayan sayan 0 May 23 15:56 file3
+\end{lstlisting}
+
+\subsection{What are . and ..?}
+
+\texttt{.} and \texttt{..} are special directory entries.
+They are hard links to the current directory and the parent directory respectively.
+Each directory has a \texttt{.} entry pointing to itself and a \texttt{..} entry pointing to its parent directory.
+
+Due to this, the number of hard links to a directory is exactly equal to the number of subdirectories it has plus 2.
+
+This is because each subdirectory has a \texttt{..} entry pointing to the parent directory, and the parent directory has a \texttt{.} entry pointing to itself.
+
+So the directory's name in its parent directory is 1 link,
+the \texttt{.} in the directory is 1 link,
+and all the subdirectories have a \texttt{..} entry pointing to the directory, which is 1 link each.
+
+\[
+  \text{Number of links to a directory} = \text{Number of subdirectories} + 2
+\]
+
+This formula always stands because a user cannot create additional hard links to a directory.
+
+
+
+
+% --- Questions and Answers ---
+
 \begin{qs}
   How to list the inodes of a file?
 \end{qs}
@@ -2445,15 +3188,6 @@ How to get that?
   The soft link is a pointer to the original file.
 \end{ans}
 
-\begin{definition}[Soft Links]
-\labdef{softlinks}
-  Soft Links are special kinds of files that just store the path
-  given to them. Thus the path given while making soft links should
-  either be an absolute path, or relative \textbf{from} the location of the
-  soft link \textbf{to} the location of the original file. It should not be
-  relative from current working directory.\footnote{This is a common mistake.}
-\end{definition}
-
 \begin{qs}
   How to create hard link of a file?
 \end{qs}
@@ -2465,15 +3199,6 @@ How to get that?
   both are \texttt{hardlinks} of each other. There is no parent-child relationship.
   The other file can be deleted and the original file will still work.
 \end{ans}
-
-\begin{definition}[Hard Links]
-  Hard Links are just pointers to the same inode. They are the same file.
-  They are not pointers to the path of the file. They are pointers to the
-  file itself. They are not affected by the deletion of the other file.
-  When creating a hard link, you need to provide the path of the original
-  file, and thus it has to be either absolute path, or relative from the
-  current working directory, not relative from the location of the hard link.
-\end{definition}
 
 \begin{qs}
   How to get the real path of a file?\\
@@ -2491,62 +3216,4 @@ How to get that?
   You can also use \texttt{readlink -f filename} to get the real path.
 \end{ans}
 
-\section{Types of Commands}
-
-\begin{qs}
-  How to create aliases? How to make them permanent? How to unset them?
-\end{qs}
-
-\begin{ans}
-  \texttt{alias name='command'} will create an alias. \\
-  \texttt{unalias name} will unset the alias. \\
-  To make them permanent, add the alias to the \texttt{$\sim$/.bashrc} file. \\
-  The \texttt{$\sim$/.bashrc} file is a script that is executed whenever a new terminal is opened.
-\end{ans}
-
-\begin{qs}
-  How to run the normal version of a command if it is aliased?
-\end{qs}
-
-\begin{ans}
-  \texttt{\textbackslash command} will run the normal version of \texttt{command} if it is aliased.
-\end{ans}
-
-\begin{qs}
-  What is the difference between \texttt{which}, \texttt{whatis}, \texttt{whereis}, \texttt{locate}, and \texttt{type}?
-\end{qs}
-
-\begin{ans}
-  Each of the commands serve a different purpose:
-  \begin{itemize}
-    \item \texttt{which} will show the path of the command that will be executed.
-    \item \texttt{whatis} will show a short description of the command.
-    \item \texttt{whereis} will show the location of the command, source files, and man pages.
-    \item \texttt{locate} is used to find files by name.
-    \item \texttt{type} will show how the command will be interpreted by the shell.
-  \end{itemize}
-\end{ans}
-
-\begin{exercise}
-  Find the path of the \texttt{true} command using \texttt{which}.
-  Find a short description of the \texttt{true} command using \texttt{whatis}.
-  Is the executable you found actually the one that is executed when you run \texttt{true}? Check using \texttt{type true}
-\end{exercise}
-
-\begin{definition}[Types of commands]
-  A command can be an alias, a shell built-in, a shell function, keyword, or an executable.
-  The \texttt{type} command will show which type the command is.
-  \begin{itemize}
-    \item \textbf{alias}: A command that is an alias to another command defined
-    by the user or the system.
-    \item \textbf{builtin}: A shell built-in command is a command that is built
-    into the shell itself. It is executed internally by the shell.
-    \item \textbf{file}: An executable file that is stored in the file system.
-      It has to be stored somewhere in the \textbf{PATH} variable.
-    \item \textbf{function}: A shell function is a set of commands that are
-    executed when the function is called.
-    \item \textbf{keyword}: A keyword is a reserved word that is part of the shell
-    syntax. It is not a command, but a part of the shell syntax.
-  \end{itemize}
-\end{definition}
 
