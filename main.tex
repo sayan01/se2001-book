@@ -58,7 +58,7 @@
 % Load the package for hyperreferences
 \usepackage{kaorefs}
 
-\graphicspath{{examples/documentation/images/}{images/}} % Paths in which to look for images
+\graphicspath{{images/}{images/pdf}{images/png}} % Paths in which to look for images
 
 \makeindex[columns=3, title=Alphabetical Index, intoc] % Make LaTeX produce the files required to compile the index
 
@@ -231,20 +231,20 @@ to understand the simplicity.\\
 \mainmatter % Denotes the start of the main document content, resets page numbering and uses arabic numbers
 \setchapterstyle{kao} % Choose the default chapter heading style
 
-\input{chapters/1-basic.tex}
+% \input{chapters/1-basic.tex}
 % \input{chapters/2-variables.tex}
 % \input{chapters/3-procman.tex}
 % \input{chapters/4-redirection.tex}
 % \input{chapters/5-pacman.tex}
 % \input{chapters/6-regex.tex}
-\input{chapters/7-editors.tex}
+% \input{chapters/7-editors.tex}
 % \input{chapters/8-grep.tex}
 % \input{chapters/9-scripts.tex}
 % \input{chapters/10-sed.tex}
 % \input{chapters/11-awk.tex}
 % \input{chapters/12-hardware.tex}
 % \input{chapters/13-git.tex}
-% \input{chapters/14-networking.tex}
+\input{chapters/14-networking.tex}
 % \input{chapters/15-storage.tex}
 
 % \appendix % From here onwards, chapters are numbered with letters, as is the appendix convention
