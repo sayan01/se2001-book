@@ -15,6 +15,27 @@
   Each process has its own `process id` or \textbf{PID} to uniquely identify it.
 \end{definition}
 
+Whenever we run an application, or even a command on the linux shell, it spawns a process. Processes are always created by an already
+existing process
+\sidenote{
+  Other than the very first process, which is always the
+  \textbf{init} process. In most distributions, this is
+  done by
+  \href{https://systemd.io/}{systemd}, which is an
+  init system that does a lot of other things as well.
+  You can learn more about systemd and what all
+  it does
+  \href{https://documentation.suse.com/external-tree/en-us/sles/12-SP4/systemd\_in\_suse\_linux\_enterprise\_12\_white\_paper.pdf}{here}.
+}
+This creates a tree-like structure of processes, where each process has a parent process and can have multiple child processes.
+When the parent of a process dies, the child processes are adopted by the \textbf{init} process.
+\textbf{init} is thus the root of the process tree.
+
+\begin{figure}[h!]
+  \includegraphics{process-tree}
+  \caption{Example of a process tree}
+  \labfig{process-tree}
+\end{figure}
 
 \begin{qs}
   How to get a snapshot of all the processes running?
