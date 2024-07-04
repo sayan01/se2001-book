@@ -53,6 +53,8 @@ Here the \texttt{NUMBER} is the amount of time to sleep.
 The \texttt{SUFFIX} can be \texttt{s} for seconds, \texttt{m} for minutes,
 \texttt{h} for hours, and \texttt{d} for days.
 
+\vfill
+\pagebreak
 \section{Different ways of running a process}
 
 \subsection{What are processes?}
@@ -397,7 +399,35 @@ $ echo $output
 This uses concepts from redirection and shell variables, which we will cover
 in later weeks.
 
+\subsection{at and cron}
 
+Processes can also be scheduled to be launched at a later time.
+This is usually done using \textbf{cron} or the \textbf{at} command.
+We will cover these in depth later.
+
+\subsection{GNU parallel}
+
+GNU parallel is a shell tool for executing jobs in parallel using one
+or more computers. A job can be a single command or a small script that
+has to be run for each of the lines in the input. The typical input is
+a list of files, a list of hosts, a list of users, a list of URLs, or a
+list of tables. A job can also be a command that reads from a pipe.
+GNU parallel can then split the input into blocks and pipe a block
+into each command in parallel.
+
+\subsection{systemd services}
+
+Finally, the best way to run a background process or a daemon is to use
+\textbf{systemd} services. \textbf{systemd} is an init system that is
+used by most modern linux distributions. You can create a service file
+declaring the process, the command line arguments, the environment variables,
+and the user and group that the process should run as. You can also
+specify if the process should be restarted if it crashes, or if it should
+be started at boot time.
+
+
+\vfill
+\pagebreak
 \section{Process Management}
 \subsection{Disown}
 
@@ -557,31 +587,443 @@ This has same effect as using the \texttt{\&} operator at the end of the command
 You cannot perform job control on a process that is not started from the shell,
 or if you have disowned the process.
 
+\subsection{Killing Processes}
 
+We have been using the \texttt{kill} command to send signals to processes.
+The kill command is a shell builtin and an executable command that is used
+to send signals to processes. The default signal that is sent is the
+\textbf{SIGTERM} signal, which is signal number 15.
+The kill command is the user-land way to communicate with the kernel that
+some process needs to be given a certain signal.
 
+\textbf{Syntax}
 
+\begin{lstlisting}[language=bash]
+$ kill [-signal|-s signal] PID|name...
+\end{lstlisting}
+
+Let us also briefly discuss what the synopsis of the command means, and
+how to interpret it.
+
+The first word is the name of the command, which is \texttt{kill} in this case.
+The argument \textbf{signal} inside square brackets means that it is optional.
+The argument \textbf{PID} is the process ID of the process that you want to kill.
+The argument \textbf{name} is the name of the process that you want to kill.
+The pipe between \textbf{PID} and \textbf{name} means that you can provide
+either the PID or the name of the process.
+The ellipsis (\texttt{...}) after \textbf{PID|name} means that you can provide
+as many PIDs or names as you want.
+
+\begin{remark}
+  As mentioned, kill is also a shell builtin command. This means that
+  the synopsis seen in the man page of kill is not the same as the
+  synopsis of the builtin. The bash builtin of kill does not support
+  providing names of the processes, only the PIDs. Hence if you want
+  to kill a process by its name, you will either have to use the
+  path of the kill binary, or use the \texttt{pkill} command.
+\end{remark}
+
+So for example, we can run kill in the following manners.
+
+\begin{lstlisting}[language=bash]
+$ kill 2452
+$ kill -9 2452
+$ kill -9 2452 62
+$ kill -SIGKILL 2525
+$ kill -SIGKILL 2525 732
+\end{lstlisting}
+
+The \texttt{kill} command can also be used to send other non-terminating signals
+to the process. For example, the \textbf{SIGSTP} signal can be used to pause
+a process, and the \textbf{SIGCONT} signal can be used to resume a process.
+Similarly, there are some undefined signals that can be used to send custom
+signals to the process.
+
+\textbf{SIGUSR1} and \textbf{SIGUSR2} are signals that do not have any predefined
+behaviour, and can be used by the user to send custom signals to the process.
+The behaviour of the process on receipt of these signals is decided by the
+process and told to the user by the process documentation. The user can
+then send these signals to the process using the \texttt{kill} command.
+This helps user interact with processes that are not running directly in the
+foreground of a shell.
+
+Processes can also \textbf{trap} signals, which means that they can catch
+a signal and run a custom handler function. This is useful when you want
+to do some cleanup before the process is killed. This can also be used
+to totally change how the process behaves on receipt of a signal.
+However, to prevent malicious code from running, the \textbf{SIGKILL} signal
+cannot be trapped, and the process will be killed immediately. Similarly
+the \textbf{SIGSTOP} signal, which is similar in definition to the \textbf{SIGSTP}
+signal, cannot be trapped.
+
+To see the list of the signals, we can run \texttt{kill -l}.
+
+\begin{lstlisting}[language=bash]
+$ kill -l
+ 1) SIGHUP       2) SIGINT       3) SIGQUIT      4) SIGILL       5) SIGTRAP
+ 6) SIGABRT      7) SIGBUS       8) SIGFPE       9) SIGKILL     10) SIGUSR1
+11) SIGSEGV     12) SIGUSR2     13) SIGPIPE     14) SIGALRM     15) SIGTERM
+16) SIGSTKFLT   17) SIGCHLD     18) SIGCONT     19) SIGSTOP     20) SIGTSTP
+21) SIGTTIN     22) SIGTTOU     23) SIGURG      24) SIGXCPU     25) SIGXFSZ
+26) SIGVTALRM   27) SIGPROF     28) SIGWINCH    29) SIGIO       30) SIGPWR
+31) SIGSYS      34) SIGRTMIN    35) SIGRTMIN+1  36) SIGRTMIN+2  37) SIGRTMIN+3
+38) SIGRTMIN+4  39) SIGRTMIN+5  40) SIGRTMIN+6  41) SIGRTMIN+7  42) SIGRTMIN+8
+43) SIGRTMIN+9  44) SIGRTMIN+10 45) SIGRTMIN+11 46) SIGRTMIN+12 47) SIGRTMIN+13
+48) SIGRTMIN+14 49) SIGRTMIN+15 50) SIGRTMAX-14 51) SIGRTMAX-13 52) SIGRTMAX-12
+53) SIGRTMAX-11 54) SIGRTMAX-10 55) SIGRTMAX-9  56) SIGRTMAX-8  57) SIGRTMAX-7
+58) SIGRTMAX-6  59) SIGRTMAX-5  60) SIGRTMAX-4  61) SIGRTMAX-3  62) SIGRTMAX-2
+\end{lstlisting}
+
+Some of the important signals are:
+
+\begin{itemize}
+  \item \textbf{SIGHUP} - Hangup signal. This is sent to a process when the
+  terminal is closed. This is used to tell the process that the terminal
+  is no longer available.
+\item \textbf{SIGINT} - Interrupt signal. This is sent to a process when the
+  user presses \texttt{Ctrl+C}. This is used to tell the process to stop
+  what it is doing and exit.
+\item \textbf{SIGKILL} - Kill signal. This is used to kill a process immediately.
+  This signal cannot be caught or ignored by the process.
+\item \textbf{SIGTERM} - Terminate signal. This is used to tell the process
+  to exit gracefully. The process can catch this signal and do some cleanup
+  before exiting. This is the default signal sent by the \texttt{kill} command.
+\item \textbf{SIGSTP} - Stop signal. This is used to pause a process.
+  This is sent when the user presses \texttt{Ctrl+Z}. This signal can be
+  caught or ignored by the process.
+\item \textbf{SIGSTOP} - Stop signal. This is used to pause a process.
+  This signal cannot be caught or ignored by the process.
+\item \textbf{SIGCONT} - Continue signal. This is used to resume a process
+  that has been paused using the \textbf{SIGSTOP} signal. This is sent
+  when the user presses \texttt{fg} or \texttt{bg}.
+\item \textbf{SIGUSR1} - User defined signal 1. This is a signal that can
+  be used by the user to send a custom signal to the process.
+\item \textbf{SIGUSR2} - User defined signal 2. This is a signal that can
+  be used by the user to send a custom signal to the process.
+\item \textbf{SIGCHLD} - Child signal. This is sent to the parent process
+  when a child process exits. This is used to tell the parent process that
+  the child process has exited.
+\item \textbf{SIGSEGV} - Segmentation fault signal. This is sent to a process
+  when it tries to access memory that it is not allowed to access.
+\item \textbf{SIGPIPE} - Pipe signal. This is sent to a process when it tries
+  to write to a pipe that has been closed.
+\end{itemize}
+
+\vfill
+\pagebreak
+\section{Finding Processes}
+
+As we saw, managing a process is easy once we know the PID of the process.
+However, it is not always easy to find the PID of a process.
+To do this, there are multiple tools in linux that can be used.
+
+\subsection{pgrep}
+
+The \texttt{pgrep} command is used to find the PID of a process based on its name.
+It can take the name of the process as an argument, and will print the PID of the
+processes that match the name. The search can also be a regex pattern.
+\sidenote{
+  We will discuss regex patterns in the next chapter.
+}
+We have already seen how \texttt{pgrep} can be used to find the PID of a process.
+
+\begin{lstlisting}[language=bash]
+$ pgrep firefox
+526272
+\end{lstlisting}
+
+We can also use it for any process run from the terminal.
+
+\begin{lstlisting}[language=bash]
+$ sleep 50 &
+$ sleep 20 &
+$ sleep 10 &
+$ pgrep sleep
+98963
+99332
+99526
+\end{lstlisting}
+
+\subsection{pkill}
+
+Similarly, we also have the \texttt{pkill} command, which is used to kill a process
+based on its name. It can take the name of the process as an argument, and will
+send the \textbf{SIGTERM} signal to the processes that match the name.
+Other signals can also be sent using the \texttt{-signal} flag, similar to the
+kill command.
+
+\begin{lstlisting}[language=bash]
+$ pkill firefox
+\end{lstlisting}
+
+\subsection{pidwait}
+
+The \texttt{pidwait} command is used to wait for a process to exit.
+It searches for the process using its name, a part of its name, or any
+regex matching its name, and waits for the process to exit.
+
+\begin{exercise}
+  Open firefox from a terminal in the background, then use the \texttt{pidwait}
+  to wait till the process exits. After some time, close the firefox window
+  and observe the terminal.
+\end{exercise}
+
+\vfill
+\pagebreak
+\section{Listing Processes}
+
+Sometimes we may not even know the name of the process, and we may want to
+list all the processes running on the system. This can be done using the
+many commands.
+
+\subsection{ps}
+
+\textbf{ps} is an ancient command
+\sidenote{
+  It exists in the Unix V7 manual, which was released in 1979.
+  It has BSD-like options, GNU-like options, and System V-like options.
+}
+that is used to list the processes running on the system.
+
+There are a lot of options and flags that can be used with the \textbf{ps} command.
+The flags are of multiple types, and some flags perform the same function but
+are named differently. This is because the \textbf{ps} command has been around
+for a long time, and has been implemented in multiple ways in different systems.
+There are also different formats in which the output can be displayed.
+
+The most common flags used with the \textbf{ps} command are:
+
+\begin{itemize}
+  \item \textbf{ps} - This will get a snapshot of the processes owned by the user tied to the TTY.
+  \item \textbf{ps -e} - This will show all the processes.
+  \item \textbf{ps -f} - This will show full format listing.
+  \item \textbf{ps -l} - This will show long format listing.
+  \item \textbf{ps u} - This will show user-oriented format listing.
+  \item \textbf{ps x} - This will show processes without controlling terminals.
+  \item \textbf{ps -A} - This will show all processes.
+  \item \textbf{ps aux} - This is a common command to see all processes owned by all users with and without TTY associations and showing the user who owns them.
+  \item \textbf{ps --forest} - This will show the processes in a tree form.
+\end{itemize}
+
+There are hundreds of flags that can be used with the \textbf{ps} command.
+
+\begin{exercise}
+  Try to use the \textbf{ps} command with the flags mentioned above, and see
+  the output of the command.
+\end{exercise}
+
+\subsection{pstree}
+
+The \textbf{pstree} command is used to display the processes in a tree form.
+Although the \textbf{ps} command can also display the processes in a tree form
+using the \texttt{--forest} flag, the \textbf{pstree} command is more suited
+for this purpose. It has many features that ps lacks, such as collapsing
+branches of identical processes, better ASCII art, Unicode support, etc.
+
+If the system and the terminal supports unicode, the \textbf{pstree} command
+will automatically use
+\href{https://en.wikipedia.org/wiki/Box-drawing\_character}{VT100 box-drawing characters}
+to make the tree look better. We can still force it to use ASCII with the
+\texttt{-A} flag.
+
+We can also disable the clubbing of identical processes using the \texttt{-c} flag.
+
+The pstree command optionally takes a PID as an argument, and will display
+the tree rooted at that PID. If no PID is provided, it will display the
+tree rooted at the init process.
+
+I can find the PID of the tmux server I am running to develop this book
+using the \texttt{pgrep} command.
+\begin{lstlisting}[language=bash]
+$ pgrep tmux
+62957
+\end{lstlisting}
+
+And then use the \texttt{pstree} command
+to display the tree rooted at that PID.
+
+\begin{lstlisting}[language=bash]
+$ pstree -A 62957
+tmux: server-+-bash---nvim-+-nvim-+-node---14*[{node}]
+             |             |      |-texlab---9*[{texlab}]
+             |             |      |-xsel
+             |             |      `-9*[{nvim}]
+             |             `-2*[{nvim}]
+             |-bash---watch.sh---entr
+             |-bash---zathura---8*[{zathura}]
+             |-3*[bash]
+             |-2*[bash---man---less]
+             |-bash---nvim-+-nvim-+-2*[node---9*[{node}]]
+             |             |      `-{nvim}
+             |             `-2*[{nvim}]
+             `-bash-+-pstree
+                    `-xsel
+\end{lstlisting}
+
+This helps us easily find out which processes are running under which process,
+and helps us understand the process tree.
+
+\subsection{top}
+
+The \textbf{top} command is used to display the processes that are running
+in real time. It is an interactive command that displays the processes in
+a table format, and updates the table every few seconds. It also displays
+the CPU and memory usage of the processes.
+
+The \textbf{top} command is very useful when you want to monitor the processes
+and the resources they are using in real time. It is also useful when you
+want to find out which process is using the most CPU or memory.
+
+Since it is an interactive command, it has keyboard shortcuts as well, along
+with runtime options that can be used to change the behaviour of the command.
+
+\marginnote{
+  Note: The output of the \textbf{top} command is not static, and it contains
+  control characters and
+  \href{https://en.wikipedia.org/wiki/ANSI\_escape\_code}{ANSI escape codes}
+  to make the output beautiful and interactive. This is why the output is not
+  suitable for use in scripts, and is only meant for human consumption.
+  I have removed the control characters and ANSI escape codes from the output
+  shown here.
+}
+
+\begin{lstlisting}
+$ top
+top - 15:44:55 up 40 min,  1 user,  load average: 2.03, 1.37, 1.02
+Tasks: 271 total,   1 running, 270 sleeping,   0 stopped,   0 zombie
+%Cpu(s):  9.8 us,  4.9 sy,  0.0 ni, 85.4 id,  0.0 wa,  0.0 hi,  0.0 si,  0.0 st
+MiB Mem :   7764.2 total,    604.5 free,   5663.2 used,   1919.6 buff/cache
+MiB Swap:  20002.0 total,  19901.2 free,    100.8 used.   2101.0 avail Mem
+
+    PID USER      PR  NI    VIRT    RES    SHR S  %CPU  %MEM     TIME+ COMMAND
+    631 sayan     20   0 1248084  81976  44580 S  18.2   1.0   1:39.82 Xorg
+   1072 sayan     20   0 3159356 229336  89816 S   9.1   2.9   0:44.01 spotify
+   1079 sayan     20   0 1123.5g 128252  65776 S   9.1   1.6   0:09.37 Discord
+      1 root      20   0   22076  12840   9476 S   0.0   0.2   0:03.62 systemd
+      2 root      20   0       0      0      0 S   0.0   0.0   0:00.00 kthreadd
+      3 root      20   0       0      0      0 S   0.0   0.0   0:00.00 pool_wo+
+\end{lstlisting}
+
+\subsection{htop}
+
+The \textbf{htop} command is an interactive process viewer for Unix systems.
+It is inspired from the \textbf{top} command, but has a lot more features
+such as scrolling the process list, searching for processes, killing processes,
+tree view of processes, etc.
+
+\begin{exercise}
+  Run (Install if not present) the \textbf{htop} command and see the output.
+  Notice how the output is more interactive and colourful than the \textbf{top}
+  command. Run something heavy in the background, and see how the CPU and
+  the memory usage changes in real time.
+\end{exercise}
+
+One such command to run to simulate heavy CPU usage is to run the following command.
+
+\begin{lstlisting}[language=bash]
+$ cat /dev/urandom | gzip > /dev/null &
+\end{lstlisting}
+
+This will compress the random data from \texttt{/dev/urandom} and write it to
+\texttt{/dev/null}. This will use a lot of CPU, and you can see the CPU usage
+spike up. But this is a single core process, so the CPU usage will be limited
+to only one core. However, the CPU core used may keep changing.
+
+\begin{remark}
+  The above command is a simple way to generate CPU usage. It will not
+  write any data to disk and not eat any disk space. However, the
+  command should be typed carefully, since if you forget to add the
+  \texttt{> /dev/null} part, it will write the compressed data to the
+  terminal if \texttt{-f} is given to \texttt{gzip}, and the terminal
+  will be filled with random data and get messed up. In this case
+  you can type \texttt{tput reset} to reset the terminal after killing
+  the process.
+\end{remark}
+
+\subsection{btop}
+
+The \textbf{btop} command is a terminal based graphical process viewer.
+It is inspired from the \textbf{htop} command, but has a more graphical
+interface. It is written in python, and uses the \textbf{blessings} library
+to draw the interface.
+
+\subsection{glances}
+
+The \textbf{glances} command is a cross-platform monitoring tool that is
+used to monitor the system resources in real time. It is written in python,
+and uses the \textbf{curses} library to draw the interface.
 
 
 \vfill
 \pagebreak
+\section{Exit Codes}
 
-\begin{qs}
-  How to get a snapshot of all the processes running?
-  What are the commonly used flags used with it?
-\end{qs}
+Every process that runs in linux has an exit code when it terminates.
+This is a number that is returned by the process to the parent process
+when it exits. This number is used to tell the parent process if the
+process exited successfully or not. The exit code is a number between
+0 and 255, and is used to tell the parent process the status of the
+child process.
 
-\begin{ans}
-  The \textbf{ps} command is used to get a snapshot of all the processes running.
-  \begin{itemize}
-    \item \textbf{ps} will get a snapshot of all the processes running.
-    \item \textbf{ps -e} will show all the processes.
-    \item \textbf{ps -f} will show full format listing.
-    \item \textbf{ps -l} will show long format listing.
-    \item \textbf{ps -u} will show user-oriented format listing.
-    \item \textbf{ps -x} will show processes without controlling terminals.
-    \item \textbf{ps -a} will show all processes with a terminal.
-    \item \textbf{ps -A} will show all processes
-    \item \textbf{ps aux} is a common command to see all processes
-    \item \textbf{ps --forest} will show the processes in a tree form
-  \end{itemize}
-\end{ans}
+The exit code of the last run process is stored in a variable
+called \texttt{\$?} in the shell. Successful processes return 0,
+whereas unsuccessful processes return a non-zero number.
+The exact return code is decided by the process itself, and usually
+has some meaning to the process. Some common exit codes are:
+
+\begin{itemize}
+  \item 0 - Success
+  \item 1 - General error
+  \item 2 - Misuse of shell builtins
+  \item 126 - Command invoked cannot execute
+  \item 127 - Command not found
+  \item 128 - Invalid argument to exit
+  \item 128+n - Fatal error signal "n"
+  \item 130 - Script terminated by \texttt{Ctrl+C}
+  \item 137 - Process killed with \textbf{SIGKILL}
+  \item 255 - Exit status out of range
+\end{itemize}
+
+\begin{remark}
+Note that $130=128+2$, and $2$ is the signal number for \textbf{SIGINT},
+thus, the exit code for a process that is terminated by \texttt{Ctrl+C}
+is 130. Similarly, any other signal sent to the process causing it to
+exit abnormally will have an exit code of $128+n$, where $n$ is the signal
+number. Similarly $137=128+9$, and $9$ is the signal number for \textbf{SIGKILL}.
+\end{remark}
+
+To return any exit status from your script, you can use the \texttt{exit} command.
+
+\begin{lstlisting}[language=bash]
+$ cat myscript.sh
+#!/bin/bash
+echo "hello"
+exit 25
+$ ./script.sh
+bash: ./script.sh: No such file or directory
+$ echo $?
+127
+$ ./myscript.sh
+bash: ./myscript.sh: Permission denied
+$ echo $?
+126
+$ chmod u+x myscript.sh
+$ ./myscript.sh
+hello
+$ echo $?
+25
+\end{lstlisting}
+
+The exit code is how shell constructs like \texttt{if}, \texttt{while},
+and \texttt{until} construct their conditions. If the exit code is 0,
+then it is considered true, and if the exit code is non-zero, then it
+is considered false.
+
+\begin{lstlisting}[language=bash]
+$ if ./myscript.sh; then echo "success"; else echo "failure $?"; fi
+hello
+failure 25
+$ if ls /bin/bash; then echo "success"; else echo "failure $?"; fi
+/bin/bash
+success
+\end{lstlisting}
