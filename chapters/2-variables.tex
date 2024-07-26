@@ -2,17 +2,28 @@
 \chapter{Shell Variables}
 \labch{variables}
 
+We have seen how to execute commands in the linux shell, and also how to
+combine those commands to perform complex tasks. However, to make really
+powerful scripts, we need to store the output of commands, and also store
+intermediate results. This is where variables come in. In this chapter,
+we will learn how to create, manipulate, and use variables in the shell.
+
 \section{Creating Variables}
+
+There are two types of variables in the shell: \textbf{Environment Variables}
+and \textbf{Shell Variables}. Environment variables are accessible to all
+processes running in the environment, while shell variables are only accessible
+to the shell in which they are created.
 
 \begin{definition}[Environment Variables]
   An environment variable is a variable that is accessbile to all
   processes running in the environment. It is a key-value pair.
-  It is created using the \texttt{export} command. It can be accessed
+  It is created using the \lstinline{export} command. It can be accessed
   using the \$ followed by the name of the variable (e.g. \$HOME) or
-  using the \texttt{printenv} command.
+  using the \lstinline{printenv} command.
   They are part of the environment in which a process runs. For example,
   a running process can query the value of the
-  TEMP environment variable to discover a suitable location to store
+  TEMP/TMPDIR environment variable to discover a suitable location to store
   temporary files, or the HOME or USER variable
   to find the directory structure owned by the user running the process.
 \end{definition}
@@ -20,144 +31,1243 @@
 \begin{definition}[Shell Variables]
   A shell variable is a variable that is only accessible to the shell
   in which it is created. It is a key-value pair. It is created using
-  the \texttt{=} operator. It can be accessed using the \$ followed by the name
+  the \lstinline{=} operator. It can be accessed using the \$ followed by the name
   of the variable (e.g. \$var).
   They are local to the shell in which they are created.
 \end{definition}
 
-\begin{qs}
-  How to create a shell variable? How to create an environment variable?
-\end{qs}
+Let us see how to create a shell variable.
 
-\begin{ans}
-  \texttt{var=value} will create a shell variable. \\
-  \texttt{export var=value} will create an environment variable.
-\end{ans}
+\begin{lstlisting}[language=bash]
+$ var="Hello World"
+\end{lstlisting}
 
-\begin{qs}
-  How to set the prompt string? How to set the secondary prompt string?
-\end{qs}
+This creates a shell variable \lstinline{var} with value \lstinline{Hello World}.
+If the value of our variable contains spaces, we need to enclose it in quotes.
+It is important to note that there should be \textbf{no spaces} around the \lstinline{=} operator.
 
-\begin{ans}
-  \texttt{PS1="newprompt"} will set the prompt string. \\
-  \texttt{PS2="newprompt"} will set the secondary prompt string.
-  This is useful when writing multi-line commands.
-\end{ans}
+Variable names can contain letters, numbers, and underscores, but they cannot start with a number.
 
-\begin{qs}
-  Where are commands searched for? How to add a new path to search for commands?
-  What symbol is used to separate the paths?
-\end{qs}
+Similarly, for an environment variable, we use the \lstinline{export} command.
 
-\begin{ans}
-  The \textbf{PATH} variable stores the paths to search for commands. \\
-  \texttt{export PATH=\$PATH:newpath} will add \texttt{newpath} to the \textbf{PATH} variable.\\
-  The colon \texttt{:} is used to separate the paths.
-\end{ans}
+\begin{lstlisting}[language=bash]
+$ export var="Hello World"
+\end{lstlisting}
+
+This creates an environment variable \lstinline{var} with value \lstinline{Hello World}.
+The difference between a shell variable and an environment variable is that the environment variable is accessible to all processes running in the environment, while the shell variable is only accessible to the shell in which it is created.
+
+A variable can also be exported after it is created.
+
+\begin{lstlisting}[language=bash]
+$ var="Hello World"
+$ export var
+\end{lstlisting}
 
 \section{Printing Variables to the Terminal}
 
-\begin{qs}
-  List the frequently used shell variables already existing in your shell.
-\end{qs}
+To access the value of a variable, we use the \lstinline{\$} operator followed by the name of the variable.
+It is only used when we want to get the value of the variable, and not for setting the value.
 
-\begin{ans}
-  Frequently used shell variables:
-  \begin{itemize}
-    \item \textbf{USER} stores the currently logged in user.
-    \item \textbf{HOME} stores the home directory of the user.
-    \item \textbf{PWD} stores the current working directory.
-    \item \textbf{SHELL} stores the path of the shell being used.
-    \item \textbf{PATH} stores the paths to search for commands.
-    \item \textbf{PS1} stores the prompt string for the shell.
-    \item \textbf{PS2} stores the secondary prompt string for the shell
-    \item \textbf{HOSTNAME} stores the network name of the system
-  \end{itemize}
-\end{ans}
+\begin{lstlisting}[language=bash]
+$ var="Hello World"
+$ echo $var
+Hello World
+\end{lstlisting}
 
-\begin{qs}
-  List the special shell variables useful in scripts.
-\end{qs}
+However, it is often required to enclose the variable name in braces to avoid ambiguity when concatenating with other alpha-numeric characters.
 
-\begin{ans}
-  Special shell variables useful in scripts:
-  \begin{itemize}
-    \item \textbf{\$0} stores the name of the script.
-    \item \textbf{\$1, \$2, \$3, ...} store the arguments to the script.
-    \item \textbf{\$\#} stores the number of arguments to the script.
-    \item \textbf{\$*} stores all the arguments to the script as a single string.
-    \item \textbf{\$@} stores all the arguments to the script as array of strings.
-    \item \textbf{\$?} stores the exit status of the last command.
-    \item \textbf{\$\$} stores the process id of the current shell.
-    \item \textbf{\$!} stores the process id of the last background command.
-    \item \textbf{\$-} stores the current options set for the shell.
-    \item \textbf{\$IFS} stores the Internal Field Separator.
-    \item \textbf{\$LINENO} stores the current line number of the script.
-    \item \textbf{\$RANDOM} stores a random number.
-    \item \textbf{\$SECONDS} stores the number of seconds the script has been running.
-  \end{itemize}
-\end{ans}
+\marginnote{
+  Here we want to concatenate the values of the variables \lstinline{date} and \lstinline{time} with an underscore in between.
+  However, the shell things that the first variable we are accessing is \lstinline{date_}, and the second variable is \lstinline{time}. This gives an empty first variable.
+  To fix this ambiguity, we enclose the variable name in braces.
+}
+\begin{lstlisting}[language=bash]
+$ date="2024_07_30"
+$ time="08:30:00"
+$ echo "$date_$time"
+08:30:00
+$ echo "${date}_${time}"
+2024_07_30_08:30:00
+\end{lstlisting}
+
+\begin{remark}
+  If we want to print the dollar symbol literally, we need to escape it using the backslash character, or surround it in single quotes, not double quotes.
+  \begin{lstlisting}
+  $ echo '$USER is' "$USER"
+  $USER is sayan
+  $ echo "\$HOSTNAME is $HOSTNAME"
+  $HOSTNAME is rex\end{lstlisting}
+\end{remark}
+
+Here we are using the \lstinline{echo} command to print the value of the variable \lstinline{var} to the terminal.
+
+\subsection{Echo Command}
+
+The \lstinline{echo} command displays a line of text on the terminal. It is commonly used in shell scripts to display a message or output of a command. It is also used to print the value of a variable.
+
+On most shells \textbf{echo} is actually a built-in command, not an external program. This means that the shell has a built-in implementation of the echo command, which is faster than calling an external program.
+
+Although the \lstinline{echo} binary might be present on your system, it is not the one being called when executing \lstinline{echo}. This is usually not an issue for most use cases, however, you should be aware which \lstinline{echo} you are running, so that you can refer to the correct documentation.
+
+When using \lstinline{man echo}, we get the documentation of \lstinline{echo} binary distributed through GNU core utils, whereas when we using \lstinline{help echo}, we get the documentation of the \lstinline{echo} which is built-in into the bash shell.
+
+\begin{lstlisting}[language=bash]
+$ man echo |  sed '/^$/d' | head -n15
+ECHO(1)                                                                                User Commands                                                                               ECHO(1)
+NAME
+       echo - display a line of text
+SYNOPSIS
+       echo [SHORT-OPTION]... [STRING]...
+       echo LONG-OPTION
+DESCRIPTION
+       Echo the STRING(s) to standard output.
+       -n     do not output the trailing newline
+       -e     enable interpretation of backslash escapes
+       -E     disable interpretation of backslash escapes (default)
+       --help display this help and exit
+       --version
+              output version information and exit
+       If -e is in effect, the following sequences are recognized:
+\end{lstlisting}
+
+\begin{lstlisting}[language=bash]
+$ help echo | head -n20 | sed '/^ +$/d'
+echo: echo [-neE] [arg ...]
+    Write arguments to the standard output.
+    Display the ARGs, separated by a single space character and followed by a
+    newline, on the standard output.
+    Options:
+      -n	do not append a newline
+      -e	enable interpretation of the following backslash escapes
+      -E	explicitly suppress interpretation of backslash escapes
+    `echo' interprets the following backslash-escaped characters:
+      \a	alert (bell)
+      \b	backspace
+      \c	suppress further output
+      \e	escape character
+      \E	escape character
+      \f	form feed
+      \n	new line
+      \r	carriage return
+\end{lstlisting}
+
+The options of both the \lstinline{echo} commands look similar, however, GNU core-utils \lstinline{echo} also has the support for two long options.
+These are options with two dashes, and are more descriptive than the short options.
+However, these are not present in the built-in \lstinline{echo} command.
+
+Thus, if we are reading the man page of \lstinline{echo}, we might think that the long options will work with the default \lstinline{echo}, but it will not.
+
+\marginnote{
+  When we call the \lstinline{echo} executable with its path, the executable gets executed instead of the built-in. This supports the long options. The built-in version simply prints the long option as text.
+}
+\begin{lstlisting}[language=bash]
+$ type -a echo
+echo is a shell builtin
+echo is /sbin/echo
+echo is /bin/echo
+echo is /usr/bin/echo
+echo is /usr/sbin/echo
+\end{lstlisting}
+\begin{lstlisting}[language=bash]
+$ echo --version
+--version
+\end{lstlisting}
+\begin{lstlisting}[language=bash]
+$ /bin/echo --version
+echo (GNU coreutils) 9.5
+Copyright (C) 2024 Free Software Foundation, Inc.
+License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>.
+This is free software: you are free to change and redistribute it.
+There is NO WARRANTY, to the extent permitted by law.
+
+Written by Brian Fox and Chet Ramey.
+\end{lstlisting}
+
+\subsubsection{Escape Characters}
+
+The \lstinline{echo} command also supports escape characters. These are special characters that are used to format the output of the \lstinline{echo} command.
+
+However, to use these escape characters, we need to use the \lstinline{-e} option.
+The following list of escape characters are supported by the \lstinline{echo} command is taken from the \lstinline{help echo} output as-is.
+
+\begin{lstlisting}[language=bash]
+`echo' interprets the following backslash-escaped characters:
+      \a        alert (bell)
+      \b        backspace
+      \c        suppress further output
+      \e        escape character
+      \E        escape character
+      \f        form feed
+      \n        new line
+      \r        carriage return
+      \t        horizontal tab
+      \v        vertical tab
+      \\        backslash
+      \0nnn     the character whose ASCII code is NNN (octal).  NNN can be
+                0 to 3 octal digits
+      \xHH      the eight-bit character whose value is HH (hexadecimal).  HH
+                can be one or two hex digits
+      \uHHHH    the Unicode character whose value is the hexadecimal value HHHH.
+                HHHH can be one to four hex digits.
+      \UHHHHHHHH the Unicode character whose value is the hexadecimal value
+                HHHHHHHH. HHHHHHHH can be one to eight hex digits.
+\end{lstlisting}
+
+\marginnote{
+  The backspace character \lstinline{\\b} moves the cursor one character to the left. This is useful to overwrite a previously typed character.
+}
+\begin{lstlisting}[language=bash]
+$ echo -e "abc\bd"
+abd
+\end{lstlisting}
+
+\marginnote{
+  The suppress further output character \lstinline{\\c} suppresses the output of any text present after it.
+}
+\begin{lstlisting}[language=bash]
+$ echo -e "abc\cde"
+abc
+\end{lstlisting}
+\marginnote{
+  The escape character \lstinline{\\e} is used to escape the escape character after it, but continues printing after that.
+}
+\begin{lstlisting}[language=bash]
+$ echo -e "abc\ede"
+abce
+\end{lstlisting}
+\marginnote{
+  The form feed character \lstinline{\\f} and vertical tab character \lstinline{\\v} moves the cursor to the next line, but does not move the cursor to the start of line, remaining where it was in the previous line.
+}
+\begin{lstlisting}[language=bash]
+$ echo -e "abc\fde"
+abc
+   de
+\end{lstlisting}
+\begin{lstlisting}[language=bash]
+$ echo -e "abc\vde"
+abc
+   de
+\end{lstlisting}
+\marginnote{
+  The carriage return character \lstinline{\\r} moves the cursor to the start of the line. This can be used to overwrite some parts of the previously written line. Characters not overwritten remain intact. Here the \lstinline|de| overwrite the \lstinline|ab| but the \lstinline|c| remains intact.
+}
+\begin{lstlisting}[language=bash]
+$ echo -e "abc\rde"
+dec
+\end{lstlisting}
+\marginnote{
+  The new line character \lstinline{\\n} moves the cursor to the next line and the cursor to the start of the line. This is same as performing \lstinline|\\f\\r|.
+}
+\begin{lstlisting}[language=bash]
+$ echo -e "abc\nde"
+abc
+de
+\end{lstlisting}
+\marginnote{
+  The horizontal tab character \lstinline{\\t} moves the cursor to the next tab stop.
+}
+\begin{lstlisting}[language=bash]
+$ echo -e "abc\tde"
+abc     de
+\end{lstlisting}
+\marginnote{
+The octal and hexadecimal characters can be used to print the character with the given ASCII code.
+Here, \lstinline{\\x41} is the ASCII code for \lstinline{A} and \lstinline{\\0132} is the ASCII code for \lstinline{Z}.
+}
+\begin{lstlisting}[language=bash]
+$ echo -e "\0132"
+Z
+$ echo -e "\x41"
+A
+\end{lstlisting}
+
+\subsection{Accessing and Updating Numeric Variables}
+
+If the variable is a number, we can perform arithmetic operations on it in a mathematical context.
+\sidenote{
+  There are no data types in bash. A variable can store a number, a string, or any other data type. Every variable is treated as a string, unless inside a mathematical context.
+}
+
+\subsubsection{Basic Arithmetic}
+
+Basic Arithmetic operations such as addition, subtraction, multiplication, division, and modulo can be performed using the \lstinline{(( ))} construct.
+
+Exponentiation can be performed using the \lstinline{**} operator, similar to Python.
+
+The \lstinline{^} operator is reserved for bitwise XOR.
+
+\begin{lstlisting}[language=bash]
+$ var=5
+$ echo $var
+5
+$ echo $((var+5))
+10
+$ echo $((var-5))
+0
+$ echo $((var*5))
+25
+$ echo $((var/5))
+1
+$ echo $((var%5))
+0
+$ echo $((var**2))
+25
+\end{lstlisting}
+
+\subsubsection{Bitwise Operations}
+
+Bash also supports bitwise operations. The bitwise NOT operator is \lstinline{~}, the bitwise AND operator is \lstinline{&}, the bitwise OR operator is \lstinline{|}, and the bitwise XOR operator is \lstinline{^}. They operate on the binary representation of the number.
+
+\textbf{AND} operation: The result is 1 if both bits are 1, otherwise 0. \\
+\textbf{OR} operation: The result is 1 if either of the bits is 1, otherwise 0. \\
+\textbf{XOR} operation: The result is 1 if the bits are different, otherwise 0. \\
+\textbf{NOT} operation: The result is the complement of the number.
+
+\marginnote{
+  To understand why the result of the bitwise NOT operation is -6, we need to understand how the numbers are stored in the computer. The number 5 is stored as 00000101 in binary. The bitwise NOT operation inverts the bits, so 00000101 becomes 11111010. This is the two's complement representation of -6. Two's complement is how computers store negative numbers. This is better than one's complement (just flipping the bits of the positive number) as it gives a single value of zero, which is its own additive inverse.\\
+  Read more about two's complement
+  \href{https://en.wikipedia.org/wiki/Two\%27s_complement}{here}.
+}
+\begin{lstlisting}[language=bash]
+$ echo $((var^2))
+7
+$ echo $((var&3))
+1
+$ echo $((var|3))
+7
+$ echo $((~var))
+-6
+\end{lstlisting}
+
+\subsubsection{Comparison Operations}
+
+The comparision operators return 1 if the condition is true, and 0 if the condition is false.
+This is the opposite of how the exit codes work in bash, where 0 means success and 1 means failure. However, we will see later that the mathematical enviroment actually exits with a zero exit code if the value is non-zero, fixing this issue.
+
+\begin{lstlisting}[language=bash]
+$ echo $((var>5))
+0
+$ echo $((var>=5))
+1
+$ echo $((var<5))
+0
+$ echo $((var<=5))
+1
+$ echo $((var==5))
+1
+$ echo $((var!=5))
+0
+\end{lstlisting}
+
+\subsubsection{Increment and Decrement}
+
+Bash supports both pre-increment and post-increment, as well as pre-decrement and post-decrement operators.
+The difference between pre and post is that the pre operator increments the variable before using it, while the post operator increments the variable after using it.
+
+\marginnote{
+ Although \lstinline{var++} increases the value, the updated value is not returned, thus the output of echo remains same as earlier. We can reprint the variable to confirm the change.
+}
+\begin{lstlisting}[language=bash]
+$ echo $((++var))
+6
+$ echo $((var++))
+6
+$ echo $var
+7
+$ echo $((--var))
+6
+$ echo $((var--))
+6
+$ echo $var
+5
+\end{lstlisting}
+
+\subsubsection{Assignment and Multiple Clauses}
+
+We can also perform multiple arithmetic operations in a single line. The result of the last operation is returned.
+
+\begin{lstlisting}[language=bash]
+$ echo $((a=5, b=10, a+b))
+15
+$ echo $((a=5, b=10, a+b, a*b))
+50
+\end{lstlisting}
+
+The evaluation of an assignment operation is the value of the right-hand side of the assignment.
+This behaviour helps in chaining multiple assignment operations.
+
+\begin{lstlisting}[language=bash]
+$ echo $((a=5, b=10))
+10
+$ echo $((a=b=7, a*b))
+49
+\end{lstlisting}
+
+\subsubsection{Floating Point Arithmetic}
+Bash does not support floating point arithmetic.
+
+\begin{lstlisting}[language=bash]
+$ echo $((10/3))
+3
+$ echo $((40/71))
+0
+\end{lstlisting}
+
+However, we can use the \lstinline{bc} command to perform floating point arithmetic.
+Other commands that support floating point arithmetic are \lstinline{awk} and \lstinline{perl}.
+We can also use the \lstinline{printf} command to format the output of the floating point arithmetic after performing integer arithmetic in bash.
+
+\begin{lstlisting}[language=bash]
+$ printf "%.2f\n" "$((10**4 * 10/3))e-4"
+3.33
+$ printf "%.2f%%\n" "$((10**4 * 40/71))e-4"
+56.33%
+\end{lstlisting}
+
+\begin{lstlisting}[language=bash]
+$ awk 'BEGIN { printf "%.2f%%", (40/71*100) }'
+56.34%
+\end{lstlisting}
+
+\subsubsection{Working with different bases}
+
+Bash supports working with different bases.
+The bases can be in the range $[2, 64]$.
+
+The syntax to refer to a number in a non-decimal base is:
+
+\begin{lstlisting}[language=bash]
+base#number
+\end{lstlisting}
+
+We can use the \lstinline{0x} prefix shortcut for hexadecimal numbers, and the \lstinline{0} prefix shortcut for octal numbers.
+
+We can also mix bases in the same expression.
+
+\marginnote{
+  $31$ in octal is same as $25$ in decimal.
+  This leads to the joke that programmers get confused between Haloween (31 Oct) and Christmas (25 Dec).
+}
+\begin{lstlisting}[language=bash]
+$ echo $((2#1000 + 2#101))
+13
+$ echo $((8#52 + 8#21))
+59
+$ echo $((052 + 021))
+59
+$ echo $((16#1a + 16#2a))
+68
+$ echo $((0x1a + 0x2a))
+68
+$ echo $((8#31 - 25))
+0
+\end{lstlisting}
+
+If we only want to evaluate the expression and not print it, we can use the \lstinline{(( ))} construct without the \lstinline{echo} command.
+
+\begin{lstlisting}[language=bash]
+$ var=5
+$ ((var++))
+$ echo $var
+6
+\end{lstlisting}
+
+There are also other ways to perform arithmetic operations in bash, such as using the \lstinline{expr} command, or using the \lstinline{let} command.
+
+\marginnote{
+  The \lstinline{expr} command is an external command, and not a shell built-in. Thus, it does not have access to the shell variables.
+  If we want to use the values of the variables, we have to expand them first. \\
+  The \lstinline|*| operator is a glob that matches all files in the current directory. To prevent this, we need to escape the \lstinline|*| operator.
+}
+\begin{lstlisting}[language=bash]
+$ var=5
+$ expr $var + 5
+10
+$ expr $var \* 5
+25
+\end{lstlisting}
+
+\marginnote{
+  The \lstinline{let} command is a shell built-in, and has access to the shell variables. Thus it can be used to not only access, but also alter the variables.
+}
+\begin{lstlisting}[language=bash]
+$ a=5
+$ echo $a
+5
+$ let a++
+$ echo $a
+6
+\end{lstlisting}
+
+\section{Removing Variables}
+
+To remove a variable, we use the \lstinline{unset} command.
+
+\begin{lstlisting}[language=bash]
+$ var="Hello World"
+$ echo $var
+Hello World
+$ unset var
+$ echo $var
+
+\end{lstlisting}
+
+This can also be used to remove multiple variables.
+
+\begin{lstlisting}[language=bash]
+$ var1="Hello"
+$ var2="World"
+$ echo $var1 $var2
+Hello World
+$ unset var1 var2
+$ echo $var1 $var2
+
+\end{lstlisting}
+
+Variables can also be unset by setting them to an empty string.
+
+\begin{lstlisting}[language=bash]
+$ var="Hello World"
+$ echo $var
+Hello World
+$ var=""
+$ echo $var
+
+\end{lstlisting}
+
+However, this does not remove the variable, but only sets it to an empty string.
+
+The difference between unsetting a variable and setting it to an empty string is that the unset variable is not present in the shell, while the variable set to an empty string is present in the shell.
+This can be observed using the \lstinline|test| shell built-in.
+
+The shell built-in version of \lstinline{test} command can detect if a variable is set or not using the \lstinline{-v} flag, this is not present in the executable version since an external executable can not read the shell variables.
+
+\begin{lstlisting}[language=bash]
+$ var="Hello World"
+$ echo $var
+Hello World
+$ test -v var ; echo $?
+0
+$ var=""
+$ echo $var
+
+$ test -v var ; echo $?
+0
+$ unset var
+$ echo $var
+
+$ test -v var ; echo $?
+1
+\end{lstlisting}
 
 
-\begin{qs}
-  How to print things to the terminal? How to print the value of a variable?
-  How to print escape characters? How to supress the newline?
-\end{qs}
+\section{Listing Variables}
 
-\begin{ans}
-  \texttt{echo "Hello World"} will print \texttt{Hello World} to the terminal. \\
-  \texttt{echo \$var} will print the value of \texttt{var} to the terminal. \\
-  \texttt{echo -e "Hello\textbackslash nWorld"} will print \texttt{Hello} and \texttt{World} in two lines. \\
-  \texttt{echo -n "Hello"} will print \texttt{Hello} without a newline.
-\end{ans}
+\subsection{set}
 
-\begin{qs}
-  How to print all the environment variables? Only some variables?
-\end{qs}
+To list all the variables in the shell, we use the \lstinline{set} command.
+This displays all the variables and functions defined in the shell.
 
-\begin{ans}
-  \texttt{printenv} will print all the environment variables. \\
-  \texttt{env} will also print all the environment variables. \\
-  \texttt{printenv var1 var2 var3} will print only \texttt{var1}, \texttt{var2}, and \texttt{var3}.
-\end{ans}
+\marginnote{
+  The output of the \lstinline{set} command is very long, and we can use the \lstinline{less} command to scroll through it.
+  Here we are showing random 10 lines from the output.
+}
+\begin{lstlisting}[language=bash]
+$ set | head -n120 | shuf | head
+BASH=/bin/bash
+LC_NUMERIC=en_US.UTF-8
+LESS_TERMCAP_so=$'\E[01;44;33m'
+BASH_REMATCH=()
+PATH=/opt/google-cloud-cli/bin:/sbin:/bin:/usr/local/sbin:/usr/local/bin:/usr/bin:/usr/sbin:/opt/android-sdk/cmdline-tools/latest/bin:/opt/android-sdk/platform-tools:/opt/android-sdk/tools:/opt/android-sdk/tools/bin:/usr/lib/jvm/default/bin:/usr/bin/site_perl:/usr/bin/vendor_perl:/usr/bin/core_perl:/usr/lib/rustup/bin:/home/sayan/scripts:/home/sayan/.android/sdk:/home/sayan/.android/sdk/tools:/home/sayan/.android/sdk/platform-tools:/home/sayan/scripts:/home/sayan/.local/bin:/home/sayan/.pub-cache/bin:/usr/lib/jvm/default/bin:/home/sayan/.fzf/bin
+HOSTTYPE=x86_64
+COLUMNS=187
+SHELL=/bin/bash
+BROWSER=thorium-browser
+\end{lstlisting}
 
-\begin{qs}
-  How to escape a character in a string? How to escape a variable in a string?
-\end{qs}
+\lstinline|set| also lists the user-defined variables defined in the shell.
 
-\begin{ans}
-  \texttt{echo -e "Hello\textbackslash nWorld"} will print \texttt{Hello} and \texttt{World} in two lines. \\
-  \texttt{echo "Hello \$var"} will print \texttt{Hello} and the value of \texttt{var}.
-\end{ans}
+\begin{lstlisting}[language=bash]
+$ var1=5
+$ set | grep var1
+var1=5
+\end{lstlisting}
+
+\subsection{declare}
+
+Another way to list the variables is to use the \lstinline{declare} command.
+It lists all the environment variables, shell variables, and functions defined in the shell.
+
+\begin{lstlisting}[language=bash]
+$ declare | head -n10
+ANDROID_HOME=/home/sayan/.android/sdk
+ANDROID_SDK_ROOT=/home/sayan/.android/sdk
+AWT_TOOLKIT=MToolkit
+BASH=/bin/bash
+BASHOPTS=autocd:cdspell:checkjobs:checkwinsize:cmdhist:complete_fullquote:execfail:expand_aliases:extglob:extquote:force_fignore:globasciiranges:globskipdots:histappend:interactive_comments:patsub_replacement:progcomp:promptvars:sourcepath
+BASH_ALIASES=()
+BASH_ARGC=([0]="0")
+BASH_ARGV=()
+BASH_CMDS=()
+BASH_COMPLETION_VERSINFO=([0]="2" [1]="11")
+\end{lstlisting}
+
+It can also be used to list the user-defined variables.
+
+\begin{lstlisting}[language=bash]
+$ var1=5
+$ declare | grep var1
+var1=5
+\end{lstlisting}
+
+\subsection{env}
+
+Although the \lstinline{env} command is used to run a command in a modified environment, it can also be used to list all the environment variables if no arguments are supplied to it.
+
+\begin{lstlisting}[language=bash]
+$ env | head -n10
+SHELL=/bin/bash
+WINDOWID=100663324
+COLORTERM=truecolor
+LANGUAGE=
+LC_ADDRESS=en_US.UTF-8
+JAVA_HOME=/usr/lib/jvm/default
+LC_NAME=en_US.UTF-8
+SSH_AUTH_SOCK=/run/user/1000/ssh-agent.socket
+SHELL_SESSION_ID=91c0e4dcd4b644e8bfa2a25613b60f60
+XDG_CONFIG_HOME=/home/sayan/.config
+\end{lstlisting}
+
+This only lists the environment variables, and not the shell variables.
+Only if the shell variable is exported, it will be listed in the output of the \lstinline{env} command.
+
+\begin{lstlisting}[language=bash]
+$ var1=5
+$ env | grep var1
+$ export var1
+$ env | grep var1
+var1=5
+\end{lstlisting}
+
+\lstinline|env| is an external command and not a shell built-in, thus it does not have the access to unexported shell variables at all.
+
+\subsection{printenv}
+
+The \lstinline{printenv} command is used to print all the environment variables.
+Similar to the \lstinline{env} command, it only lists the environment variables, and not the shell variables since it is an executable and not a shell built-in.
+
+\begin{lstlisting}[language=bash]
+$ printenv | shuf | head
+KONSOLE_VERSION=240202
+FZF_DEFAULT_COMMAND=fd --type f -H
+HOME=/home/sayan
+LANGUAGE=
+KONSOLE_DBUS_WINDOW=/Windows/1
+USER=sayan
+CLOUDSDK_PYTHON=/usr/bin/python
+COLORFGBG=15;0
+VISUAL=nvim
+SSH_AUTH_SOCK=/run/user/1000/ssh-agent.socket
+\end{lstlisting}
+
+\section{Special Variables}
+
+The bash shell exports some special variables whose values are set by the shell itself.
+These are useful to refer in scripts, and also to understand the environment in which the script is running.
+They let the script to be more dynamic and adapt to the environment.
+
+\begin{itemize}
+  \item \lstinline{USER} stores the currently logged in user.
+    \sidenote{
+      Originally, the \textbf{System V} distributions exported the \lstinline{LOGNAME} variable, while the \textbf{BSD} distributions exported the \lstinline{USER} variable.
+      Modern distros export both, but \lstinline{USER} is more commonly used.
+      The \textbf{zsh} shell exports \lstinline|USERNAME| as well.
+    }
+  \item \lstinline{HOME} stores the home directory of the user.
+  \item \lstinline{PWD} stores the current working directory.
+  \item \lstinline{SHELL} stores the path of the shell being used.
+  \item \lstinline{PATH} stores the paths to search for commands.
+  \item \lstinline{PS1} stores the prompt string for the shell.
+  \item \lstinline{PS2} stores the secondary prompt string for the shell
+  \item \lstinline{HOSTNAME} stores the network name of the system
+  \item \lstinline{OSTYPE} stores the type of operating system.
+  \item \lstinline{TERM} stores the terminal type.
+\end{itemize}
+
+The shell also sets some special variables that are useful in scripts. These are not exported, but set for every shell or child process accordingly.
+
+\begin{itemize}
+  \item \lstinline{$0} stores the name of the script or shell.
+  \item \lstinline{$1, $2, $3, ...} store the arguments to the script.
+  \item \lstinline{$#} stores the number of arguments to the script.
+  \item \lstinline{$*} stores all the arguments to the script as a single string.
+  \item \lstinline{$@} stores all the arguments to the script as array of strings.
+  \item \lstinline{$?} stores the exit status of the last command.
+  \item \lstinline{$$} stores the process id of the current shell.
+  \item \lstinline{$!} stores the process id of the last background command.
+  \item \lstinline{$-} stores the current options set for the shell.
+  \item \lstinline{$IFS} stores the Internal Field Separator.
+  \item \lstinline{$LINENO} stores the current line number of the script.
+  \item \lstinline{$RANDOM} stores a random number.
+  \item \lstinline{$SECONDS} stores the number of seconds the script has been running.
+\end{itemize}
+
+
+These variables are automatically set and updated by the shell whenever required.
+
+\subsection{PWD}
+
+\marginnote{
+  The \lstinline|PWD| variable is updated whenever the current working directory changes.
+}
+\begin{lstlisting}[language=bash]
+$ echo $PWD
+/home/sayan
+$ cd /tmp
+$ echo $PWD
+/tmp
+\end{lstlisting}
+
+\subsection{RANDOM}
+
+\marginnote{
+  The \lstinline|RANDOM| variable stores a random number between $0$ and $32767$, and is constantly changed.
+}
+\begin{lstlisting}[language=bash]
+$ echo $RANDOM
+11670
+$ echo $RANDOM
+29897
+\end{lstlisting}
+
+\begin{remark}
+  The \lstinline{RANDOM} variable is not truly random, but is a pseudo-random number generated by the shell.
+  It is generated using the Linear Congruential Generator algorithm.
+  The seed for the random number is the process id of the shell.
+  Thus, the same sequence of random numbers will be generated if the shell is restarted.
+  To get a more cryptographically secure random number, we can use the \lstinline{openssl} command or read from the \lstinline|/dev/urandom| file.
+  Read more
+  \href{https://ioflood.com/blog/bash-random-number/}{here}.
+\end{remark}
+
+\subsection{PATH}
+
+The \lstinline{PATH} variable stores the paths to search for commands.
+Whenever a command is executed in the shell, the shell searches for the command in the directories listed in the \lstinline{PATH} variable if it is not a shell keyword or a shell built-in. If an executable with that name with execute permissions is not found in any of the paths mentioned in \lstinline|PATH| variable, then the command fails.
+
+The \lstinline{PATH} variable is colon separated. It is not set automatically, rather it has to be set by the system.
+It is usually set in the \lstinline|/etc/profile| file and the \lstinline|~/.bashrc| file.
+
+\begin{lstlisting}[language=bash]
+$ echo "echo hello" > sayhello
+$ chmod 764 sayhello
+mode of 'sayhello' changed from 0644 (rw-r--r--) to 0764 (rwxrw-r--)
+$ sayhello
+bash: sayhello: command not found
+$ PATH=$PATH:$PWD
+$ sayhello
+hello
+\end{lstlisting}
+
+Here we create an executable that prints \lstinline{hello} to the terminal.
+It is present in our current directory, but the shell does not know where to find it, as the current directory is not present in the \lstinline|PATH| variable.
+Once we add the current directory to the \lstinline|PATH| variable, the shell is able to find the executable and execute it.
+
+\subsection{PS1}
+
+The \lstinline{PS1} variable stores the primary prompt string for the shell.
+It can be used to customize the prompt of the shell.
+
+\begin{lstlisting}[language=bash]
+[sayan@rex ~] $ PS1="[\u@\h \w] \$ "
+[sayan@rex ~] $ PS1="hello "
+hello PS1="enter command> "
+enter command> PS1="User: \u> "
+User: sayan> PS1="User: \u, Computer: \h> "
+User: sayan, Computer: rex> PS1="Date: \d> "
+Date: Thu Jul 25> PS1="Time: \t> "
+Time: 17:35:44> PS1="Jobs: \j> "
+Jobs: 0> sleep 50 &
+[1] 3600280
+Jobs: 1>
+Jobs: 1> PS1="Shell: \s> "
+Shell: bash> PS1="History Number: \!> "
+[1]+  Done                    sleep 50
+History Number: 563>
+History Number: 563> echo hello
+hello
+History Number: 564> PS1="Command Number: \#> "
+Command Number: 65>
+Command Number: 65> echo hello
+hello
+Command Number: 66> PS1="Ring a bell \a> "
+Ring a bell >
+Ring a bell > PPS1="[\u@\h \w] \$ "
+[sayan@rex ~] $
+\end{lstlisting}
+
+These changes are temporary and are only valid for the current shell session.
+To make the changes permanent, we need to add the \lstinline{PS1} variable assignment to the \lstinline{~/.bashrc} file.
+
+The \lstinline|PS1| variable gives us some customization, however it is limited.
+To run any arbitrary command to determine the prompt, we can use the \lstinline|PROMPT_COMMAND| variable.
+
+For example, if you want to display the exit code of the last command in the prompt, you can use the following command.
+
+\marginnote{
+  Notice how the exit code of the last command is displayed in the prompt and is updated whenever a new command is run.
+}
+\begin{lstlisting}[language=bash]
+$ prompt(){
+> PS1="($?)[\u@\h \w]\$ "
+> }
+$ PROMPT_COMMAND=prompt
+(0)[sayan@rex ~]$ ls /home
+sayan
+(0)[sayan@rex ~]$ ls /random
+ls: cannot access '/random': No such file or directory
+(2)[sayan@rex ~]$
+\end{lstlisting}
+
+We can also show the exit code of each process in the prompt if piped commands are used.
+
+\begin{lstlisting}[language=bash]
+$ export PROMPT_COMMAND="
+       _RES=\${PIPESTATUS[*]};
+       _RES_STR='';
+       for res in \$_RES; do
+         if [[ ( \$res > 0 ) ]]; then
+           _RES_STR=\" [\$_RES]\";
+         fi;
+       done"
+$ export PS1="\u@\h \w\$_RES_STR\\$ "
+sayan@rex ~$ echo hello
+hello
+sayan@rex ~$ exit 1 | exit 2 | exit 3
+sayan@rex ~ [1 2 3]$
+\end{lstlisting}
+
+\marginnote{
+  Read more
+  \href{https://ss64.com/bash/syntax-prompt.html}{here}.
+}
+We can also color the prompt using ANSI escape codes.
+We will these in details in later chapters.
+
+\section{Variable Manipulation}
+
+\subsection{Default Values}
+
+The \lstinline{:-} operator is used to substitute a default value if the variable is not set or is empty. This simply returns the value, and the variable still remains unset.
+
+\begin{lstlisting}[language=bash]
+$ unset var
+$ echo ${var:-default}
+default
+$ echo $var
+
+$ var=hello
+$ echo ${var:-default}
+hello
+$ echo $var
+hello
+\end{lstlisting}
+
+The \lstinline{:+} operator is used to substitute a replacement value if the variable is set, but not do anything if not present.
+
+\begin{lstlisting}[language=bash]
+$ unset var
+$ echo ${var:+default}
+
+$ var=hello
+$ echo ${var:+default}
+default
+$ echo $var
+hello
+\end{lstlisting}
+
+The \lstinline{:=} operator is used to substitute a default value if the variable is not set or is empty, and also set the variable to the default value.
+\sidenote{
+  This operator is also present in modern python and is called the walrus operator.
+}
+This is similar to the \lstinline{:-} operator, but also sets the variable to the default value. It does nothing if the variable is already set.
+
+\begin{lstlisting}[language=bash]
+$ unset var
+$ echo ${var:=default}
+default
+$ echo $var
+default
+$ var=hello
+$ echo ${var:=default}
+hello
+$ echo $var
+hello
+\end{lstlisting}
+
+These operations consider an empty variable as unset.
+However, sometimes we may need to consider an empty variable as set, but empty.
+In those cases, we can drop the colon from the operator.
+
+\begin{remark}
+  \lstinline|echo ${var:-default}| will print \lstinline{default} if \lstinline{var} is absent \textbf{or} empty. \\
+  \lstinline|echo \${var-default}| will print \lstinline{default} if \lstinline{var} is absent, but not if \lstinline{var} is empty. \\
+  \lstinline|echo \${var:+default}| will print \lstinline{default} if \lstinline{var} is present \textbf{and} not empty. \\
+  \lstinline|echo \${var+default}| will print \lstinline{default} if \lstinline{var} is present,
+  regardless of whether \lstinline{var} is empty or not. \\
+\end{remark}
+
+\subsection{Error if Unset}
+
+Sometimes we may want to throw an error if a variable is unset. This is useful in scripts to ensure that all the required variables are set when performing critical operations.
+
+Imagine the following line of code.
+
+\begin{lstlisting}[language=bash]
+$ rm -rf "$STEAMROOT/"
+\end{lstlisting}
+
+This looks like a simple line to remove the steam root directory. However, if the \lstinline{STEAMROOT} variable is unset, this will expand to \lstinline{rm -rf /}, which will delete the root directory of the system if ran with priviledge, or at the very least, the entire home directory of the user.
+This is a very dangerous operation, and can lead to loss of data.
+
+To prevent this, we can use the \lstinline{:?} operator to throw an error if the variable is unset.
+
+\marginnote{
+  The reason for the specific example is that this is a bug that was present in the steam installer script, and was fixed by Valve after it was reported.
+}
+\begin{lstlisting}[language=bash]
+$ unset STEAMROOT
+$ rm -rf "${STEAMROOT:?Variable not set}/"
+bash: STEAMROOT: Variable not set
+\end{lstlisting}
+
+The shell will not even attempt to run the command if the variable is unset, and will throw an error immediately, saving the day.
+
+\subsection{Length of Variable}
+
+The length of a variable can be found using the \lstinline{#} operator.
+
+\begin{lstlisting}[language=bash]
+$ var="Hello World"
+$ echo ${#var}
+11
+\end{lstlisting}
+
+\subsection{Substring of Variable}
+
+The substring of a variable can be found using the \lstinline{:} operator.
+
+The syntax is \lstinline|${var:start:length}|. The \lstinline{start} is the index of the first character of the substring, and the \lstinline{length} is the number of characters to include in the substring. The index starts from zero.
+If the length exceeds the end of the string, it will print till the end and not throw any error.
+The index can also be negative, in which case it is counted from the end of the string, similar to Python.
+\sidenote{
+  In case of a negative index, the space between the colon and the negative index is important. If there is no space, it will be considered as a default substitution.
+}
+
+\begin{lstlisting}[language=bash]
+$ var="Hello World"
+$ echo ${var:0:5}
+Hello
+$ echo ${var:6:5}
+World
+$ echo ${var:6:50}
+World
+$ echo ${var: -5:5}
+World
+$ echo ${var: -11:5}
+Hello
+\end{lstlisting}
+
+\subsection{Prefix and Suffix Removal}
+
+The prefix and suffix of a variable can be removed using the \lstinline{#} and \lstinline{\%} operators respectively. Any glob like pattern can be matched, not just fixed strings.
+
+The match can be made greedy (longest match) by using \lstinline{##} and \lstinline{\%\%} respectively.
+This applies for wildcard matching.
+
+
+\begin{itemize}
+  \item
+    \lstinline|${var%pattern}| will delete the shortest match of \lstinline{pattern} from the end of \lstinline{var}.
+  \item
+    \lstinline|${var%%pattern}| will delete the longest match of \lstinline{pattern} from the end of \lstinline{var}.
+  \item
+    \lstinline|${var#pattern}| will delete the shortest match of \lstinline{pattern} from the start of \lstinline{var}.
+  \item
+    \lstinline|${var##pattern}| will delete the longest match of \lstinline{pattern} from the start of \lstinline{var}.
+\end{itemize}
+
+If we have a variable with value "abc.def.ghi.xyz".
+\marginnote{
+  Here the dot is used as a separator, and we want to extract the first and last part of the string.
+  The dot does not signify a wildcard, but a literal dot, since this is not regex.
+}
+\begin{itemize}
+  \item \lstinline|echo ${var%.*}| will print "abc.def.ghi".
+  \item \lstinline|echo ${var%%.*}| will print "abc".
+  \item \lstinline|echo ${var#*.}| will print "def.ghi.xyz".
+  \item \lstinline|echo ${var##*.}| will print "xy
+\end{itemize}
+
+\subsection{Replace Substring}
+
+The substring of a variable can be replaced using the \lstinline{/} operator.
+The syntax is \lstinline|${var/pattern/string}|. This will replace the first occurence of \lstinline{pattern} with \lstinline{string}.
+The search pattern can be a glob pattern, not just a fixed string.
+The replacement has to be a fixed string, and not a glob pattern.
+
+\begin{lstlisting}[language=bash]
+$ var="Hello World"
+$ echo ${var/ */ Universe}
+Hello Universe
+\end{lstlisting}
+
+We can also replace all occurences of the pattern using the \lstinline{//} operator.
+
+\begin{lstlisting}[language=bash]
+$ var="Hello World"
+$ echo ${var//o/O}
+HellO WOrld
+\end{lstlisting}
+
+\subsection{Anchoring Matches}
+
+We can also anchor the match to the start or end of the string using the \lstinline{#} and \lstinline{\%} operators respectively.
+
+\marginnote{
+  Observe how the \lstinline{#} operator anchors the match to the start of the string.
+  Even though the second variable also had an \lstinline{s} in the middle, it was not replaced.
+}
+\begin{lstlisting}[language=bash]
+$ var="system commands"
+$ echo ${var/#s/S}
+System commands
+$ var="linux commands"
+$ echo ${var/#s/S}
+linux commands
+\end{lstlisting}
+
+Similarly, we can anchor the match to the end of the string using the \lstinline{\%} operator.
+
+\begin{lstlisting}[language=bash]
+$ var="Hello World"
+$ echo ${var/%?/&!}
+Hello World!
+\end{lstlisting}
+
+Here we are using the \lstinline{?} wildcard to match any character, and replace it with \lstinline{&!}.
+The \lstinline{&} is used to refer to the matched string and is not interpreted as a literal ampersand.
+
+\subsection{Deleting the match}
+
+We can also delete the match by keeping the replacement string empty.
+
+\begin{lstlisting}[language=bash]
+$ var="Hello World"
+$ echo ${var/% */}
+\end{lstlisting}
+
+This matches all the words after the first word, and deletes them.
+Here the match is always greedy, and will match the longest possible string.
+
+\subsection{Lowercase and Uppercase}
+
+The case of a variable can be changed using the \lstinline{,} and \lstinline{^} operators.
+This changes only the first character of the variable.
+To change the entire variable, we can use the \lstinline{,,} and \lstinline{^^} operators.
+
+\begin{lstlisting}[language=bash]
+$ var="sayan"
+$ echo ${var^}
+Sayan
+\end{lstlisting}
+
+Similarly, we can change the entire variable.
+
+\begin{lstlisting}[language=bash]
+$ var="SAYAN"
+$ echo ${var,,}
+sayan
+\end{lstlisting}
+
+This is useful if you want to approximate the user's name from the username.
+
+\begin{lstlisting}[language=bash]
+$ echo "Hello ${USER^}!"
+Hello Sayan!
+\end{lstlisting}
+
+\subsection{Sentence Case}
+
+To convert the first letter of a variable to uppercase, and the rest to lowercase, we can use the following command.
+
+\begin{lstlisting}[language=bash]
+var="hELLO wORLD"
+lower=${var,,}
+echo ${lower^}
+Hello world
+\end{lstlisting}
+
+Here we are simply using the two operators in sequence to achieve the desired result.
+
+\section{Restrictions on Variables}
+
+Since bash variables are untyped, they can be set to any value.
+However, sometimes we may want to restrict the type of value that can be stored in a variable.
+
+This can be done using the \lstinline{declare} command.
+
+\subsection{Integer Only}
+
+To restrict a variable to only store integers, we can use the \lstinline{-i} flag.
+
+\begin{lstlisting}[language=bash]
+$ declare -i `var`
+$ var=5
+$ echo "$var * $var = $((var**2))"
+5 * 5 = 25
+$ var=hello
+$ echo "$var * $var = $((var**2))"
+0 * 0 = 0
+\end{lstlisting}
+
+If we assign any non-integer value to the variable, it will be treated as zero.
+This will not throw an error, but will silently set the variable to zero.
+
+\subsection{No Upper Case}
+
+To automatically convert all the characters of a variable to lowercase, we can use the \lstinline{-l} flag.
+This does not change non-alphabetic characters.
+
+\begin{lstlisting}[language=bash]
+$ declare -l var
+$ var="HELLO WORLD!"
+$ echo $var
+hello world!
+\end{lstlisting}
+
+\subsection{No Lower Case}
+
+Similarly, we can use the \lstinline{-u} flag to convert all the characters of a variable to uppercase, while retaining non-alphabetic characters as-is.
+
+\begin{lstlisting}[language=bash]
+$ declare -u var
+$ var="hello world!"
+$ echo $var
+HELLO WORLD!
+\end{lstlisting}
+
+\subsection{Read Only}
+
+To make a variable read only, we can use the \lstinline{-r} flag.
+This means we cannot change the value of the variable once it is set.
+Thus the value also has to be set at the time of declaration.
+\sidenote{
+  This way of assigning the value is also possible for the other flags, but is not necessary.
+}
+
+\begin{lstlisting}[language=bash]
+$ declare -r PI=3.14159
+$ echo "PI = $PI"
+PI = 3.14159
+$ PI=3.1416
+-bash: PI: readonly variable
+\end{lstlisting}
+
+\subsection{Removing Restrictions}
+
+We can remove the restrictions from a variable using the \lstinline{+} flag.
+This cannot be done for the read only flag.
+
+\begin{lstlisting}[language=bash]
+$ declare -i var
+$ var=hello
+$ echo $var
+0
+$ declare +i var
+$ var=hello
+$ echo $var
+hello
+\end{lstlisting}
 
 \section{Bash Flags}
 
-\begin{qs}
-  How to list the bash flags set in the shell? How to set or unset them?
-  What does the default flags mean? (himBHs)
-\end{qs}
+There are some flags that can be set in the bash shell to change the behaviour of the shell.
+The currently set flags can be viewed using the \lstinline{echo \$-} command.
 
-\begin{ans}
-  \texttt{echo \$-} will list the bash flags set in the shell. \\
-  \texttt{set -o flag} will set the flag. \\
-  \texttt{set +o flag} will unset the flag. \\
-  The default flags are: \\
-  \textbf{h}: locate and remember (hash) commands as they are looked up. \\
-  \textbf{i}: \textbf{interactive} shell \\
-  \textbf{m}: monitor the jobs and report changes \\
-  \textbf{B}: \textbf{braceexpand} - expand the expression in braces \\
-  \textbf{H}: \textbf{histexpand} - expand the history command \\
-  \textbf{s}: Read commands from the standard input. \\
-\end{ans}
+\begin{lstlisting}[language=bash]
+$ echo $-
+himBHs
+\end{lstlisting}
+
+These can be set or unset using the \lstinline{set} command.
+
+\begin{lstlisting}[language=bash]
+$ echo $-
+himBHs
+$ set +m
+$ echo $-
+hiBHs
+\end{lstlisting}
+
+The same convention as the \lstinline{declare} command is used, with \lstinline{+} to unset the flag, and \lstinline{-} to set the flag.
+
+The default flags are:
+
+\begin{itemize}
+  \item
+    \textbf{h}: locate and remember (hash) commands as they are looked up.
+  \item
+    \textbf{i}: \textbf{interactive} shell
+  \item
+    \textbf{m}: monitor the jobs and report changes
+  \item
+    \textbf{B}: \textbf{braceexpand} - expand the expression in braces
+  \item
+    \textbf{H}: \textbf{histexpand} - expand the history command
+  \item
+    \textbf{s}: Read commands from the standard input.
+\end{itemize}
+
+We can see the default flags change if we start a non-interactive shell.
+
+\begin{lstlisting}[language=bash]
+$ bash -c 'echo $-'
+hBc
+\end{lstlisting}
+
+The \textbf{c} flag means that \lstinline{bash} is reading the command from the argument and it assigns \lstinline|$0| to the first non-option argument.
+
+Some other important flags are:
+
+\begin{itemize}
+  \item
+    \textbf{e}: Exit immediately if a command exits with a non-zero status.
+  \item
+    \textbf{u}: Treat unset variables as an error when substituting.
+  \item
+    \textbf{x}: Print commands and their arguments as they are executed.
+  \item
+    \textbf{v}: Print shell input lines as they are read.
+  \item
+    \textbf{n}: Read commands but do not execute them. This is useful for testing syntax of a command.
+  \item
+    \textbf{f}: Disable file name generation (globbing).
+  \item
+    \textbf{C}: Also called \textbf{noclobber}. Prevent overwriting of files using redirection.
+\end{itemize}
+
+If we set the \textbf{-f} flag, the shell will not expand the glob patterns which we discussed in \refch{regex}.
 
 \section{Signals}
 
 \begin{remark}
-  If you press \texttt{Ctrl+S} in the terminal, some terminals might
-  stop responding. You can resume it by pressing \texttt{Ctrl+Q}.
-  This is because \texttt{ixoff} is set. You can unset
-  it using \texttt{stty -ixon}. This is a common problem with some
-  terminals, thus it can placed inside the \texttt{~/.bashrc} file.
+  If you press \lstinline{Ctrl+S} in the terminal, some terminals might
+  stop responding. You can resume it by pressing \lstinline{Ctrl+Q}.
+  This is because \lstinline{ixoff} is set. You can unset
+  it using \lstinline{stty -ixon}. This is a common problem with some
+  terminals, thus it can placed inside the \lstinline{~/.bashrc} file.
 \end{remark}
 
 \textbf{Other Ctrl+Key combinations:}
@@ -173,190 +1283,447 @@
   \item \textbf{Ctrl+W}: Cut the word before the cursor
   \item \textbf{Ctrl+Y}: Paste the last cut text
 \end{itemize}
-\section{Variable Manipulation}
 
+\section{Brace Expansion}
 
-\begin{qs}
-  How to remove a variable that is set? How to check if a variable is present?
-\end{qs}
+As the \lstinline{B} flag is set by default, brace expansion is enabled in the shell.
 
-\begin{ans}
-  \texttt{unset var} will remove the variable \texttt{var}. \\
-  \texttt{echo \$var} will print if the variable \texttt{var} is present.\\
-  \texttt{test -v var} will check if the variable \texttt{var} is present.\\
-  \texttt{test -z \${var+x}} will check if the variable \texttt{var} is present.\\
-\end{ans}
-
-
-\begin{qs}
-  How to print a default value if variable is absent? if present? how to
-  set a default value if variable is absent?
-\end{qs}
-
-\begin{ans}
-  \texttt{echo \${var:-default}} will print \texttt{default} if \texttt{var} is absent. \\
-  \texttt{echo \${var:+default}} will print \texttt{default} if \texttt{var} is present. \\
-  \texttt{echo \${var:=default}} will set \texttt{var} to \texttt{default} if \texttt{var} is absent. \\
-\end{ans}
-
-\begin{remark}
-  \texttt{echo \${var:-default}} will print \texttt{default} if \texttt{var} is absent \textbf{or} empty. \\
-  \texttt{echo \${var-default}} will print \texttt{default} if \texttt{var} is absent, but not if \texttt{var} is empty. \\
-  \texttt{echo \${var:+default}} will print \texttt{default} if \texttt{var} is present \textbf{and} not empty. \\
-  \texttt{echo \${var+default}} will print \texttt{default} if \texttt{var} is present,
-  regardless of whether \texttt{var} is empty or not. \\
-\end{remark}
-
-
-\begin{qs}
-  How to print the number of characters in a variable?
-  How about a substring of the variable?
-\end{qs}
-
-\begin{ans}
-  \texttt{echo \${\#var}} will print the number of characters in \texttt{var}. \\
-  \texttt{echo \${var:0:5}} will print the first 5 characters of \texttt{var}.
-\end{ans}
-
-\begin{remark}
-  The second number in the substring is the length of the substring.
-  Thus, \texttt{echo \${var:5:3}} will print the 3 characters starting from the 5th character.
-  If the length of substring is more than the length of the variable, it will print till the end.
-  Thus, \texttt{echo \${var:5:100}} will print the characters from the 5th character till the end.
-\end{remark}
-
-\begin{definition}[Variable Match and Delete]
-  We can match some part of the variable and delete it from left or right: \\
-  \texttt{\$\{var\%pattern\}} will delete the shortest match of \texttt{pattern} from the end of \texttt{var}. \\
-  \texttt{\$\{var\%\%pattern\}} will delete the longest match of \texttt{pattern} from the end of \texttt{var}. \\
-  \texttt{\$\{var\#pattern\}} will delete the shortest match of \texttt{pattern} from the start of \texttt{var}. \\
-  \texttt{\$\{var\#\#pattern\}} will delete the longest match of \texttt{pattern} from the start of \texttt{var}.
+\begin{definition}[Brace Expansion]
+  Brace expansion is a mechanism by which arbitrary strings can be generated using a concise syntax. It is similar to pathname expansion, but can be used to expand to non-existing patterns too.
 \end{definition}
 
-\begin{qs}
-  If we have a variable with value "abc.def.ghi.xyz". How can we get the following:
-  \begin{itemize}
-    \item "abc.def.ghi"
-    \item "abc"
-    \item "def.ghi.xyz"
-    \item "xyz"
-  \end{itemize}
-\end{qs}
+Brace expansion is used to generate list of strings, and is useful in generating sequences of strings.
 
-\begin{ans}
-  The variable is \texttt{var="abc.def.ghi.xyz"}.
-  \begin{itemize}
-    \item \texttt{echo \$\{var\%.*\}} will print "abc.def.ghi".
-    \item \texttt{echo \$\{var\%\%.*\}} will print "abc".
-    \item \texttt{echo \$\{var\#*.\}} will print "def.ghi.xyz".
-    \item \texttt{echo \$\{var\#\#*.\}} will print "xy
-  \end{itemize}
-\end{ans}
+\subsection{Range Expansion}
 
+For generating a sequence of numbers, we can use the range expansion.
 
-\begin{qs}
- How to replace some part of a variable by something else? How to do for all
-  occurences?
-\end{qs}
+\textbf{Syntax:}
+\begin{lstlisting}[language=bash]
+{start...end}
+\end{lstlisting}
 
-\begin{ans}
-  \texttt{echo \$\{var/pattern/string\}} will replace the first occurence of \texttt{pattern} with \texttt{string}. \\
-  \texttt{echo \$\{var//pattern/string\}} will replace all occurences of \texttt{pattern} with \texttt{string}.
-\end{ans}
+\begin{lstlisting}[language=bash]
+$ echo {1..5}
+1 2 3 4 5
+\end{lstlisting}
 
-\begin{qs}
-  How to make a variable lowercase? How to make it uppercase?
-  How to do for entire string? How to do for first character?
-  How to make a variable Sentence case? (First letter is capital, rest lower)
-\end{qs}
+We can also specify the increment value.
 
-\begin{ans}
-  The following commands can be used to manipulate the case of a variable:
-  \begin{lstlisting}[language=bash]
-  echo ${var,,} # will make the variable lowercase.
-  echo ${var^^} # will make the variable uppercase.
-  echo ${var,} # will make the first character lowercase.
-  echo ${var^} # will make the first character uppercase.
-  lower=${var,,} # will store the lowercase variable in lower.
-  echo ${lower^} # will make the first character uppercase. (Sentence case) \end{lstlisting}
-\end{ans}
+\begin{lstlisting}[language=bash]
+$ echo {1..11..2}
+1 3 5 7 9 11
+\end{lstlisting}
 
+The start and end values are both inclusive.
 
+This can also be used for alphabets.
 
-\begin{qs}
-  How to make a variable integer only? How to make it lowercase only?
-  Uppercase only? Read only?
-\end{qs}
+\begin{lstlisting}[language=bash]
+$ echo {a..f}
+a b c d e f
+\end{lstlisting}
 
-\begin{ans}
-  \texttt{declare -i var} will make the variable integer only. \\
-  \texttt{declare -l var} will make the variable lowercase only. \\
-  \texttt{declare -u var} will make the variable uppercase only. \\
-  \texttt{declare -r var} will make the variable read only.
-\end{ans}
+\subsection{List Expansion}
 
+For generating a list of strings, we can use the list expansion.
 
-\begin{qs}
-  How to remove those restrictions from a variable?
-\end{qs}
+\textbf{Syntax:}
+\begin{lstlisting}[language=bash]
+{string1,string2,string3}
+\end{lstlisting}
 
-\begin{ans}
-  \texttt{declare +i var} will remove the integer only restriction. \\
-  \texttt{declare +l var} will remove the lowercase only restriction. \\
-  \texttt{declare +u var} will remove the uppercase only restriction. \\
-  \texttt{declare +r var} will not work, as read only cannot be removed.
-\end{ans}
+This can be used to generate a list of strings.
 
-\begin{qs}
-  How to store output of a command in a variable?
-\end{qs}
+\begin{lstlisting}[language=bash]
+$ echo {apple,banana,cherry}
+apple banana cherry
+\end{lstlisting}
 
-\begin{ans}
-  \texttt{var=\$(command)} will store the output of \texttt{command} in \texttt{var}.
-\end{ans}
+\subsection{Combining Expansions}
+
+The real power of brace expansion comes when we combine the expansion with a static part.
+
+\begin{lstlisting}[language=bash]
+$ echo file{1..5}.txt
+file1.txt file2.txt file3.txt file4.txt file5.txt
+\end{lstlisting}
+
+Brace expansion automatically expands to the cartesian product of the strings if multiple expansions are present in a single token.
+
+\begin{lstlisting}[language=bash]
+$ echo {a,b}{1,2}
+a1 a2 b1 b2
+\end{lstlisting}
+
+We can also combine multiple tokens with space in between by escaping the space.
+
+\begin{lstlisting}[language=bash]
+$ echo {a,b}\ {1,2}
+a 1 a 2 b 1 b 2
+\end{lstlisting}
+
+The expansion is done from left to right, and the order of the tokens is preserved.
+
+This can be used to create a list of files following some pattern.
+
+\marginnote{
+  Here we are using ascii encoded output of the \lstinline{tree} command for
+  compatibility with the book. Feel free to drop the \lstinline{--charset ascii}
+  when trying this out in your terminal.
+}
+\begin{lstlisting}[language=bash]
+$ mkdir -p test/{a,b,c}/{1,2,3}
+$ touch test/{a,b,c}/{1,2,3}/file{1..5}.txt
+$ tree --charset ascii test
+test
+|-- a
+|   |-- 1
+|   |   |-- file1.txt
+|   |   |-- file2.txt
+|   |   |-- file3.txt
+|   |   |-- file4.txt
+|   |   `-- file5.txt
+|   |-- 2
+|   |   |-- file1.txt
+|   |   |-- file2.txt
+|   |   |-- file3.txt
+|   |   |-- file4.txt
+|   |   `-- file5.txt
+|   `-- 3
+|       |-- file1.txt
+|       |-- file2.txt
+|       |-- file3.txt
+|       |-- file4.txt
+|       `-- file5.txt
+|-- b
+|   |-- 1
+|   |   |-- file1.txt
+|   |   |-- file2.txt
+|   |   |-- file3.txt
+|   |   |-- file4.txt
+|   |   `-- file5.txt
+|   |-- 2
+|   |   |-- file1.txt
+|   |   |-- file2.txt
+|   |   |-- file3.txt
+|   |   |-- file4.txt
+|   |   `-- file5.txt
+|   `-- 3
+|       |-- file1.txt
+|       |-- file2.txt
+|       |-- file3.txt
+|       |-- file4.txt
+|       `-- file5.txt
+`-- c
+    |-- 1
+    |   |-- file1.txt
+    |   |-- file2.txt
+    |   |-- file3.txt
+    |   |-- file4.txt
+    |   `-- file5.txt
+    |-- 2
+    |   |-- file1.txt
+    |   |-- file2.txt
+    |   |-- file3.txt
+    |   |-- file4.txt
+    |   `-- file5.txt
+    `-- 3
+        |-- file1.txt
+        |-- file2.txt
+        |-- file3.txt
+        |-- file4.txt
+        `-- file5.txt
+
+13 directories, 45 files
+\end{lstlisting}
+
+\section{History Expansion}
+
+\begin{definition}[History Expansion]
+  History expansion is a mechanism by which we can refer to previous commands in the history list.
+\end{definition}
+
+It is enabled using the \lstinline{H} flag.
+
+We can run \lstinline{history} to see the list of commands in the history.
+To re-run a command, we can use the \lstinline{!} operator along with the history number.
+
+\begin{lstlisting}[language=bash]
+$ echo hello
+hello
+$ history | tail
+  499  man set
+  500  man set
+  501  man tree
+  502  tree --charset unicode
+  503  tree --charset ascii
+  504  history
+  505  tree --charset unicode
+  506  clear
+  507  echo hello
+  508  history | tail
+$ !507
+echo hello
+hello
+\end{lstlisting}
+
+The command itself is output to the terminal before it is executed.
+
+We can also refer to the last command using the \lstinline{!!} operator.
+
+\begin{lstlisting}[language=bash]
+$ touch file1 file2 .hidden
+$ ls
+file1  file2
+$ !! -a
+ls -a
+.  ..  .hidden  file1  file2
+\end{lstlisting}
+
+One frequent use of history expansion is to run a command as root.
+If we forget to run a command as root, we can use the \lstinline{sudo} command to run the last command as root.
+
+\begin{lstlisting}[language=bash]
+$ touch /etc/test
+touch: cannot touch '/etc/test': Permission denied
+$ sudo !!
+sudo touch /etc/test
+\end{lstlisting}
 
 \section{Arrays}
 
-\begin{qs}
-  How to create an array? How to access an element of an array?
-  How to print all elements of an array?
-\end{qs}
+\begin{definition}[Array]
+  An array is a collection of elements, each identified by an index.
+\end{definition}
 
-\begin{ans}
-  \texttt{arr=(1 2 3 4 5)} will create an array. \\
-  \texttt{echo \$\{arr[2]\}} will access the 3rd element of the array. \\
-  \texttt{echo \$\{arr[@]\}} will print all elements of the array.
-\end{ans}
+We can declare an array using the \lstinline{declare} command.
 
-\begin{qs}
-  How to get the number of elements in an array?
-  How to get the indices of the array?
-  How to add an element to the array?
-\end{qs}
+\begin{lstlisting}[language=bash]
+$ declare -a arr
+\end{lstlisting}
 
-\begin{ans}
-  \texttt{echo \$\{\#arr[@]\}} will print the number of elements in the array. \\
-  \texttt{echo \$\{!arr[@]\}} will print the indices of the array. \\
-  \texttt{arr+=(6)} will add the element 6 to the array.
-\end{ans}
+However, this is not necessary, as bash automatically creates an array when we assign multiple values to a variable.
 
+\begin{lstlisting}[language=bash]
+$ arr=(1 2 3 4 5)
+$ echo ${arr[2]}
+3
+\end{lstlisting}
 
-\begin{qs}
-  What are associative arrays? How to declare and use them?
-\end{qs}
+We can set the value of each element of the array using the index.
 
-\begin{ans}
-  Associative arrays are arrays with key-value pairs. \\
-  \texttt{declare -A arr} will declare an associative array. \\
-  \texttt{arr[key]=value} will set the value of \texttt{key} to \texttt{value}. \\
-  \texttt{echo \$\{arr[key]\}} will print the value of \texttt{key}.
-\end{ans}
+\begin{lstlisting}[language=bash]
+$ arr[2]=6
+$ echo ${arr[2]}
+6
+\end{lstlisting}
 
+If we only access the variable without the index, it will return the first element of the array.
 
-\begin{qs}
-  How to store output of a command in an array?
-\end{qs}
+\begin{lstlisting}[language=bash]
+$ arr=(1 2 3 4 5)
+$ echo $arr
+1
+\end{lstlisting}
 
-\begin{ans}
-  \texttt{arr=(\$(command))} will store the output of \texttt{command} in \texttt{arr}.
-\end{ans}
+\subsection{Length of Array}
+
+The length of the array can be found using the \lstinline{\#} operator.
+
+\begin{lstlisting}[language=bash]
+$ arr=(1 2 3 4 5)
+$ echo ${#arr[@]}
+\end{lstlisting}
+
+\subsection{Indices of Array}
+
+Although it looks like a continuous sequence of numbers, the indices of the array are not necessarily continuous. Bash arrays are actually dictionaries or hash-maps
+and the index is the key.
+Thus we may also need to get the indices of the array.
+
+\begin{lstlisting}[language=bash]
+$ arr=(1 2 3 4 5)
+$ arr[10]=6
+$ echo ${!arr[@]}
+0 1 2 3 4 10
+\end{lstlisting}
+
+\subsection{Printing all elements of Array}
+
+To print all the elements of the array, we can use the \lstinline{@} operator.
+
+By default, the indices start from zero and are incremented by one.
+
+\begin{lstlisting}[language=bash]
+$ arr=(1 2 3 4 5)
+$ echo ${arr[@]}
+1 2 3 4 5
+\end{lstlisting}
+
+In indexed arrays, the indices are always integers, however, if we try to use a non-integer index, it will be treated as zero.
+
+\begin{lstlisting}[language=bash]
+$ arr=(1 2 3 4 5)
+$ arr["hello"]=6
+$ echo ${arr[@]}
+6 2 3 4 5
+\end{lstlisting}
+
+\subsection{Deleting an Element}
+
+To delete an element of an array, we can use the \lstinline{unset} command.
+
+\begin{lstlisting}[language=bash]
+$ arr=(1 2 3 4 5)
+$ arr[10]=6
+$ echo ${arr[@]}
+1 2 3 4 5 6
+$ echo ${!arr[@]}
+0 1 2 3 4 10
+$ unset arr[10]
+$ echo ${arr[@]}
+1 2 3 4 5
+$ echo ${!arr[@]}
+0 1 2 3 4
+\end{lstlisting}
+
+\subsection{Appending an Element}
+
+If we want to simply append an element to the array without specifying the index, we can use the \lstinline{+=} operator.
+The index of the new element will be the next integer after the last element.
+
+\begin{lstlisting}[language=bash]
+$ arr=(1 2 3 4 5)
+$ arr[10]=6
+$ arr+=(7)
+$ echo ${arr[@]}
+1 2 3 4 5 6 7
+$ echo ${!arr[@]}
+0 1 2 3 4 10 11
+\end{lstlisting}
+
+We can also append multiple elements at once by separating them with spaces.
+
+\subsection{Storing output of a command in an Array}
+
+We can store the output of a command in a normal variable using the \lstinline{=} operator.
+
+\begin{lstlisting}[language=bash]
+$ var=$(ls)
+$ echo $var
+file1 file2 file3
+\end{lstlisting}
+
+But if we want to iterate over the output of a command, we can store it in an array by surrounding the command evaluation with parenthesis.
+
+\begin{lstlisting}[language=bash]
+$ arr=($(ls))
+$ echo ${arr[@]}
+file1 file2 file3
+$ echo ${!arr[@]}
+0 1 2
+$ echo ${arr[1]}
+file2
+\end{lstlisting}
+
+\subsection{Iterating over an Array}
+
+We can iterate over an array using a \lstinline{for} loop.
+
+\begin{lstlisting}[language=bash]
+$ arr=(1 2 3 4 5)
+$ for i in ${arr[@]}; do
+>   echo $i
+> done
+1
+2
+3
+4
+5
+\end{lstlisting}
+
+We will cover loops in more detail in \refch{scripts}.
+
+\subsubsection{Different Ways of Iterating}
+
+There are three ways to iterate over an array depending on how we break the array.
+
+\textbf{Treat entire array as a single element}
+
+\begin{lstlisting}[language=bash]
+$ arr=("Some" "elements" "are" "multi word")
+$ for i in "${arr[*]}"; do
+>   echo $i
+> done
+Some elements are multi word
+\end{lstlisting}
+
+Here, as we are using the \lstinline{*} operator, the array is expandded as string, and not array elements.
+Further, as we have then quoted the variable, the for loop does not break the string by the spaces.
+
+\textbf{Break on each word}
+
+This can be done in two ways, either by using the \lstinline{@} operator, or by using the \lstinline|*| operator.
+In either case we do not quote the variable.
+
+\begin{lstlisting}[language=bash]
+$ arr=("Some" "elements" "are" "multi word")
+$ for i in ${arr[*]}; do    echo $i;  done
+Some
+elements
+are
+multi
+word
+\end{lstlisting}
+
+\begin{lstlisting}[language=bash]
+$ arr=("Some" "elements" "are" "multi word")
+$  for i in ${arr[@]}; do    echo $i;  done
+Some
+elements
+are
+multi
+word
+\end{lstlisting}
+
+\textbf{Break on each element}
+
+Finally, the last way is to break on each element of the array.
+This is often the desired way to iterate over an array.
+We use the \lstinline{@} operator, and quote the variable to prevent word splitting.
+
+\begin{lstlisting}[language=bash]
+$ arr=("Some" "elements" "are" "multi word")
+$  for i in "${arr[@]}"; do    echo $i;  done
+Some
+elements
+are
+multi word
+\end{lstlisting}
+
+\section{Associative Arrays}
+
+If we want to store key-value pairs, we can use associative arrays.
+In this, the index is not an integer, but a string.
+It also does not automatically assign the next index, but we have to specify the index.
+
+We use the \lstinline{declare -A} command to declare an associative array, although this is not necessary.
+
+\begin{lstlisting}[language=bash]
+$ declare -A arr
+$ arr=(["name"]="Sayan" ["age"]=22)
+$ echo ${arr[name]}
+Sayan
+$ arr["age"]=23
+$ echo ${#arr[@]}
+2
+$ echo ${!arr[@]}
+age name
+$ echo ${arr[@]}
+23 Sayan
+$ unset arr[name]
+\end{lstlisting}
+
+In bash, the order of the elements is not preserved, and the elements are not sorted.
+This was how Python dictionaries worked before Python 3.7.

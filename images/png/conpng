@@ -1,0 +1,6 @@
+#!/bin/bash
+
+filepath=$(find ~/down -type f | fzf)
+filename=$(basename "${filepath%.*}")
+
+convert "$filepath" "$filename.png"
