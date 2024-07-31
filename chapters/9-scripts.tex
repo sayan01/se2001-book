@@ -1,0 +1,2195 @@
+\setchapterpreamble[u]{\margintoc}
+\chapter{Shell Scripting}
+\labch{scripts}
+
+Now that we have learnt the basics of the bash shell and the core utils, we will now see how we can combine them to create shell scripts which let us do even more complex tasks in just one command.
+
+\section{What is a shell script?}
+
+A shell script is a file that contains a sequence of shell commands. When you run a shell script, the commands in the script are executed in the order they are written. Shell scripts are used to automate tasks that would otherwise require a lot of manual work. They are also used to create complex programs that can be run from the command line.
+
+\section{Shebang}
+
+\begin{definition}[Shebang]
+    The shebang is a special line at the beginning of a shell script that tells the operating system which interpreter to use to run the script. The shebang is written as \lstinline{#!} followed by the path to the interpreter.
+\end{definition}
+
+For example, the shebang for a bash script is \lstinline{#!/bin/bash}.
+However, as \lstinline{/bin} is a symbolic link to \lstinline{/usr/bin} in most systems, we can also specify the path as \lstinline{#!/usr/bin/bash}
+
+The shebang is only needed if we run the script directly from the shell, without specifying the interpreter.
+This also requires the script to have the execute permission set.
+
+
+\begin{lstlisting}[language=bash]
+$ cat script.sh
+#!/bin/bash
+echo "Hello, World!"
+$ bash script.sh
+Hello, World!
+$ ./script.sh
+bash: ./script.sh: Permission denied
+$ chmod +x script.sh
+$ ./script.sh
+Hello, World!
+\end{lstlisting}
+
+Here we are first running the script with the \lstinline{bash} command, which is why the shebang and execute permission is not needed. However, when we try to run the script directly, we get a permission denied error as the permission is not set. We then set the execute permission and run the script again, which works.
+
+We can also use the shebang for non-bash scripts, for example, a python script can have the shebang \lstinline{#!/usr/bin/python3}.
+
+\begin{lstlisting}[language=bash]
+$ cat script.py
+#!/usr/bin/python3
+print("Hello, World!")
+$ python3 script.py
+Hello, World!
+$ chmod u+x script.py
+$ ./script.py
+Hello, World!
+\end{lstlisting}
+
+Even though we called the script without specifying the interpreter, the shebang tells the shell to use the python3 interpreter to run the script.
+This only works if the file has the execute permission set.
+
+If the shebang is absent, and a file is executed without specifying the interpreter, the shell will try to execute it in its own interpreter.
+
+\section{Comments}
+
+In shell scripts, comments are lines that are not executed by the shell. Comments are used to document the script and explain what the script does. Comments in shell scripts start with a \lstinline{#} character and continue to the end of the line.
+
+Although it may not be required when running a command from the terminal, comments are supported there as well.
+Comments are most useful in scripts, where they can be used to explain what the script does and how it works.
+
+\begin{lstlisting}[language=bash]
+$ echo "hello" # This is a comment
+$ echo "world" # we are using the echo command to print the word "world"
+\end{lstlisting}
+
+Here we use the \lstinline{#} to start a line comment. Any character after the pound sign is ignored by the interpreter.
+
+\begin{remark}
+    The shebang also starts with a \lstinline{#} character, so it is also ignored by the interpreter when executing, however, if a file is executed without mentioning the interpreter then the shell reads its first line and find the path to the interpreter using the shebang
+\end{remark}
+
+\subsection{Multiline Comments}
+
+Although bash does not have a built-in syntax for multiline comments, we can use a trick to create multiline comments.
+We can use the NOP command \lstinline{:} to create a multiline comment by passing the multiline string to it.
+
+\begin{lstlisting}[language=bash]
+$ : '
+This is a multiline comment
+This is the second line
+This is the third line
+'
+\end{lstlisting}
+
+\section{Variables}
+
+We have already seen the various ways to create and use variables in bash. We can use these variables in scripts as well.
+
+\begin{lstlisting}[language=bash]
+$ cat variables.sh
+#!/bin/bash
+name="alice"
+declare -i dob=2001
+echo "Hello, ${name^}! You are $((2024 - dob)) years old."
+$ chmod u+x variables.sh
+$ ./variables.sh
+Hello, Alice! You are 23 years old.
+\end{lstlisting}
+
+The variables defined inside a script are not available outside the script if the script is executed in a new environment.
+However, if we want to actually retain the variables, we can use the \lstinline{source} command to run the script in the current environment.
+
+This reads the script and executes it in the current shell, so the variables defined in the script are available in the current shell. The PID of the script remains same as the executing shell, and no new process is created.
+Since this only reads the file, the execute permission is not needed.
+
+This is useful when we want to set environment variables or aliases using a script.
+
+\begin{lstlisting}[language=bash]
+$ cat variables.sh
+name="alice"
+dob=2001
+$ source variables.sh
+$ echo "Hello, ${name^}! You are $((2024 - dob)) years old."
+Hello, Alice! You are 23 years old.
+\end{lstlisting}
+
+Similarly, if we want to run a script in a new environment, but we still want it to have read access to the variables declared in the current environment, we can export the variables needed.
+
+\marginnote{
+  In this example we can see that if a variable is not defined in the scrtipt and we access the variable in the script, it will take an empty string. If we define the variable in the parent shell and then call the script, it will still not have access to it. However, if we export the variable, then calling the script will provide it with the variable.
+}
+\begin{lstlisting}[language=bash]
+$ cat variables.sh
+#!/bin/bash
+echo "Hello, ${name^}! You are $((2024 - dob)) years old."
+$ chmod u+x variables.sh
+$ ./variables.sh
+Hello, ! You are 2024 years old.
+$ name="alice"
+$ dob=2001
+$ ./variables.sh
+Hello, ! You are 2024 years old.
+$ export name dob
+$ ./variables.sh
+Hello, Alice! You are 23 years old.
+\end{lstlisting}
+
+This is because \lstinline{export} makes the variable into an environment variable, which is available to all child processes of the current shell.
+When a new environment is created, the environment variables are copied to the new environment, so the script has access to the exported variables.
+
+However, if we want to add some variable to the environment of the script, but we do not want to add it to our current shell's environment, we can directly specify the variable and the value before running the script, in the same line. This sets the variables for the script's environment, but not for the shell's environment.
+
+\begin{lstlisting}[language=bash]
+$ cat variables.sh
+#!/bin/bash
+echo "Hello, ${name^}! You are $((2024 - dob)) years old."
+$ ./variables.sh
+Hello, ! You are 2024 years old.
+$ name=Alice dob=2001 ./script.sh
+Hello, Alice! You are 23 years old.
+\end{lstlisting}
+
+\section{Arguments}
+
+Just like we can provide arguments to a command, we can also provide arguments to a script. These arguments are stored in special variables that can be accessed inside the script.
+
+\begin{itemize}
+    \item \lstinline{$0} - The path of the script/interpreter by which it is called.
+    \item \lstinline{$1} - The first argument
+    \item \lstinline{$2} - The second argument
+    \\
+    \vdots
+    \item \lstinline{$@} - All arguments stored as an array
+    \item \lstinline{$*} - All arguments stored as a space separated string
+    \item \lstinline{$#} - The number of arguments
+\end{itemize}
+
+\begin{lstlisting}[language=bash]
+$ cat arguments.sh
+echo $0
+$ ./arguments.sh
+./arguments.sh
+$ bash arguments.sh
+arguments.sh
+$ source arguments.sh
+/bin/bash
+$ echo $0
+/bin/bash
+\end{lstlisting}
+
+If we know the number of arguments that will be passed to the script, we can directly access them using the \lstinline{$n} syntax.
+
+\begin{lstlisting}[language=bash]
+$ cat arguments.sh
+echo $1 $2
+echo $3
+$ bash arguments.sh Hello World "This is a multiword single argument"
+Hello World
+This is a multiword single argument
+\end{lstlisting}
+
+Here we can also see how to pass multiple words as a single argument, by quoting it.
+
+Sometimes, we may want to pass the value of a variable as an argument, in those cases, we should always quote the variable expansion, as if the variable contains multiple words, bash will expand the variables and treat each word as a separate argument, instead of the entire value of the variable as a single argument.
+
+Quoting the variable prevents word splitting.
+
+\begin{lstlisting}[language=bash]
+$ cat split.sh
+echo $1
+$ var="Hello World"
+$ bash split.sh $var
+Hello
+$ bash split.sh "$var"
+Hello World
+\end{lstlisting}
+
+The first attempt prints only \lstinline{Hello} as the second word is stored in \lstinline{$2}. But if we quote the variable expansion, then the entire string is taken as one parameter.
+
+\subsubsection{Double vs Single Quotes}
+
+There are some subtle differences between double and single quotes.
+Although both are used to prevent word splitting, single quotes also prevent variable expansion, while double quotes do not.
+
+\begin{lstlisting}[language=bash]
+$ echo "Hello $USER"
+Hello sayan
+$ echo 'Hello $USER'
+Hello $USER
+\end{lstlisting}
+
+However, if we do not know the number of arguments that will be passed to the script, we can use the \lstinline{$@} and \lstinline{$*} variables to access all the arguments.
+
+\begin{lstlisting}[language=bash]
+$ cat all-arguments.sh
+echo "$@"
+$ bash all-arguments.sh Hello World "This is a multiword single argument"
+Hello World This is a multiword single argument
+\end{lstlisting}
+
+Here we can see that \lstinline{$@} expands to all the arguments as an array, while \lstinline{$*} expands to all the arguments as a single string.
+In this case, the output of both looks same as \lstinline{echo} its arguments side by side, separated by a space.
+
+We can observe the difference between \lstinline{$@} and \lstinline{$*} when we use them in a loop, or pass to any command that shows output for each argument on separate lines.
+
+\begin{lstlisting}[language=bash]
+$ cat multiword.sh
+touch "$@"
+$ bash multiword.sh Hello World "This is a multiword single argument"
+$ ls -1
+Hello
+multiword.sh
+'This is a multiword single argument'
+World
+\end{lstlisting}
+
+In this case, since we are using \lstinline{"$@"} (the quoting is important), the \lstinline{touch} command is called with each argument as a separate argument, so it creates a file for each argument. The last array element has multiple words, but it creates a single file with the entire sentence as the file name.
+
+Whereas if we use \lstinline{$*}, the arguments are stored as a string, and it is split by spaces, so the touch command will create a file for each word.
+
+\begin{lstlisting}[language=bash]
+$ cat multiword.sh
+touch $*
+$ bash multiword.sh Hello World "This is a multiword single argument"
+$ ls -1
+a
+argument
+Hello
+is
+multiword
+multiword.sh
+single
+This
+World
+\end{lstlisting}
+
+In this case, the \lstinline{touch} command is called with each word as a separate argument, so it creates a file for each word.
+
+\begin{exercise}
+  Similarly, try out the other way of iterating over the arguments (\lstinline{"$*"}) and observe the difference.
+\end{exercise}
+
+We can also iterate over the indices and access each argument using a for loop. To find the number of arguments, we can use \lstinline|$#|.
+
+\begin{lstlisting}[language=bash]
+$ cat args.sh
+args=("$@")
+echo $#
+for ((i=0; i < $#; i++)); do
+  echo "${args[i]}"
+done
+$ bash args.sh hello how are you
+4
+hello
+how
+are
+you
+\end{lstlisting}
+
+Here we are using \lstinline|$#| to get the number of arguments the script has recieved and then dynamically iterating that many times to access each element of the \lstinline|args| array.
+
+\subsection{Shifting Arguments}
+
+Sometimes we may want to remove the first few arguments from the list of arguments. We can do this using the \lstinline{shift} command.
+
+\lstinline|shift| is a shell builtin that shifts the arguments to the left by one. The first argument is removed, and the second argument becomes the first argument, the third argument becomes the second argument, and so on.
+
+\begin{lstlisting}[language=bash]
+$ cat shift.sh
+echo "First argument is $1"
+shift
+echo "Rest of the arguments are $*"
+$ bash shift.sh one two three four
+First argument is one
+Rest of the arguments are two three four
+\end{lstlisting}
+
+\section{Input and Output}
+
+Now that we have seen how to pass arguments to a script, we will see how to take input from the user and display output to the user.
+
+This is called the standard streams in bash. There are three standard streams in bash:
+
+\begin{itemize}
+    \item \textbf{Standard Input (stdin)} - This is the input stream that is used to read input from the user. By default, this is the keyboard.
+    \item \textbf{Standard Output (stdout)} - This is the output stream that is used to display output to the user. By default, this is the terminal.
+    \item \textbf{Standard Error (stderr)} - This is the error stream that is used to display error messages to the user. By default, this is the terminal.
+\end{itemize}
+
+The streams can also be redirected to/from files or other commands, as we have seen in \refch{redirection}.
+
+\subsection{Reading Input}
+
+To read input from the user, we can use the \lstinline{read} command. The \lstinline{read} command reads a line of input from the stdin and stores it in a variable.
+
+Optionally, we can also provide a prompt to the user, which is displayed before the user enters the input.
+
+\begin{lstlisting}[language=bash]
+$ read -p "Enter your name: " name
+Enter your name: Alice
+$ echo "Hello, $name!"
+Hello, Alice!
+\end{lstlisting}
+
+This reads the input from the user and stores it in the \lstinline{name} variable, which is then used to display a greeting message.
+
+We can use the same command inside a script to read input from the user, or take in any data passed in standard input.
+
+\begin{lstlisting}[language=bash]
+$ cat input.sh
+read line
+echo "STDIN: $line"
+$ echo "Hello, World!" | bash input.sh
+STDIN: Hello, World!
+\end{lstlisting}
+
+However, the \lstinline{read} command reads only one line of input. If we want to read multiple lines of input, we can use a loop to read input until the user enters a specific keyword.
+
+\begin{lstlisting}[language=bash]
+$ cat multiline.sh
+while read line; do
+  echo "STDIN: $line"
+done
+$ cat file.txt
+Hello World
+This is a multiline file
+We have three lines in it
+$ cat file.txt | bash multiline.sh
+STDIN: Hello World
+STDIN: This is a multiline file
+STDIN: We have three lines in it
+\end{lstlisting}
+
+Here we are reading input from the file \lstinline{file.txt} and displaying each line of the file.
+
+The redirection can be done more succinctly by using the input redirection operator \lstinline{<}. The pipe was used to demonstrate that the input can be coming from the output of any arbritary commands, not just the content of a file.
+
+\begin{lstlisting}[language=bash]
+$ bash multiline.sh < file.txt
+STDIN: Hello World
+STDIN: This is a multiline file
+STDIN: We have three lines in it
+\end{lstlisting}
+
+
+\section{Conditionals}
+
+Often times, in scripts, we require to decide between two blocks of code to execute, depending on some non-static condition. This can be either based on some value inputted by the user, a value of a file on the filesystem, or some other value fetched from the sensors or over the internet. To facilitate branching in the scripts, bash provides multiple keywords and commands.
+
+\subsection{Test command}
+
+The \lstinline|test| command is a command that checks the value of an expression and either exits with a exit code of 0
+\sidenote{
+  Exit code 0 denotes success in POSIX
+}
+if the expression is true, or exits with a non-zero exit code if the expression is false.
+
+It has a lot of unary and binary operators that can be used to check various conditions.
+
+\marginnote{
+  Here we evaluate two equations, $1 = 1$ and $5 > 7$. The first equation is true, so the \lstinline{test} command exits with a 0 exit code, while the second equation is false, so the \lstinline{test} command exits with a 1 exit code.
+}
+\begin{lstlisting}[language=bash]
+$ test 1 -eq 1
+$ echo $?
+0
+$ test 5 -gt 7
+$ echo $?
+1
+\end{lstlisting}
+
+\subsubsection{String condtions}
+
+\lstinline|test| can check for unary and binary conditions on strings.
+
+\begin{itemize}
+    \item \lstinline|-z| - True if the string is empty
+    \item \lstinline|-n| - True if the string is not empty
+    \item \lstinline|=| - True if the strings are equal
+    \item \lstinline|!=| - True if the strings are not equal
+    \item \lstinline|<| - True if the first string is lexicographically less than the second string
+    \item \lstinline|>| - True if the first string is lexicographically greater than the second string
+\end{itemize}
+
+\textbf{Unary Operators}
+
+The \lstinline|-z| and \lstinline|-n| flags of \lstinline|test| check if a string is empty or not.
+
+\begin{lstlisting}[language=bash]
+$ var="apple"
+$ test -n "$var" ; echo $?
+0
+$ test -z "$var" ; echo $?
+1
+\end{lstlisting}
+
+\begin{lstlisting}[language=bash]
+$ var=""
+$ test -n "$var" ; echo $?
+1
+$ test -z "$var" ; echo $?
+0
+\end{lstlisting}
+
+\textbf{Binary Operators}
+
+The \lstinline|=|, \lstinline|!=|, \lstinline|<|, and \lstinline|>| flags of \lstinline|test| check if two strings are equal, not equal, less than, or greater than each other.
+
+\begin{lstlisting}[language=bash]
+$ var="apple"
+$ test "$var" = "apple" ; echo $?
+0
+$ test "$var" != "apple" ; echo $?
+1
+\end{lstlisting}
+
+\begin{lstlisting}[language=bash]
+$ var="apple"
+$ test "$var" = "banana" ; echo $?
+1
+$ test "$var" != "banana" ; echo $?
+0
+\end{lstlisting}
+
+\marginnote{
+  We are escaping the \lstinline{>} and \lstinline{<} characters as they have special meaning in the shell. If we do not escape them, the shell will try to redirect the input or output of the command to/from a file. We can also quote the symbols instead of escaping them.
+}
+\begin{lstlisting}[language=bash]
+$ var="apple"
+$ test "$var" \< "banana" ; echo $?
+0
+$ test "$var" \> "banana" ; echo $?
+1
+\end{lstlisting}
+
+\subsubsection{Numeric conditions}
+
+\lstinline|test| can also check for unary and binary conditions on numbers.
+
+\begin{itemize}
+    \item \lstinline|-eq| - True if the numbers are equal
+    \item \lstinline|-ne| - True if the numbers are not equal
+    \item \lstinline|-lt| - True if the first number is less than the second number
+    \item \lstinline|-le| - True if the first number is less than or equal to the second number
+    \item \lstinline|-gt| - True if the first number is greater than the second number
+    \item \lstinline|-ge| - True if the first number is greater than or equal to the second number
+\end{itemize}
+
+\begin{lstlisting}[language=bash]
+$ test 5 -eq 5 ; echo $?
+0
+$ test 5 -ne 5 ; echo $?
+1
+$ test 5 -ge 5 ; echo $?
+0
+$ test 5 -lt 7 ; echo $?
+0
+$ test 5 -le 7 ; echo $?
+0
+$ test 5 -gt 7 ; echo $?
+1
+$ test 5 -ge 7 ; echo $?
+1
+\end{lstlisting}
+
+\subsubsection{File conditions}
+
+The most number of checks in \lstinline|test| are for files. We can check if a file exists, if it is a directory, if it is a regular file, if it is readable, writable, or executable, and many more.
+
+\textbf{File Types}
+
+\begin{itemize}
+    \item \lstinline|-e| and \lstinline|-a| - if the file exists
+    \item \lstinline|-f| - if the file is a regular file
+    \item \lstinline|-d| - if the file is a directory
+    \item \lstinline|-b| - if the file is a block device
+    \item \lstinline|-c| - if the file is a character device
+    \item \lstinline|-h| and \lstinline|-L| - if the file is a symbolic link
+    \item \lstinline|-p| - if the file is a named pipe
+      \item \lstinline|-S| - if the file is a socket
+\end{itemize}
+
+\textbf{File Permissions}
+
+\begin{itemize}
+    \item \lstinline|-r| - if the file is readable
+    \item \lstinline|-w| - if the file is writable
+    \item \lstinline|-x| - if the file is executable
+    \item \lstinline|-u| - if the file has the setuid bit set
+    \item \lstinline|-g| - if the file has the setgid bit set
+    \item \lstinline|-k| - if the file has the sticky bit set
+    \item \lstinline|-O| - if the file is effectively owned by the user
+    \item \lstinline|-G| - if the file is effectively owned by the user's group
+\end{itemize}
+
+\textbf{Binary Operators}
+
+\begin{itemize}
+    \item \lstinline|-nt| - if the first file is newer than the second file
+    \item \lstinline|-ot| - if the first file is older than the second file
+    \item \lstinline|-ef| - if the first file is a hard link to the second file
+\end{itemize}
+
+\subsubsection{Other conditions}
+
+\begin{itemize}
+  \item \lstinline|-o| - Logical OR (When used in binary operation)
+  \item \lstinline|-a| - Logical AND
+  \item \lstinline|!| - Logical NOT
+  \item \lstinline|-v| - if the variable is set
+  \item \lstinline|-o| - if the \lstinline|shopt| option is set (when used as unary operator)
+\end{itemize}
+
+The test built-in can be invoked in two ways, either by using the \lstinline{test} word or by using the \lstinline{[} built-in. The \lstinline{[} is a synonym for the \lstinline{test} command, and is used to make the code more readable.
+If we use the \lstinline{[} command, the last argument must be \lstinline{]}. This makes it look like a shell syntax rather than a command, but we should keep in mind that the test command (even the \lstinline|[| shortcut) is a command built-in, and not a shell keyword, thus we need to use a space after the command.
+
+\begin{lstlisting}[language=bash]
+$ [ 1 -eq 1 ] ; echo $?
+0
+$ var=apple
+$ [ "$var" = "apple" ] ; echo $?
+0
+\end{lstlisting}
+
+\begin{remark}
+  The \lstinline|test| and \lstinline|[| exist as both a executable stored in the filesystem and also as a shell built-in in bash. However the built-in takes preference when we simply type the name. Almost all operators are same in both, however the executable version cannot check if a variable is set using the \lstinline|-v| option since executables dont have access to the shell variables.
+\end{remark}
+
+\subsection{Test Keyword}
+
+Although we already have the \lstinline|test| executable and its shorthand \lstinline|[| as built-in, bash also provides a keyword \lstinline|[[| which is a more powerful version of the \lstinline|test| command. This is present in bash
+\sidenote{
+  And other popular shells like zsh
+}
+but not present in the POSIX standard.
+
+\begin{lstlisting}[language=bash]
+$ type -a test
+test is a shell builtin
+test is /usr/bin/test
+$ type -a [
+[ is a shell builtin
+[ is /usr/bin/[
+$ type -a [[
+[[ is a shell keyword
+\end{lstlisting}
+
+This is an improvement over the \lstinline|test| command, as it has more features and is more reliable.
+
+\begin{itemize}
+    \item It does not require us to quote variables
+    \item It supports logical operators like \lstinline{&&} and \lstinline{||}
+    \item It supports regular expressions
+    \item It supports globbing
+\end{itemize}
+
+\textbf{Quoting and Empty Variables}
+
+\begin{lstlisting}[language=bash]
+$ var=""
+$ [ $var = "apple" ] ; echo $?
+-bash: [: =: unary operator expected
+2
+$ [ "$var" = "apple" ] ; echo $?
+1
+\end{lstlisting}
+
+As we can see, the \lstinline|test| command requires us to quote the variables, otherwise it will throw an error if the variable is empty. However, the \lstinline|[[| keyword does not require us to quote the variables.
+
+\begin{lstlisting}[language=bash]
+$ var=""
+$ [[ $var = "apple" ]] ; echo $?
+1
+\end{lstlisting}
+
+\textbf{Logical Operators}
+
+The logical operators to combine multiple conditions are \lstinline{&&} and \lstinline{||}.
+In the \lstinline{test} command, we can use the \lstinline{-a} and \lstinline{-o} operators, or we can use \lstinline|&&| and \lstinline{||} outside by combining multiple test commands.
+
+\begin{lstlisting}[language=bash]
+$ var="apple"
+$ [ "$var" = "apple" -a 1 -eq 1 ] ; echo $?
+0
+$ [ "$var" = "apple" ] && [ 1 -eq 1 ] ; echo $?
+0
+\end{lstlisting}
+
+But in the \lstinline{[[} keyword, we can use the \lstinline{&&} and \lstinline{||} operators directly.
+
+\begin{lstlisting}[language=bash]
+$ var="apple"
+$ [[ "$var" = "apple" && 1 -eq 1 ]] ; echo $?
+0
+\end{lstlisting}
+
+\textbf{Comparison Operators}
+
+For string comparison, we had to escape the \lstinline{>} and \lstinline{<} characters in the \lstinline{test} command, but in the \lstinline{[[} keyword, we can use them directly.
+
+\begin{lstlisting}[language=bash]
+$ var="apple"
+$ [[ "$var" < "banana" ]] ; echo $?
+0
+\end{lstlisting}
+
+\textbf{Regular Expressions}
+
+The \lstinline{[[} keyword also supports regular expressions using the \lstinline{=~} operator.
+
+If we want to check whether the variable \lstinline|response| is \lstinline|y| or \lstinline|yes|, in \lstinline|test| we would do the following.
+
+\begin{lstlisting}[language=bash]
+$ response="yes"
+$ [ "$response" = "y" -o "$response" = "yes" ] ; echo $?
+0
+\end{lstlisting}
+
+But in \lstinline|[[| we can use the \lstinline{=~} operator to check if the variable matches a regular expression.
+
+\begin{lstlisting}[language=bash]
+$ response="yes"
+$ [[ "$response" =~ ^y(es)?$ ]] ; echo $?
+0
+\end{lstlisting}
+
+It also uses \textbf{ERE} (Extended Regular Expressions) by default, so we can use the \lstinline|?| operator without escaping it to match 0 or 1 occurrence of the previous character.
+
+\begin{warn}
+  When using regular expressions in bash scripts, we should never quote the regular expression, as it will be treated as a string and not a regular expression.
+\end{warn}
+
+\textbf{Globbing}
+
+We can also simply match for any response starting with \lstinline|y| using globbing.
+
+\begin{lstlisting}[language=bash]
+$ response="yes"
+$ [[ "$response" == y* ]] ; echo $?
+0
+\end{lstlisting}
+
+\textbf{Double Equals}
+
+In the \lstinline{[[} keyword, we can use the \lstinline{==} operator to check for string equality, which is a widely known construct from most languages.
+
+\section{If-elif-else}
+
+\subsection{If}
+
+The \lstinline{if} statement is used to execute a block of code if a condition is true. If the condition is false, the block of code is skipped.
+
+The syntax of the \lstinline{if} statement is as follows:
+
+\marginnote{
+  The end of the \lstinline{if} statement is denoted by the \lstinline{fi} keyword, which is the reverse of the \lstinline{if} keyword.
+}
+\begin{lstlisting}[language=bash]
+if command ; then
+  # code to execute if the command is successful
+else
+  # code to execute if the command is not successful
+fi
+\end{lstlisting}
+
+Unlike most programming language that takes a boolean expression, the \lstinline{if} statement in bash takes a command, and executes the command.
+If the command exits with a 0 exit code, the block of code after the \lstinline{then} keyword is executed, otherwise the block of code after the \lstinline{else} keyword is executed.
+
+This allows us to use any command that we have seen so far in the \lstinline{if} statement.
+The most used command is the \lstinline{test} command, which is used to check conditions.
+
+\begin{lstlisting}[language=bash]
+$ var="apple"
+$ if [ "$var" =~ ^a.* ] ; then
+>   echo "The variable starts with a"
+> fi
+The variable starts with a
+\end{lstlisting}
+
+However, we can also use other commands, like the \lstinline{grep} command, to check if a file contains a pattern.
+
+\begin{lstlisting}[language=bash]
+$ cat file.txt
+Hello how are you
+$ if grep -q "how" file.txt ; then
+>   echo "The file contains the word how"
+> fi
+The file contains the word how
+$ if grep -q "world" file.txt ; then
+>   echo "The file contains the word world"
+> fi
+\end{lstlisting}
+
+The first \lstinline{if} statement checks if the file contains the word \lstinline{how}, which is present, and thus prints the message to the screen.
+The second \lstinline{if} statement checks if the file contains the word \lstinline{world}, which is not present, and thus does not print anything.
+
+\subsection{Else}
+
+The \lstinline{else} keyword is used to execute a block of code if the command in the \lstinline{if} statement is not successful.
+
+\begin{lstlisting}[language=bash]
+$ var="apple"
+$ if [ "$var" = "banana" ] ; then
+>   echo "The variable is banana"
+> else
+>   echo "The variable is not banana"
+> fi
+The variable is not banana
+\end{lstlisting}
+
+The combination of the \lstinline{if} and \lstinline{else} keywords allows us to execute different blocks of code depending on the condition; this is one of the most used construct in scripting.
+
+\begin{lstlisting}[language=bash]
+$ read -p "Enter a number: " num
+Enter a number: 5
+$ if [[ $num -gt 0 ]] ; then
+>   echo "The number is positive"
+> else
+>   echo "The number is negative"
+> fi
+The number is positive
+\end{lstlisting}
+
+However, notice that this allows us only two branches, one for the condition being true, and one for the condition being false.
+Due to this, we have misclassified the number 0 as positive, which is not correct.
+
+To fix this, we can use the \lstinline{elif} keyword, which is short for \lstinline{else if}.
+
+\subsection{Elif}
+
+\begin{marginfigure}
+  \includegraphics{elif}
+  \caption{Flowchart of the \lstinline{if}, \lstinline{elif}, and \lstinline{else} construct}
+  \labfig{elif}
+\end{marginfigure}
+
+If the command in the \lstinline{if} statement is not successful, we can run another command using the \lstinline{elif} keyword and decide the branching based on its exit status.
+
+\begin{lstlisting}[language=bash]
+$ read -p "Enter a number: " num
+Enter a number: 0
+$ if [[ $num -gt 0 ]] ; then
+>   echo "The number is positive"
+> elif [[ $num -lt 0 ]] ; then
+>   echo "The number is negative"
+> else
+>   echo "The number is zero"
+> fi
+The number is zero
+\end{lstlisting}
+
+Here we have added an \lstinline{elif} statement to check if the number is less than 0, and if it is, we print that the number is negative, finally if both the commands are unsuccessful, we execute the statements in the \lstinline|else| block.
+
+\section{Exit code inversion}
+
+We can also invert the condition using the \lstinline{!} operator.
+
+\begin{lstlisting}[language=bash]
+$ var=apple
+$ if ! [ "$var" = "banana" ] ; then
+>   echo "The variable is not banana"
+> fi
+The variable is not banana
+\end{lstlisting}
+
+\section{Mathematical Expressions as if command}
+
+We can also use the \lstinline{((} keyword to evaluate mathematical expressions in the \lstinline{if} statement. This environment does not print any output to the standard output, rather, it exits with a zero exit code if the result of the mathematical evaluation is non-zero, and exits with a non-zero exit code if the evaluation results to zero. This is useful as $0$ is false in mathematics but $0$ is success exit code in the shell.
+
+\begin{lstlisting}[language=bash]
+$ if (( 5 > 3 )) ; then
+>   echo "5 is greater than 3"
+> fi
+5 is greater than 3
+\end{lstlisting}
+
+However, this environment only supports integers, and not floating point numbers.
+
+\section{Command Substitution in if}
+
+We can also run a command in the \lstinline{if} statement, and compare the output of the command to a value using the \lstinline|test| command and the \lstinline|$(())| construct.
+
+\begin{lstlisting}[language=bash]
+$ if [ $(wc -l < file.txt) -gt 100 ] ; then
+>   echo "The file is big"
+> fi
+The file is big
+\end{lstlisting}
+
+\section{Switch}
+
+\begin{definition}[Switch Case]
+  A switch case is a syntactical sugar that helps match a variable's value against a list of options (or patterns) and executes the block of code corresponding to the match.
+\end{definition}
+
+The branching achieved by \textbf{switch case} can also be achieved by using multiple \lstinline{if-elif-else} statements, but the switch case is more readable and concise.
+
+\textbf{Syntax}
+
+\marginnote{
+  The \lstinline|case| block is ended with the keyword \lstinline|esac|, which is the reverse of the \lstinline|case| keyword.
+}
+\begin{lstlisting}[language=bash]
+case var in
+  pattern1)
+    # code to execute if var matches pattern1
+    ;;
+  pattern2)
+    # code to execute if var matches pattern2
+    ;;
+  *)
+    # code to execute if var does not match any pattern
+    ;;
+esac
+\end{lstlisting}
+
+The \lstinline{case} keyword is followed by the variable to match against, and the \lstinline{in} keyword.
+Then we have multiple patterns, each followed by a block of code to execute if the variable matches the pattern.
+
+The \lstinline{;;} keyword is used to denote the end of a block of code, and the start of the next pattern. This ensures that the script does not continue running the statements of the other blocks after it as well.
+
+The \lstinline{*} pattern is a wildcard pattern, and matches any value that does not match any of the other patterns.
+
+The patterns in the switch case are similar to globs rather than regular expressions, so we cannot use regular expressions in the switch case.
+
+Although sometimes we actually want to execute the blocks after the match. This is called fall through.
+
+\subsection{Fall Through}
+
+If we replace the \lstinline|;;| with \lstinline|;&| or \lstinline|;;&| then the control will flow into the next block.
+
+\marginnote{
+  In this example, the script will print both the statements "Multiple of 10" and "Multiple of 5" for numbers ending with zero because of the fall through \lstinline|;&| instead of \lstinline|;;|.
+}
+\begin{lstlisting}[language=bash]
+$ cat switch.sh
+read -p "Enter number: " num
+case "$num" in
+  *0) echo "Multiple of 10" ;&
+  *5) echo "Multiple of 5" ;;
+  *) echo "Not Multiple of 5" ;;
+esac
+$ bash switch.sh
+Enter number: 60
+Multiple of 10
+Multiple of 5
+\end{lstlisting}
+
+\subsection{Multiple Patterns}
+
+We can also have multiple patterns for a single block of code by separating the patterns with the \lstinline{|} operator.
+
+\begin{lstlisting}[language=bash]
+$ cat switch.sh
+read -p "Enter digit: " num
+case "$num" in
+  1|2|3) echo "Small number" ;;
+  4|5|6) echo "Medium number" ;;
+  7|8|9) echo "Large number" ;;
+  *) echo "Invalid number" ;;
+esac
+$ bash switch.sh
+Enter digit: 5
+Medium number
+\end{lstlisting}
+
+\section{Select Loop}
+
+\begin{definition}[Select Loop]
+  A select loop is a construct that is used to create a menu in the shell script. It takes a list of items and displays them to the user, and then waits for the user to select an item. The selected item is stored in a variable, and the block of code corresponding to the selected item is executed.
+  This repeats infinitely, until the user stops it.
+\end{definition}
+
+\begin{lstlisting}[language=bash]
+$ cat select.sh
+select choice in dog cat bird stop
+do
+  case $choice in
+    dog) echo "A dog barks" ;;
+    cat) echo "A cat meows" ;;
+    bird) echo "A bird chirps" ;;
+    stop) break ;;
+    *) echo "Invalid choice" ;;
+  esac
+done
+$ bash select.sh
+1) dog
+2) cat
+3) bird
+4) stop
+#? 1
+A dog barks
+#? 2
+A cat meows
+#? 3
+A bird chirps
+#? 4
+\end{lstlisting}
+
+A select loop is simply a syntactical sugar for a while loop that displays a menu to the user and waits for the user to select an option and reads it using \lstinline|read|.
+The conditional branching is done using a \lstinline|case| statement.
+
+The menu output is actually displayed on the standard error stream, so that it is easy to split the conditional output from the menu output.
+
+\begin{lstlisting}[language=bash]
+$ bash select.sh > output.txt
+1) dog
+2) cat
+3) bird
+4) stop
+#? 1
+#? 2
+#? 3
+#? 4
+$ cat output.txt
+A dog barks
+A cat meows
+A bird chirps
+\end{lstlisting}
+
+To stop the select loop, we can use the \lstinline|break| keyword.
+We will see more about loops in the next section.
+
+\section{Loops}
+
+If we want to execute a block of code multiple times, we can use loops. There are three types of loops in bash:
+
+\begin{itemize}
+    \item \textbf{For loop} - Used to iterate over a list of items or a fixed number of times
+    \item \textbf{While loop} - Used to execute a block of code as long as a condition is true
+    \item \textbf{Until loop} - Used to execute a block of code as long as a condition is false
+\end{itemize}
+
+\subsection{For loop}
+
+In bash, we can use the \lstinline{for} loop to iterate over a list of items,
+called a \textbf{for-each} loop
+\sidenote{
+This is similar to how the for loop in Python works.
+}, or a range of numbers
+\sidenote{
+This is similar to how the for loop in C and C like languages works.
+}.
+
+\subsubsection{For-each loop}
+
+\begin{lstlisting}[language=bash]
+$ cat foreach.sh
+for item in mango banana strawberry; do
+  echo "$item shake"
+done
+$ bash foreach.sh
+mango shake
+banana shake
+strawberry shake
+\end{lstlisting}
+
+As we saw in \refch{variables}, there are three ways to iterate over an array in bash.
+We can either treat the entire array as a single element (\lstinline|"${arr[*]}"|),
+we can break the elements by spaces (\lstinline|${arr[@]}|),
+or we can split as per the array elements, preserving multi-word elements (\lstinline|"${arr[@]}"|).
+
+\textbf{Treating entire array as a single element:}
+\begin{lstlisting}[language=bash]
+$ cat forsplit.sh
+name=("Sayan" "Alice" "John Doe")
+for name in "${name[*]}"; do
+  echo "Name: $name"
+done
+$ bash forsplit.sh
+Name: Sayan Alice John Doe
+\end{lstlisting}
+
+\textbf{Splitting by spaces:}
+
+\begin{lstlisting}[language=bash]
+$ cat forsplit.sh
+name=("Sayan" "Alice" "John Doe")
+for name in ${name[@]}; do
+  echo "Name: $name"
+done
+$ bash forsplit.sh
+Name: Sayan
+Name: Alice
+Name: John
+Name: Doe
+\end{lstlisting}
+
+\textbf{Preserving multi-word elements:}
+
+\begin{lstlisting}[language=bash]
+$ cat forsplit.sh
+name=("Sayan" "Alice" "John Doe")
+for name in "${name[@]}"; do
+  echo "Name: $name"
+done
+$ bash forsplit.sh
+Name: Sayan
+Name: Alice
+Name: John Doe
+\end{lstlisting}
+
+We can also dynamically generate a list of numbers in a range using the \lstinline|{start..end}| syntax or the \lstinline|seq| command.
+
+\begin{lstlisting}[language=bash]
+$ cat range.sh
+for i in {1..5}; do
+  echo "Number: $i"
+done
+$ bash range.sh
+1
+2
+3
+4
+5
+\end{lstlisting}
+
+\begin{lstlisting}[language=bash]
+$ cat range.sh
+for i in $(seq 1 5); do
+  echo "Number: $i"
+done
+$ bash range.sh
+1
+2
+3
+4
+5
+\end{lstlisting}
+
+\textbf{Differences between range expansion and seq command}
+
+Although both \lstinline|seq| and the \textbf{range expansion} bash syntax have similar functionality, they have slightly different behaviour, as seen in \reftab{rangevsseq}.
+
+\begin{table*}[h!]
+  \caption{Differences between range expansion and seq command}
+  \labtab{rangevsseq}
+  \begin{tabular}{l l}
+    \toprule
+    \textbf{Range Expansion} & \textbf{Seq Command} \\
+    \midrule
+    It is a bash feature hence it is faster & It is an external command \\
+    Only integer step size & Fractional step size is allowed \\
+    Works on letters & Works only on numbers \\
+    Step size should be the third argument & Step size should be the second argument \\
+    Output is space separated & Output is newline separated \\
+    Start range cannot be omitted & Start range is 1 by default \\
+    \bottomrule
+  \end{tabular}
+\end{table*}
+
+\textbf{Letters:}
+
+\begin{lstlisting}[language=bash]
+$ echo {a..e}
+a b c d e
+$ seq a e
+seq: invalid floating point argument: 'a'
+Try 'seq --help' for more information.
+\end{lstlisting}
+
+\textbf{Position of step size:}
+
+\begin{lstlisting}[language=bash]
+$ echo {1..10..2}
+1 3 5 7 9
+$ seq 1 2 10
+1
+3
+5
+7
+9
+\end{lstlisting}
+
+\textbf{Fractional step size:}
+
+\marginnote{
+  Note that if the shell is not able to expand a range expansion due to invalid syntax it will not throw an error, rather it will simply keep it unexpanded. This is similar to how path expansion works.
+}
+\begin{lstlisting}[language=bash]
+$ seq 1 0.5 2
+1.0
+1.5
+2.0
+$ echo {1..2..0.5}
+{1..2..0.5}
+\end{lstlisting}
+
+\textbf{Default start range:}
+
+\begin{lstlisting}[language=bash]
+$ seq 5
+1
+2
+3
+4
+5
+\end{lstlisting}
+
+\subsubsection{Different between python's range and seq command:}
+
+The \lstinline|seq| command is similar to the \lstinline|range| function in Python, but there are some differences between the two.
+
+\begin{table*}[h!]
+  \caption{Differences between seq and python's range function}
+  \labtab{seqvspyrange}
+  \begin{tabular}{l l}
+    \toprule
+    \textbf{Python's Range} & \textbf{Seq Command} \\
+    \midrule
+    Start of range is 0 by default & Start range is 1 by default \\
+    Order of parameters is start,end,step & Order of parameters is start,step,end \\
+    End range is exclusive & End range is inclusive \\
+    \bottomrule
+  \end{tabular}
+\end{table*}
+
+\subsection{C style for loop}
+
+Bash also supports C-style for-loops, where we declare a variable, a condition for the loop, and an increment command.
+
+\begin{lstlisting}[language=bash]
+$ cat cstyle.sh
+for ((i=0; i<5; i++)); do
+  echo "Number: $i"
+done
+$ bash cstyle.sh
+Number: 0
+Number: 1
+Number: 2
+Number: 3
+Number: 4
+\end{lstlisting}
+
+We can also have multiple variables in the C-style for loop.
+
+\begin{lstlisting}[language=bash]
+$ cat cstyle.sh
+begin1=1
+begin2=10
+finish=10
+for (( a=$begin1, b=$begin2; a < $finish; a++, b-- )); do
+  echo $a $b
+done
+$ bash cstyle.sh
+1 10
+2 9
+3 8
+4 7
+5 6
+6 5
+7 4
+8 3
+9 2
+\end{lstlisting}
+
+\subsection{IFS}
+
+By default the for loop splits the input by tabs, spaces, and newlines. We can change the delimiter by changing the \lstinline|IFS| variable.
+
+\begin{definition}[IFS]
+  The \lstinline|IFS| variable is the Internal Field Separator, and is used to split the input into fields.
+\end{definition}
+
+It is used by for loop and other word splitting operations in bash.
+
+Default value of \lstinline|IFS| is \lstinline|$' \t\n'|.
+If set to multiple characters, it will split the input by any of the characters.
+\sidenote{
+  The \lstinline|$''| syntax is used to denote ANSI escape sequences in the string in bash.
+}
+
+\marginnote{
+  In this example we are reading the \lstinline|$PATH| variable, which is a colon separated list of directories. We are changing the \lstinline|IFS| variable to a colon, so that the for loop splits the input by colon.
+}
+\begin{lstlisting}[language=bash]
+$ cat ifs.sh
+IFS=:
+for i in $PATH; do
+  echo $i
+done
+$ bash ifs.sh
+/usr/local/sbin
+/usr/local/bin
+/usr/bin
+\end{lstlisting}
+
+We should remember to reset the \lstinline|IFS| variable after using it, as it can cause unexpected behaviour in other parts of the script.
+
+\begin{lstlisting}[language=bash]
+$ cat unsetifs.sh
+IFS=:
+# some code
+
+var="a b c:d"
+for i in $var; do
+  echo $i
+done
+$ bash unsetifs.sh
+a b c
+d
+\end{lstlisting}
+
+Although we wanted to iterate over the elements by spliting by space, we ended up splitting by colon because we forgot to reset the \lstinline|IFS| variable.
+
+To reset the \lstinline|IFS| variable, we can simply unset it.
+
+\begin{lstlisting}[language=bash]
+$ cat unsetifs.sh
+IFS=:
+# some code
+
+unset IFS
+var="a b c:d"
+for i in $var; do
+  echo $i
+done
+$ bash unsetifs.sh
+a
+b
+c:d
+\end{lstlisting}
+
+Unsetting the \lstinline|IFS| variable will reset it to the default value of \lstinline|$' \t\n'|.
+
+However, setting and resetting the \lstinline|IFS| variable can be cumbersome, so we can use a subshell to change the \lstinline|IFS| variable only for the for loop.
+
+\begin{lstlisting}[language=bash]
+$ cat subshellifs.sh
+var="a b c:d"
+(
+IFS=:
+for i in $var; do
+  echo $i
+done
+)
+
+for i in $var; do
+  echo $i
+done
+$ bash subshellifs.sh
+a b c
+d
+a
+b
+c:d
+\end{lstlisting}
+
+\subsection{While loop}
+
+The \lstinline{while} loop is used to execute a block of code as long as a condition is true.
+This is useful if we do not know the number of iterations beforehand, rather we know the condition that should be satisfied.
+
+Just like the \lstinline{if} statement, the \lstinline{while} loop also takes a command, and executes the block of code if the command is successful.
+This means we can run any arbritary command in the \lstinline{while} loop condition checking.
+
+\begin{lstlisting}[language=bash]
+$ cat while.sh
+i=5
+while [ $i -gt 0 ]; do
+  echo  "i is $i"
+  ((i--))
+done
+$ bash while.sh
+i is 5
+i is 4
+i is 3
+i is 2
+i is 1
+\end{lstlisting}
+
+Here we are using the \lstinline|test| command to check if the variable \lstinline|i| is greater than 0, and if it is, we print the value of \lstinline|i| and decrement it by 1.
+
+However, \lstinline|test| is not the only command that we can use in the \lstinline{while} loop condition.
+
+\marginnote{
+  Here we are using the \lstinline|grep| command to check if the password contains any special character or not, and looping as long as the user enters a strong password.\\\\
+  Ideally when reading passwords, we should use the \lstinline|read -s| command to hide the input from the user, however it is ommited from the example so that the input can be seen by the reader.
+}
+\begin{lstlisting}[language=bash]
+$ cat pass.sh
+read -p "Enter password: " pass
+
+while ! grep -q '[[:punct:]]' <<< "$pass" ; do
+  echo "Password must contain at least one special character"
+  read -p "Enter password: " pass
+done
+echo "Password is set"
+$ bash pass.sh
+Enter password: 123
+Password must contain at least one special character
+Enter password: abc
+Password must contain at least one special character
+Enter password: sayan
+Password must contain at least one special character
+Enter password: $ayan
+Password is set
+\end{lstlisting}
+
+\subsection{Until loop}
+
+The \lstinline{until} loop is used to execute a block of code as long as a condition is false.
+This is simply a negation of the \lstinline{while} loop.
+It is a syntactical sugar.
+The last example we saw in the \lstinline{while} loop can be rewritten using the \lstinline{until} loop to omit the \lstinline|!| symbol.
+
+\begin{lstlisting}[language=bash]
+$ cat pass.sh
+read -p "Enter password: " pass
+
+until grep -q '[[:punct:]]' <<< "$pass" ; do
+  echo "Password must contain at least one special character"
+  read -p "Enter password: " pass
+done
+echo "Password is set"
+$ bash pass.sh
+Enter password: 123
+Password must contain at least one special character
+Enter password: abc
+Password must contain at least one special character
+Enter password: sayan
+Password must contain at least one special character
+Enter password: $ayan
+Password is set
+\end{lstlisting}
+
+\subsection{Read in while}
+
+The \lstinline{read} command is used to read one line of input from the user,
+however if we want to read multiple lines of input,
+and we do not know the number of lines beforehand,
+we can use the \lstinline{while} loop to read input until the user enters a specific value,
+or the input stops.
+\sidenote{
+  The end of input is denoted by the \lstinline|EOF| character,
+  if we are reading input from standard input, we can press \lstinline|Ctrl+D| to send the \lstinline|EOF| character and mark the end of input.
+}
+
+\begin{lstlisting}[language=bash]
+$ cat read.sh
+while read line; do
+  echo "Line is $line"
+done
+$ bash read.sh
+hello
+Line is hello
+this is typed input
+Line is this is typed input
+now press ctrl+D
+Line is now press ctrl+D
+\end{lstlisting}
+
+We can also read from a file using the \lstinline{<} operator.
+Since the entire while loop is a command, we can use the \lstinline{<} operator to redirect the input to the while loop after the ending \lstinline|done| keyword.
+
+\marginnote{
+  Here we are reading the \lstinline|/etc/passwd| file line by line and printing the username.
+  The username is the first field in the \lstinline|/etc/passwd| file, which is separated by a colon.
+  The username is extracted by removing everything after the first colon using shell variable manipulation.
+}
+\begin{lstlisting}[language=bash]
+$ cat read.sh
+while read line; do
+  echo ${line%%:*}
+done < /etc/passwd
+$ bash read.sh
+root
+bin
+daemon
+mail
+ftp
+http
+nobody
+dbus
+systemd-coredump
+systemd-network
+\end{lstlisting}
+
+We can also use the \lstinline{IFS} variable to split each row by a colon, and extract the username.
+
+\marginnote{
+  In this example, we are setting the IFS only for the while loop, and it gets reset after the loop.
+  If we provide multiple variables to the \lstinline|read| command, it will split the input by the \lstinline|IFS| variable and assign the split values to the variables.
+}
+\begin{lstlisting}[language=bash]
+$ cat read.sh
+while IFS=: read username pass uid gid gecos home shell; do
+  echo $username - ${gecos:-$username}
+done < /etc/passwd
+$ bash read.sh
+root - root
+bin - bin
+daemon - daemon
+mail - mail
+ftp - ftp
+http - http
+nobody - Kernel Overflow User
+dbus - System Message Bus
+systemd-coredump - systemd Core Dumper
+systemd-network - systemd Network Management
+\end{lstlisting}
+
+If the number of variables provided to the \lstinline|read| command is less than the number of fields in the input, the remaining fields are stored in the last variable.
+This can be utilized to read only the first field of the input, and discard the rest.
+
+\marginnote{
+  In this example, we are reading only the first field of the input, and discarding the rest.
+  In bash (and many other languages) the underscore variable is used to denote a variable that is not to be used.
+}
+\begin{lstlisting}[language=bash]
+$ cat read.sh
+while IFS=: read username _; do
+  echo $username
+done < /etc/passwd
+$ bash read.sh
+root
+bin
+daemon
+mail
+ftp
+http
+nobody
+dbus
+systemd-coredump
+systemd-network
+\end{lstlisting}
+
+\subsection{Break and Continue}
+
+The \lstinline{break} and \lstinline{continue} keywords are used to control the flow of the loop.
+
+\begin{itemize}
+    \item \textbf{Break} - The \lstinline{break} keyword is used to exit the loop immediately. This skips the current iteration, and also all the next iterations.
+    \item \textbf{Continue} - The \lstinline{continue} keyword is used to skip the rest of the code in the loop and go to the next iteration.
+\end{itemize}
+
+\subsubsection{Break:}
+\begin{lstlisting}[language=bash]
+$ cat pat.sh
+for i in {1..5}; do
+  for j in {1..5}; do
+    if [[ "$j" -eq 3 ]]; then
+      break;
+    fi
+    echo -n $j
+  done
+  echo
+done
+$ bash pat.sh
+12
+12
+12
+12
+12
+\end{lstlisting}
+
+\subsubsection{Continue:}
+\begin{lstlisting}[language=bash]
+$ cat pat.sh
+for i in {1..5}; do
+  for j in {1..5}; do
+    if [[ "$j" -eq 3 ]]; then
+      continue;
+    fi
+    echo -n $j
+  done
+  echo
+done
+$ bash pat.sh
+1245
+1245
+1245
+1245
+1245
+\end{lstlisting}
+
+Unlike most languages, the \lstinline{break} and \lstinline{continue} keywords in bash also takes an optional argument.
+This argument is the number of loops to break or continue.
+If we change the \lstinline{break} keyword to \lstinline{break 2}, it will break out of the outer loop, and not just the inner loop.
+
+\begin{lstlisting}[language=bash]
+$ cat pat.sh
+for i in {1..5}; do
+  for j in {1..5}; do
+    if [[ "$j" -eq 3 ]]; then
+      break 2;
+    fi
+    echo -n $j
+  done
+  echo
+done
+$ bash pat.sh
+12
+\end{lstlisting}
+
+The same works for the \lstinline{continue} keyword as well.
+
+\begin{lstlisting}[language=bash]
+$ cat pat.sh
+for i in {1..5}; do
+  for j in {1..5}; do
+    if [[ "$j" -eq 3 ]]; then
+      continue 2;
+    fi
+    echo -n $j
+  done
+  echo
+done
+$ bash pat.sh
+1212121212
+\end{lstlisting}
+
+\section{Functions}
+
+If the script is too long, it is usually better to split the script into multiple concise functions that does only one task.
+
+There are three ways to define a function in bash:
+
+\textbf{Without the function keyword:}
+
+\begin{lstlisting}[language=bash]
+abc(){
+  commands
+}
+\end{lstlisting}
+
+\textbf{function keyword with brackets}
+
+\begin{lstlisting}[language=bash]
+function abc(){
+  commands
+}
+\end{lstlisting}
+
+\textbf{function keyword without brackets}
+
+\begin{lstlisting}[language=bash]
+function abc {
+  commands
+}
+\end{lstlisting}
+
+\textbf{Example:}
+
+\begin{lstlisting}[language=bash]
+$ cat functions.sh
+sayhi(){
+    echo "Hello, $1"
+}
+
+sayhi "John"
+$ bash functions.sh
+Hello, John
+\end{lstlisting}
+
+\subsubsection{Arguments in Functions}
+
+Just like we can use \lstinline|$1| inside a script to refer to the first argument, we can use \lstinline|$1| inside a function to refer to the first argument passed to the function.
+
+The arguments passed to the script are not available inside the function, instead the arguments passed to the function are available inside the function.
+
+\begin{lstlisting}[language=bash]
+$ cat fun.sh
+fun(){
+  echo $1 $2
+}
+echo "Full name:" $1 $2
+fun "Hello" "$1"
+$ bash fun.sh John Appleseed
+Full name: John Appleseed
+Hello John
+\end{lstlisting}
+
+\subsubsection{Return value of a function}
+
+Functions in bash do not return a value, rather they exit with a status code.
+However, functions can print the value to the standard output, and the caller can capture the output of the function using command substitution.
+
+\marginnote{
+  In this example, we are creating a simple calculator script that takes two operands and an operator, and returns the result. The operator selection is done using a select loop, and the operands are read using \lstinline|read|.
+  We have modularized the script by creating two functions, \lstinline|add| and \lstinline|mul|, that takes two operands and returns the result.
+}
+\begin{lstlisting}[language=bash]
+$ cat calc.sh
+add(){
+  echo $(($1 + $2))
+}
+
+mul(){
+  echo $(($1 * $2))
+}
+
+select operator in plus multiply ; do
+  read -p "Operand 1: " op1
+  read -p "Operand 2: " op2
+  case "$operator" in
+    plus) answer=$(add $op1 $op2) ;;
+    multiply) answer=$(mul $op1 $op2) ;;
+    *) echo "Invalid option" ;;
+  esac
+  echo "Answer is $answer"
+done
+$ bash calc.sh
+1) plus
+2) multiply
+#? 1
+Operand 1: 5
+Operand 2: 4
+Answer is 9
+#? 2
+Operand 1: 6
+Operand 2: 3
+Answer is 18
+#?
+\end{lstlisting}
+
+However, sometimes we may want to return from a function as a means to exit the function early. We may also want to signal the success or failure of the function.
+Both of these can be done using the \lstinline|return| shell built-in.
+
+\marginnote{
+  In this example, we have created a function that prints the numbers from 0 to the number passed to the function, but if the number passed is negative, the function returns early with a status code of 1. If the number if greater than $9$, it only prints till $9$, and then returns.
+}
+\begin{lstlisting}[language=bash]
+$ cat return.sh
+fun(){
+  if [[ $1 -lt 0 ]]; then
+    return 1
+  fi
+  local i=0
+  while [[ $i -lt $1 ]]; do
+    if [[ $i -gt 9 ]]; then
+      echo
+      return
+    fi
+    echo -n $i
+    ((i++))
+  done
+  echo
+}
+
+fun 5
+echo return value: $?
+fun 15
+echo return value: $?
+fun -5
+echo return value: $?
+$ bash return.sh
+01234
+return value: 0
+0123456789
+return value: 0
+return value: 1
+\end{lstlisting}
+
+\begin{remark}
+  If no value is provided to the \lstinline|return| command, it returns the exit status of the last command executed in the function.
+\end{remark}
+
+\subsubsection{Local variables in functions}
+
+By default, all variables in bash are global, and are available throughout the script.
+Even variables defined inside a function are global, and are available outside the function.
+This might cause confusion, as the variable might be modified by the function, and the modification might affect the rest of the script.
+
+To make a variable local to a function, we can use the \lstinline|local| keyword.
+
+\begin{lstlisting}[language=bash]
+$ cat local.sh
+fun(){
+  a=5
+  local b=10
+}
+
+fun
+echo "A is $a"
+echo "B is $b"
+$ bash local.sh
+A is 5
+B is
+\end{lstlisting}
+
+\marginnote{
+  If a variable is declared using the \lstinline|declare| keyword, it is global if defined outside a function and local if defined inside a function.
+}
+As it is seen in the example, the variable \lstinline|a| is available outside the function, but the variable \lstinline|b| is not available outside the function since it is defined using the \lstinline|local| shell built-in.
+
+\section{Debugging}
+
+Sometimes, especially when writing and debugging scripts, we may want to print out each line that the interpreter is executing, so that we can trace the control flow and find out any logical errors.
+
+This can be done by setting the \lstinline|x| flag of \lstinline|bash| using \lstinline|set -x|.
+
+\begin{lstlisting}[language=bash]
+$ cat debug.sh
+fun(){
+  echo $(($1 + $2))
+}
+
+fun $(fun $(fun 1 2) 3) 4
+$ bash debug.sh
+10
+\end{lstlisting}
+
+In the above script, we are calling the \lstinline|fun| function multiple times, and it is difficult to trace the control flow.
+
+To trace the control flow, we can set the \lstinline|x| flag using the \lstinline|set| command.
+
+\begin{lstlisting}[language=bash]
+$ cat debug.sh
+set -x
+fun(){
+  echo $(($1 + $2))
+}
+
+fun $(fun $(fun 1 2) 3) 4
+$ bash debug.sh
++++ fun 1 2
++++ echo 3
+++ fun 3 3
+++ echo 6
++ fun 6 4
++ echo 10
+10
+\end{lstlisting}
+
+Now we can see the control flow of the script, and we can trace the execution of the script.
+The \lstinline|+| is the \lstinline|PS4| prompt, which denotes that the line printed is a trace line and not real output of the script.
+
+\begin{remark}
+  The trace output of a script is printed to the standard error stream, so that it does not interfere with the standard output of the script.
+\end{remark}
+
+The \lstinline|PS4| prompt is repeated for each level of the function call, and is incremented by one for each level.
+This helps us visualize the call stack and order of execution of the script.
+
+\section{Recursion}
+
+Just like other programming languages, bash also supports recursion.
+However, since functions in bash do not return a value, it becomes terse to use recursion in bash by using command substitutions.
+
+\begin{lstlisting}[language=bash]
+fibo(){
+  if [[ $1 -le 2 ]]; then
+    echo 1
+  else
+    echo $(($(fibo $(($1-1))) + $(fibo $(($1-2)))))
+  fi
+}
+
+for i in {1..10}; do
+  fibo $i
+done
+\end{lstlisting}
+
+In the above example, we are calculating the first ten elements of the fibonacci series using recursion.
+We need to use \textbf{command substitution} to capture the output of the function, and then use \textbf{mathematical evaluation} environment to add the two values.
+
+However, most recursive solutions, including this one, are not efficient, and are not recommended for use in bash as they will be very slow.
+If we time the function with a argument of $20$, we see it takes a lot of time.
+
+\begin{lstlisting}[language=bash]
+$ time fibo 20
+6765
+
+real    0m13.640s
+user    0m10.010s
+sys     0m3.187s
+\end{lstlisting}
+
+An iterative solution would be much faster and efficient.
+
+\begin{lstlisting}[language=bash]
+$ cat fibo.sh
+fibo(){
+  declare -i a=0
+  declare -i b=1
+  for (( i=1; i<=$1; i++ )); do
+    declare -i c=$a+$b
+    a=$b
+    b=$c
+  done
+  echo $a
+}
+
+time fibo 40
+$ bash fibo.sh
+102334155
+
+real	0m0.001s
+user	0m0.001s
+sys	0m0.000s
+\end{lstlisting}
+
+The iterative solution is much faster and efficient than the recursive solution.
+
+\section{Shell Arithmetic}
+
+We have already seen the mathematical evaluation environment in bash, which is used to evaluate mathematical expressions.
+
+\begin{lstlisting}[language=bash]
+$ echo $((1 + 2))
+3
+\end{lstlisting}
+
+However, the mathematical evaluation environment is limited to integer arithmetic, and does not support floating point arithmetic.
+
+\subsection{bc}
+
+A more powerful way to do arithmetic in bash is to use the \lstinline|bc| command.
+
+\begin{definition}[BC]
+  \lstinline|bc| is an arbitrary precision calculator language, and is used to do floating point arithmetic in bash.
+\end{definition}
+
+\begin{lstlisting}[language=bash]
+$ bc <<< "1.5 + 2.5"
+4.0
+\end{lstlisting}
+
+However, \lstinline|bc| by default will set the scale to 0, and will truncate the result to an integer.
+
+\begin{lstlisting}[language=bash]
+$ bc <<< "10/3"
+3
+\end{lstlisting}
+
+This can be changed by setting the \lstinline|scale| variable in \lstinline|bc|.
+
+\begin{lstlisting}[language=bash]
+$ bc <<< "scale=3; 10/3"
+3.333
+\end{lstlisting}
+
+We can also use the \lstinline|-l| flag to load the math library in \lstinline|bc|,
+which provides more mathematical functions and also sets the scale to 20.
+
+\begin{lstlisting}[language=bash]
+$ bc -l <<< "10/3"
+3.33333333333333333333
+\end{lstlisting}
+
+\lstinline|bc| can also be started in an interactive mode, which is a REPL.
+\sidenote{
+  \textbf{REPL} - \textbf{R}ead, \textbf{E}valuate, \textbf{P}rint, \textbf{L}oop
+  is an interactive interpreter of a language.
+}
+
+\lstinline|bc| is not just a calculator, rather it is a full fledged programming language, and can be used to write scripts.
+
+\marginnote{
+  \lstinline|bc| supports all the basic arithmetic operations, and also supports the \lstinline|if| statement, \lstinline|for| loop, and \lstinline|while| loop and other programming constructs.
+  It is similar to C in syntax, and is a powerful language.
+}
+\begin{lstlisting}[language=bash]
+$ cat factorial.bc
+define factorial(n) {
+  if(n==1){
+    return 1;
+  }
+  return factorial(n-1) * n;
+}
+$ bc factorial.bc <<< "factorial(5)"
+120
+\end{lstlisting}
+
+Read the man page of \lstinline|bc| to know more about the language.
+
+\begin{lstlisting}[language=bash]
+$ man bc
+\end{lstlisting}
+
+\subsection{expr}
+
+\begin{definition}[EXPR]
+  \lstinline|expr| is a command line utility that is used to evaluate expressions.
+\end{definition}
+
+As \lstinline|expr| is a command line utility, it is not able to access the shell variables directly, rather we need to use the \lstinline|$| symbol to expand the variable with the value before passing the arguments to \lstinline|expr|.
+
+\begin{lstlisting}[language=bash]
+$ expr 1 + 2
+3
+\end{lstlisting}
+
+The spaces around the operator are necessary, as \lstinline|expr| is a command line utility, and the shell will split the input by spaces.
+
+The operand needs to be escaped or quoted if it has a special meaning in the shell.
+
+\marginnote{
+  The \lstinline|*| symbol is a special character in the shell, and is used for path expansion. If the folder is empty, then it remains as \lstinline|*|, but if the directory has files, then \lstinline|*| will expand to the  sorted list of all the files. In this example we show this by creating a file with the name as \lstinline|+|, thus $10 * 3$ actually expands to $10 + 3$ and gives the output of $13$.
+}
+\begin{lstlisting}[language=bash]
+$ expr 10 \* 3
+30
+$ expr 10 '*' 3
+30
+$ ls
+$ expr 10 * 3
+30
+$ touch '+'
+$ expr 10 * 3
+13
+\end{lstlisting}
+
+Like the mathematical environment, \lstinline|expr| exits a zero exit code if the expression evaluates to a non-zero value, and exits with a non-zero exit code if the expression evaluates to zero.
+
+This inversion is useful in \lstinline|if| and \lstinline|while| loops.
+
+\begin{lstlisting}[language=bash]
+$ expr 5 '>' 6
+0
+$ echo $?
+1
+$ expr 5 '<' 6
+1
+$ echo $?
+0
+\end{lstlisting}
+
+\lstinline|expr| can also be used to match regex patterns.
+Unlike most other commands, the regex pattern is always anchored to the start of the string.
+
+\marginnote{
+  As seen, the regex pattern is always anchored to the start of the string. The matching is done greedily, and the maximum possible match is taken.
+  \lstinline|expr| prints the length of the match, and not the match itself.
+}
+\begin{lstlisting}[language=bash]
+$ expr hello : h
+1
+$ expr hello : e
+0
+$ expr hello : .*e
+2
+$ expr hello : .*l
+4
+\end{lstlisting}
+
+However, if we want to actually print the match instead of the length, we can
+enclose the regex pattern in escaped parentheses.
+
+\begin{lstlisting}[language=bash]
+$ expr hello : '\(.*l\)'
+hell
+\end{lstlisting}
+
+Other string operations that \lstinline|expr| supports are:
+
+\begin{itemize}
+  \item \lstinline|length| - Returns the length of the string.
+  \item \lstinline|index| - Returns the index of the first occurrence of the substring.
+  \item \lstinline|substr| - Returns the substring of the string.
+\end{itemize}
+
+\begin{lstlisting}[language=bash]
+$ expr length hello
+5
+\end{lstlisting}
+
+\begin{lstlisting}[language=bash]
+$ expr index hello e
+2
+\end{lstlisting}
+
+\begin{lstlisting}[language=bash]
+$ expr substr hello 2 3
+ell
+\end{lstlisting}
+
+The index is 1 based in \lstinline|expr|, and not 0 based.
+For the \lstinline|substr| command, the first argument is the string, the second argument is the starting index, and the third argument is the length of the substring.
+
+\section{Running arbritary commands using source, eval and exec}
+
+Just like we can use the \lstinline|source| command to run a script file in the current shell itself, we can also run any arbritary command directly using \lstinline|eval| without needing a file.
+
+\begin{lstlisting}[language=bash]
+$ eval date
+Wed Jul 31 11:00:42 PM IST 2024
+$ cat script.sh
+echo "Hello"
+$ source script.sh
+Hello
+$ eval ./script.sh
+Hello
+\end{lstlisting}
+
+As it can run any command, it can also run a script file. But the \lstinline|source| command cannot run a command without a file.
+However, this can be circumvented by using the \lstinline|/dev/stdin| file.
+
+\begin{lstlisting}[language=bash]
+$ source /dev/stdin <<< "echo Hello"
+Hello
+\end{lstlisting}
+
+\begin{warn}
+  We should be careful when using the \lstinline|eval| command, as it can run any arbritary command in the current shell, and can be a security risk.
+\end{warn}
+
+\subsection{exec}
+
+Similar to the \lstinline|eval| command, the \lstinline|exec| command can also be used to run arbritary commands in the same environment without creating a new environment.
+However, the shell gets replaced by the command being run, and when the command exits, the terminal closes. If the command fails to run then the shell is preserved.
+
+\begin{exercise}
+  Open a new terminal and run the command \lstinline|exec sleep 2|.
+  Observe that the terminal closes after 2 seconds.
+\end{exercise}
+
+
+\section{Getopts}
+
+Getopts is a built-in command in bash that is used to parse command line arguments.
+It is a syntactical sugar that helps us parse command line arguments easily.
+
+  The first argument to the \lstinline|getopts| command is the string that contains the options that the script accepts.
+  The second argument is the name of the variable that will store the option that is parsed\dots
+  \lstinline|getopts| reads each argument passed to the script one by one, and stores the option in the variable, and the argument to the option in the \lstinline|$OPTARG| variable.
+  It needs to be executed as many times as the number of options passed to the script.
+  As this number is often unknown, it is usually executed in a \lstinline|while| loop, since the \lstinline|getopts| command returns a non-zero exit code once all the passed options are checked.
+
+\begin{lstlisting}[language=bash]
+$ cat optarg.sh
+while getopts ":a:bc:" flag; do
+    echo "flag -$flag, Argument $OPTARG";
+done
+$ bash optarg.sh -a 1 -b -c 2
+flag -a, Argument 1
+flag -b, Argument
+flag -c, Argument 2
+\end{lstlisting}
+
+The colon after the option denotes that the option requires an additional argument.
+The colon at the start of the string denotes that the script should not print an error message if an invalid option is passed.
+
+\textbf{Without the leading colon:}
+\begin{lstlisting}[language=bash]
+$ cat optarg.sh
+while getopts "a:" flag; do
+    echo "flag -$flag, Argument $OPTARG";
+done
+$ bash optarg.sh -a 1 -b
+flag -a, Argument 1
+optarg: illegal option -- b
+flag -?, Argument
+$ bash optarg.sh -a
+optarg: option requires an argument -- a
+flag -?, Argument
+\end{lstlisting}
+
+\textbf{With the leading colon:}
+\begin{lstlisting}[language=bash]
+$ cat optarg.sh
+while getopts ":a:" flag; do
+    echo "flag -$flag, Argument $OPTARG";
+done
+$ bash optarg.sh -a 1 -b
+flag -a, Argument 1
+flag -?, Argument b
+$ bash optarg.sh -a
+flag -:, Argument a
+\end{lstlisting}
+
+If the option is not passed, the \lstinline|$OPTARG| variable is set to the option itself, and the \lstinline|flag| variable is set to \lstinline|:|.
+
+If an illegal option is passed, the \lstinline|flag| variable is set to \lstinline|?|, and the \lstinline|$OPTARG| variable is set to the illegal option.
+
+These let the user print a custom error message if an illegal option is passed or if an option that requires an argument is passed without an argument.
+
+\subsection{With case statement}
+
+Usually the \lstinline|getopts| command is used with a \lstinline|case| statement to execute the code for each option.
+
+\begin{lstlisting}[language=bash]
+$ cat optarg.sh
+time="Day"
+while getopts ":n:mae" opt; do
+  case $opt in
+    n) name=$OPTARG ;;
+    m) time="Morning" ;;
+    a) time="Afternoon" ;;
+    e) time="Evening" ;;
+    \?) echo "Invalid option: $OPTARG" >&2 ;;
+  esac
+done
+echo -n "Good $time"
+if [ -n "$name" ]; then
+  echo ", $name!"
+else
+  echo "!"
+fi
+$ bash optarg
+Good Day!
+$ bash optarg -a
+Good Afternoon!
+$ bash optarg -e
+Good Evening!
+$ bash optarg -m
+Good Morning!
+$ bash optarg -an Sayan
+Good Afternoon, Sayan!
+$ bash optarg -mn Sayan
+Good Morning, Sayan!
+$ bash optarg -en Sayan
+Good Evening, Sayan!
+$ bash optarg -n Sayan
+Good Day, Sayan!
+$ bash optarg -n Sayan -a
+Good Afternoon, Sayan!
+\end{lstlisting}
+
+The error printing can also be supressed by setting the \lstinline|OPTERR| shell variable to $0$.
+
+\section{Profile and RC files}
+
+There are two kinds of bash environments:
+
+\begin{itemize}
+  \item \textbf{Login shell} - A login shell is a shell that is started after a user logs in. It is used to set up the environment for the user.
+  \item \textbf{Non-login shell} - A non-login shell is a shell that is started after the user logs in, and is used to run commands.
+\end{itemize}
+
+When a non-login shell is started, it reads the \lstinline|~/.bashrc| file, and the \lstinline|/etc/bash.bashrc| file.
+\sidenote{
+  The \textbf{rc} in \textbf{bashrc} stands for \textbf{run command}.
+  This is a common naming convention in Unix-like systems, where the configuration files are named with the extension \textbf{rc}.
+}
+
+When a login shell is started, along with the \textbf{run command} files, it reads the \lstinline|/etc/profile| file, and then reads the \lstinline|~/.bash_profile| and \lstinline|~/.profile| file.
+
+We make most of the configuration changes in the \lstinline|~/.bashrc| file, as it is read by both login and non-login shells, and is the most common configuration file.
+Make sure to backup the \lstinline|~/.bashrc| file before making any changes, as a misconfiguration can cause the shell to not start.
+
+\newpage
+\section{Summary}
+
+In this chapter, we learned about the control flow constructs in bash, and how to use them to author scripts to automate your work.
+
+\begin{table*}[h!]
+  \caption{Summary of the bash constructs}
+  \labtab{bash-constructs}
+  \begin{tabular}{ll}
+    \toprule
+    \textbf{Construct} & \textbf{Description} \\
+    \midrule
+    \lstinline|if| & Used to execute a block of code based on a condition. \\
+    \lstinline|case| & Used to execute a block of code based on a pattern. \\
+    \lstinline|for| & Used to iterate over a list of elements. \\
+    \lstinline|while| & Used to execute a block of code as long as a condition is true. \\
+    \lstinline|until| & Used to execute a block of code as long as a condition is false. \\
+    \lstinline|break| & Used to exit the loop immediately. \\
+    \lstinline|continue| & Used to skip the rest of the code in the loop and go to the next iteration. \\
+    \lstinline|read| & Used to read input from the user. \\
+    \lstinline|unset| & Used to unset a variable. \\
+    \lstinline|local| & Used to declare a variable as local to a function. \\
+    \lstinline|return| & Used to return from a function. \\
+    \lstinline|source| & Used to run a script file in the current shell. \\
+    \lstinline|eval| & Used to run arbritary commands in the current shell. \\
+    \lstinline|exec| & Used to run arbritary commands in the current shell. \\
+    \lstinline|getopts| & Used to parse command line arguments. \\
+    \bottomrule
+  \end{tabular}
+\end{table*}
