@@ -1,4 +1,4 @@
-\setchapterpreamble[u]{\margintoc}
+% \setchapterpreamble[u]{\margintoc}
 \chapter{Essentials of Linux}
 \labch{basic}
 
@@ -190,30 +190,30 @@ Some popular terminal emulators are:
 In most terminal emulators, there are some basic shortcuts that can be used to make the terminal experience more efficient.
 Some of the basic shortcuts are listed in \vreftab{basic-shortcuts}.
 
-\begin{table}[h!]
+\begin{table*}[h!]
 \caption{Basic Shortcuts in Terminal}
 \labtab{basic-shortcuts}
 \begin{tabular}{ c l }
   \toprule
  Shortcut & Description \\
  \midrule
-  \texttt{Ctrl + C} & Terminate the current process\\
-  \texttt{Ctrl + D} & Exit the shell \\
-  \texttt{Ctrl + L} & Clear the terminal screen \\
-  \texttt{Ctrl + A} & Move the cursor to the beginning of the line \\
-  \texttt{Ctrl + E} & Move the cursor to the end of the line \\
-  \texttt{Ctrl + U} & Delete from the cursor to the beginning of the line \\
-  \texttt{Ctrl + K} & Delete from the cursor to the end of the line \\
-  \texttt{Ctrl + W} & Delete the word before the cursor \\
-  \texttt{Ctrl + Y} & Paste the last deleted text \\
-  \texttt{Ctrl + R} & Search the command history \\
-  \texttt{Ctrl + Z} & Suspend the current process \\
-  \texttt{Ctrl + \textbackslash} & Terminate the current process \\
-  \texttt{Ctrl + S} & Pause the terminal output \\
-  \texttt{Ctrl + Q} & Resume the terminal output \\
+  \lstinline|Ctrl + C| & Terminate the current process\\
+  \lstinline|Ctrl + D| & Exit the shell \\
+  \lstinline|Ctrl + L| & Clear the terminal screen \\
+  \lstinline|Ctrl + A| & Move the cursor to the beginning of the line \\
+  \lstinline|Ctrl + E| & Move the cursor to the end of the line \\
+  \lstinline|Ctrl + U| & Delete from the cursor to the beginning of the line \\
+  \lstinline|Ctrl + K| & Delete from the cursor to the end of the line \\
+  \lstinline|Ctrl + W| & Delete the word before the cursor \\
+  \lstinline|Ctrl + Y| & Paste the last deleted text \\
+  \lstinline|Ctrl + R| & Search the command history \\
+  \lstinline|Ctrl + Z| & Suspend the current process \\
+  \lstinline|Ctrl + \\| & Terminate the current process \\
+  \lstinline|Ctrl + S| & Pause the terminal output \\
+  \lstinline|Ctrl + Q| & Resume the terminal output \\
   \bottomrule
 \end{tabular}
-\end{table}
+\end{table*}
 
 
 \subsection{Why the Command Line?}
@@ -240,7 +240,7 @@ In this course we will be learning how to use the CLI to navigate the file syste
 
 \subsection{Command Prompt}
 
-The command prompt is the text that is displayed in the terminal to indicate that the shell is ready to accept commands. It usually ends with a \texttt{\$} or a \texttt{\#} symbol. The \texttt{\$} symbol indicates that the shell is running as a normal user, and the \texttt{\#} symbol indicates that the shell is running as the root user. The root user has complete control over the system and can perform any operation on the system.
+The command prompt is the text that is displayed in the terminal to indicate that the shell is ready to accept commands. It usually ends with a \lstinline|$| or a \lstinline|#| symbol. The \lstinline|$| symbol indicates that the shell is running as a normal user, and the \lstinline|#| symbol indicates that the shell is running as the root user. The root user has complete control over the system and can perform any operation on the system.
 
 An example of a command prompt is:
 
@@ -248,13 +248,12 @@ An example of a command prompt is:
   username@hostname:~$
 \end{lstlisting}
 
-Here, \texttt{username} is the name of the user, \texttt{hostname} is the name of the computer, and \texttt{\$} indicates that the shell is running as a normal user.
-The $\sim$ symbol indicates that the current working directory is the user's home directory.
-\sidenote{
-  The home directory is the directory where the user's files and settings are stored.
-  It is usually located at \texttt{/home/username}.
-  This can be shorted to \texttt{\textasciitilde} in the shell.
-} This prompt can be changed and customized according to the user's preferences using the \texttt{PS1} variable discussed in \refch{variables}.
+Here, \lstinline|username| is the name of the user, \lstinline|hostname| is the name of the computer, and \lstinline|$| indicates that the shell is running as a normal user.
+The \lstinline|~| symbol indicates that the current working directory is the user's home directory.
+The home directory is the directory where the user's files and settings are stored.
+It is usually located at \lstinline|/home/username|.
+This can be shorted to \lstinline|~| in the shell.
+This prompt can be changed and customized according to the user's preferences using the \lstinline|PS1| variable discussed in \refch{variables}.
 
 \vfill
 \pagebreak
@@ -282,60 +281,60 @@ Although the commands are simple, they are powerful and can be combined to perfo
 
 Some basic commands in the core-utils are listed in \vreftab{basic-commands}.
 
-\begin{table}[h!]
+\begin{table*}[h!]
 \caption{Basic Commands in GNU Core Utils}
 \labtab{basic-commands}
 \begin{tabular}{ c l }
   \toprule
  Command & Description \\
  \midrule
-  \texttt{ls} & List the contents of a directory \\
-  \texttt{cd} & Change the current working directory \\
-  \texttt{pwd} & Print the current working directory \\
-  \texttt{mkdir} & Create a new directory \\
-  \texttt{rmdir} & Remove a directory \\
-  \texttt{touch} & Create a new file \\
-  \texttt{rm} & Remove a file \\
-  \texttt{cp} & Copy a file \\
-  \texttt{mv} & Move a file \\
-  \texttt{echo} & Print a message \\
-  \texttt{cat} & Concatenate and display the contents of a file \\
-  \texttt{less} & Display the contents of a file one page at a time \\
-  \texttt{head} & Display the first few lines of a file \\
-  \texttt{tail} & Display the last few lines of a file \\
-  \texttt{find} & Find files and directories \\
-  \texttt{locate} & Find files and directories \\
-  \texttt{which} & Find the location of a command \\
-  \texttt{uname} & Print system information \\
-  \texttt{ps} & Display information about running processes \\
-  \texttt{kill} & Terminate a process \\
-  \texttt{chmod} & Change the permissions of a file \\
-  \texttt{chown} & Change the owner of a file \\
-  \texttt{chgrp} & Change the group of a file \\
-  \texttt{date} & Print the current date and time \\
-  \texttt{cal}, \texttt{ncal} & Print a calendar \\
-  \texttt{df} & Display disk space usage \\
-  \texttt{du} & Display disk usage \\
-  \texttt{free} & Display memory usage \\
-  \texttt{top} & Display system information \\
-  \texttt{history} & Display the command history \\
-  \texttt{sleep} & Pause the shell for a specified time \\
-  \texttt{true} & Do nothing, successfully \\
-  \texttt{false} & Do nothing, unsuccessfully \\
-  \texttt{tee} & Read from stdin and write to stdout and files \\
-  \texttt{whoami} & Print the current user \\
-  \texttt{groups} & Print the groups the user belongs to \\
-  \texttt{clear} & Clear the terminal screen \\
-  \texttt{exit} & Exit the shell \\
+  \lstinline|ls| & List the contents of a directory \\
+  \lstinline|cd| & Change the current working directory \\
+  \lstinline|pwd| & Print the current working directory \\
+  \lstinline|mkdir| & Create a new directory \\
+  \lstinline|rmdir| & Remove a directory \\
+  \lstinline|touch| & Create a new file \\
+  \lstinline|rm| & Remove a file \\
+  \lstinline|cp| & Copy a file \\
+  \lstinline|mv| & Move a file \\
+  \lstinline|echo| & Print a message \\
+  \lstinline|cat| & Concatenate and display the contents of a file \\
+  \lstinline|less| & Display the contents of a file one page at a time \\
+  \lstinline|head| & Display the first few lines of a file \\
+  \lstinline|tail| & Display the last few lines of a file \\
+  \lstinline|find| & Find files and directories \\
+  \lstinline|locate| & Find files and directories \\
+  \lstinline|which| & Find the location of a command \\
+  \lstinline|uname| & Print system information \\
+  \lstinline|ps| & Display information about running processes \\
+  \lstinline|kill| & Terminate a process \\
+  \lstinline|chmod| & Change the permissions of a file \\
+  \lstinline|chown| & Change the owner of a file \\
+  \lstinline|chgrp| & Change the group of a file \\
+  \lstinline|date| & Print the current date and time \\
+  \lstinline|cal|, \lstinline|ncal| & Print a calendar \\
+  \lstinline|df| & Display disk space usage \\
+  \lstinline|du| & Display disk usage \\
+  \lstinline|free| & Display memory usage \\
+  \lstinline|top| & Display system information \\
+  \lstinline|history| & Display the command history \\
+  \lstinline|sleep| & Pause the shell for a specified time \\
+  \lstinline|true| & Do nothing, successfully \\
+  \lstinline|false| & Do nothing, unsuccessfully \\
+  \lstinline|tee| & Read from stdin and write to stdout and files \\
+  \lstinline|whoami| & Print the current user \\
+  \lstinline|groups| & Print the groups the user belongs to \\
+  \lstinline|clear| & Clear the terminal screen \\
+  \lstinline|exit| & Exit the shell \\
   \bottomrule
 \end{tabular}
-\end{table}
+\end{table*}
 
 \subsection{File System Navigation}
 
 \textbf{pwd}:
 
-The \texttt{pwd} command prints the current working directory. The current working directory is the directory that the shell is currently in. The shell starts in the user's home directory when it is opened. The \texttt{pwd} command prints the full path of the current working directory.
+The \lstinline|pwd| command prints the current working directory. The current working directory is the directory that the shell is currently in. The shell starts in the user's home directory when it is opened. The \lstinline|pwd| command prints the full path of the current working directory.
 
 \begin{lstlisting}[language=bash]
   $ pwd
@@ -344,7 +343,7 @@ The \texttt{pwd} command prints the current working directory. The current worki
 
 \textbf{ls}:
 
-The \texttt{ls} command lists the contents of a directory. By default, it lists the contents of the current working directory. The \texttt{ls} command can take arguments to list the contents of a different directory.
+The \lstinline|ls| command lists the contents of a directory. By default, it lists the contents of the current working directory. The \lstinline|ls| command can take arguments to list the contents of a different directory.
 
 \begin{lstlisting}[language=bash]
   $ ls
@@ -353,19 +352,19 @@ The \texttt{ls} command lists the contents of a directory. By default, it lists 
 
 We can also list hidden files
 \sidenote{
-  Hidden files are files whose names start with a dot. They are hidden by default in the \texttt{ls} command.
+  Hidden files are files whose names start with a dot. They are hidden by default in the \lstinline|ls| command.
 }
-using the \texttt{-a} flag.
+using the \lstinline|-a| flag.
 
 \begin{lstlisting}[language=bash]
   $ ls -a
   .  ..  .bashrc  Desktop  Documents  Downloads  Music  Pictures  Videos
 \end{lstlisting}
 
-Here, the \texttt{.} and \texttt{..} directories are special directories. The \texttt{.} directory is the current directory, and the \texttt{..} directory is the parent directory.
-The \texttt{.bashrc} file is a configuration file for the shell which is a hidden file.
+Here, the \lstinline|.| and \lstinline|..| directories are special directories. The \lstinline|.| directory is the current directory, and the \lstinline|..| directory is the parent directory.
+The \lstinline|.bashrc| file is a configuration file for the shell which is a hidden file.
 
-\texttt{ls} can also list the details of the files using the \texttt{-l} flag.
+\lstinline|ls| can also list the details of the files using the \lstinline|-l| flag.
 
 \begin{lstlisting}[language=bash]
   $ ls -l
@@ -380,7 +379,7 @@ The \texttt{.bashrc} file is a configuration file for the shell which is a hidde
 
 \begin{marginfigure}
 	\includegraphics{ls-l}
-	\caption[\texttt{ls -l} Output]{\texttt{ls -l} Output}
+	\caption[\lstinline|ls -l| Output]{\lstinline|ls -l| Output}
 	\labfig{ls-l}
 \end{marginfigure}
 
@@ -398,7 +397,7 @@ We can also list the inode numbers
 \sidenote{
   An inode is a data structure on a filesystem on Linux and other Unix-like operating systems that stores all the information about a file except its name and its actual data. This includes the file type, the file's owner, the file's group, the file's permissions, the file's size, the file's last modified date and time, and the file's location on the disk. The inode is the reference pointer to the data in the disk.
 }
-using the \texttt{-i} flag.
+using the \lstinline|-i| flag.
 
 \begin{lstlisting}[language=bash]
   $ ls -i
@@ -409,7 +408,7 @@ Inodes will be discussed in detail later in the course.
 
 \textbf{cd}:
 
-The \texttt{cd} command changes the current working directory. It takes the path to the directory as an argument.
+The \lstinline|cd| command changes the current working directory. It takes the path to the directory as an argument.
 
 \begin{lstlisting}[language=bash]
   $ cd Documents
@@ -417,8 +416,8 @@ The \texttt{cd} command changes the current working directory. It takes the path
   /home/username/Documents
 \end{lstlisting}
 
-The \texttt{cd} command can also take the \texttt{\textasciitilde} symbol as an argument to change to the user's home directory.
-This is the default behavior of the \texttt{cd} command when no arguments are passed.
+The \lstinline|cd| command can also take the \lstinline|~| symbol as an argument to change to the user's home directory.
+This is the default behavior of the \lstinline|cd| command when no arguments are passed.
 
 \begin{lstlisting}[language=bash]
   $ cd
@@ -426,9 +425,9 @@ This is the default behavior of the \texttt{cd} command when no arguments are pa
   /home/username
 \end{lstlisting}
 
-If we want to go back to the previous directory, we can use the \texttt{-} symbol as an argument to the \texttt{cd} command.
+If we want to go back to the previous directory, we can use the \lstinline|-| symbol as an argument to the \lstinline|cd| command.
 \sidenote{
-  This internally uses the \texttt{OLDPWD} environment variable to change the directory. More about variables will be covered later in the course.
+  This internally uses the \lstinline|OLDPWD| environment variable to change the directory. More about variables will be covered later in the course.
 }
 
 \begin{lstlisting}[language=bash]
@@ -443,13 +442,13 @@ If we want to go back to the previous directory, we can use the \texttt{-} symbo
 % --- Questions and Answers ---
 
 \begin{qs}
-  \texttt{ls} can only show files and directories in the \textbf{cwd}\sidenote{\textbf{cwd} means \textbf{Current Working Directory}}, not subdirectories.
+  \lstinline|ls| can only show files and directories in the \textbf{cwd}\sidenote{\textbf{cwd} means \textbf{Current Working Directory}}, not subdirectories.
   True or False?
 \end{qs}
 
 \begin{ans}
-  False. \texttt{ls} can show files and directories in the cwd, and also in subdirectories.
-  The \texttt{-R} flag can be used to show files and directories in subdirectories, recursively.
+  False. \lstinline|ls| can show files and directories in the cwd, and also in subdirectories.
+  The \lstinline|-R| flag can be used to show files and directories in subdirectories, recursively.
 \end{ans}
 
 
@@ -458,7 +457,7 @@ If we want to go back to the previous directory, we can use the \texttt{-} symbo
 \textbf{man}:
 
 How to remember so many flags and options for each of the commands?
-The \texttt{man} command is used to display the manual pages for a command.
+The \lstinline|man| command is used to display the manual pages for a command.
 
 \begin{definition}[Manual Pages]
   Manual pages are a type of software documentation that provides details about a command, utility, function, or file format. They are usually written in a simple and concise manner and provide information about the command's syntax, options, and usage.
@@ -468,7 +467,7 @@ The \texttt{man} command is used to display the manual pages for a command.
   $ man ls
 \end{lstlisting}
 
-This will display the manual page for the \texttt{ls} command. The manual page is divided into sections, and you can navigate through the sections using the arrow keys. Press \texttt{q} to exit the manual page.
+This will display the manual page for the \lstinline|ls| command. The manual page is divided into sections, and you can navigate through the sections using the arrow keys. Press \lstinline|q| to exit the manual page.
 
 Example manual page:
 
@@ -498,15 +497,15 @@ DESCRIPTION
 The manual page provides information about the command, its syntax, options, and usage.
 It is a good practice to refer to the manual page of a command before using it.
 
-To exit the manual page, press \texttt{q}.
+To exit the manual page, press \lstinline|q|.
 
-There are multiple sections in the manual page, \texttt{man} takes the section number as an argument to display the manual page from that section.
+There are multiple sections in the manual page, \lstinline|man| takes the section number as an argument to display the manual page from that section.
 
 \begin{lstlisting}[language=bash]
   $ man 1 ls
 \end{lstlisting}
 
-This will display the manual page for the \texttt{ls} command from section 1. The details of the sections can be seen in \vreftab{man-sections}.
+This will display the manual page for the \lstinline|ls| command from section 1. The details of the sections can be seen in \vreftab{man-sections}.
 
 \begin{table}[h!]
 \caption{Manual Page Sections}
@@ -518,7 +517,7 @@ This will display the manual page for the \texttt{ls} command from section 1. Th
   1 & User Commands \\
   2 & System Calls \\
   3 & Library Functions \\
-  4 & Special Files usually found in \texttt{/dev} \\
+  4 & Special Files usually found in \lstinline|/dev| \\
   5 & File Formats and conventions \\
   6 & Games \\
   7 & Miscellaneous \\
@@ -530,7 +529,7 @@ This will display the manual page for the \texttt{ls} command from section 1. Th
 
 Man pages only provide information about the commands and utilities that are installed on the system. They do not provide information about the shell builtins or the shell syntax. For that, you can refer to the shell's documentation or use the \textbf{help} command.
 
-Some commands also have a \texttt{-{}-{}help} flag that displays the usage and options of the command.
+Some commands also have a \lstinline|--help| flag that displays the usage and options of the command.
 
 Some commands have their own \textbf{info} pages, which are more detailed than the \textbf{man} pages.
 
@@ -540,14 +539,14 @@ To be proficient with shell commands, one needs to read the man, info, and help 
 }
 
 \begin{exercise}
-  Run \texttt{man}, \texttt{info}, and \texttt{-{}-help} on all the commands discussed in this section.
+  Run \lstinline|man|, \lstinline|info|, and \lstinline|--help| on all the commands discussed in this section.
   Note the differences in the information provided by each of them.
   Read the documentations carefully and try to understand how each command works, and the pattern in which the documentations are written.
 \end{exercise}
 
 \textbf{info}:
 
-The \texttt{info} command is used to display the info pages for a command.
+The \lstinline|info| command is used to display the info pages for a command.
 The info pages are more detailed than the \textbf{man} pages for some commands.
 It is navigable like a hypertext document.
 There are links to chapters inside the info pages that can be followed using the arrow keys and entered using the enter key.
@@ -560,43 +559,43 @@ The \vreftab{info-keys} lists some of the keys that can be used to navigate the 
   \toprule
  Key & Description \\
  \midrule
-  \texttt{h} & Display the help page \\
-  \texttt{q} & Exit the info page \\
-  \texttt{n} & Move to the next node \\
-  \texttt{p} & Move to the previous node \\
-  \texttt{u} & Move up one level \\
-  \texttt{d} & Move down one level \\
-  \texttt{l} & Move to the last node \\
-  \texttt{t} & Move to the top node \\
-  \texttt{g} & Move to a specific node \\
-  \texttt{<enter>} & Follow the link \\
-  \texttt{m} & Display the menu \\
-  \texttt{s} & Search for a string \\
-  \texttt{S} & Search for a string (case-sensitive) \\
+  \lstinline|h| & Display the help page \\
+  \lstinline|q| & Exit the info page \\
+  \lstinline|n| & Move to the next node \\
+  \lstinline|p| & Move to the previous node \\
+  \lstinline|u| & Move up one level \\
+  \lstinline|d| & Move down one level \\
+  \lstinline|l| & Move to the last node \\
+  \lstinline|t| & Move to the top node \\
+  \lstinline|g| & Move to a specific node \\
+  \lstinline|<enter>| & Follow the link \\
+  \lstinline|m| & Display the menu \\
+  \lstinline|s| & Search for a string \\
+  \lstinline|S| & Search for a string (case-sensitive) \\
   \bottomrule
 \end{tabular}
 \end{table}
 
 \textbf{help}:
 
-The \texttt{help} command is a shell builtin that displays information about the shell builtins and the shell syntax.
+The \lstinline|help| command is a shell builtin that displays information about the shell builtins and the shell syntax.
 
 \begin{lstlisting}[language=bash]
 $ help read
 \end{lstlisting}
 
-This will list the information about the \texttt{read} builtin command.
+This will list the information about the \lstinline|read| builtin command.
 
-The \texttt{help} command can also be used to display information about the shell syntax.
+The \lstinline|help| command can also be used to display information about the shell syntax.
 
 \begin{lstlisting}[language=bash]
 $ help for
 \end{lstlisting}
 
-This will list the information about the \texttt{for} loop in the shell.
+This will list the information about the \lstinline|for| loop in the shell.
 
 Help pages are not paged, and the output is displayed in the terminal.
-To page the output, one can use the \texttt{less} command.
+To page the output, one can use the \lstinline|less| command.
 
 \begin{lstlisting}[language=bash]
 $ help read | less
@@ -607,7 +606,7 @@ $ help read | less
 
 \textbf{uname}:
 
-The \texttt{uname} command prints system information.
+The \lstinline|uname| command prints system information.
 It can take flags to print specific information about the system.
 By default, it prints only the kernel name.
 
@@ -616,9 +615,9 @@ By default, it prints only the kernel name.
   Linux
 \end{lstlisting}
 
-The \texttt{-a} flag prints all the system information.
+The \lstinline|-a| flag prints all the system information.
 \sidenote{
-  Here \texttt{rex} is the hostname of the system, \texttt{6.8.2-arch2-1} is the kernel version, \texttt{x86\_64} is the architecture, and \texttt{GNU/Linux} is the operating system.
+  Here \lstinline|rex| is the hostname of the system, \lstinline|6.8.2-arch2-1| is the kernel version, \lstinline|x86_64| is the architecture, and \lstinline|GNU/Linux| is the operating system.
 }
 
 \begin{lstlisting}[language=bash]
@@ -628,7 +627,7 @@ The \texttt{-a} flag prints all the system information.
 
 \textbf{ps}:
 
-The \texttt{ps} command displays information about running processes.
+The \lstinline|ps| command displays information about running processes.
 By default, it displays information about the processes run by the current user that are running from a terminal.
 \sidenote{
   The \textbf{PID} is the process ID, the \textbf{TTY} is the terminal the process is running from, the \textbf{TIME} is the time the process has been running, and the \textbf{CMD} is the command that is running.
@@ -641,7 +640,7 @@ By default, it displays information about the processes run by the current user 
   12346 pts/0    00:00:00 ps
 \end{lstlisting}
 
-There are a lot of flags that can be passed to the \texttt{ps} command to display more information about the processes. These will be covered in \refch{procman}.
+There are a lot of flags that can be passed to the \lstinline|ps| command to display more information about the processes. These will be covered in \refch{procman}.
 
 \begin{remark}
   \textbf{ps} has three types of options:
@@ -655,7 +654,7 @@ There are a lot of flags that can be passed to the \texttt{ps} command to displa
   The GNU options are preceded by two hyphens (--).
   These are also called long options.
 
-  The same action can be performed by using different options, for example, \texttt{ps -ef} and \texttt{ps aux} are equivalent, although first is using \textbf{UNIX} options, and the latter is using \textbf{BSD} options.
+  The same action can be performed by using different options, for example, \lstinline|ps -ef| and \lstinline|ps aux| are equivalent, although first is using \textbf{UNIX} options, and the latter is using \textbf{BSD} options.
 
   Another difference in \textbf{GNU core utils} and \textbf{BSD utils} is that the \textbf{GNU} utils have long options, whereas the \textbf{BSD} utils do not.
 
@@ -665,17 +664,17 @@ There are a lot of flags that can be passed to the \texttt{ps} command to displa
 
 \textbf{kill}:
 
-The \texttt{kill} command is used to terminate a process.
+The \lstinline|kill| command is used to terminate a process.
 It takes the process ID as an argument.
 
 \begin{lstlisting}[language=bash]
   $ kill 12345
 \end{lstlisting}
 
-The \texttt{kill} command can also take the \textbf{signal} number as an argument to send a signal to the process.
-For example, the \texttt{SIGKILL} signal can be sent to the process to terminate it.
+The \lstinline|kill| command can also take the \textbf{signal} number as an argument to send a signal to the process.
+For example, the \lstinline|SIGKILL| signal can be sent to the process to terminate it.
 \sidenote{
-  The \texttt{SIGKILL} signal is used to terminate a process immediately. It cannot be caught or ignored by the process.
+  The \lstinline|SIGKILL| signal is used to terminate a process immediately. It cannot be caught or ignored by the process.
   It is numbered as 9.
 }
 
@@ -685,7 +684,7 @@ For example, the \texttt{SIGKILL} signal can be sent to the process to terminate
 
 \textbf{free}:
 
-The \texttt{free} command is used to display the amount of free and used memory in the system.
+The \lstinline|free| command is used to display the amount of free and used memory in the system.
 
 \begin{lstlisting}[language=bash]
   $ free
@@ -694,7 +693,7 @@ The \texttt{free} command is used to display the amount of free and used memory 
   Swap:       2097148           0     2097148
 \end{lstlisting}
 
-The \texttt{free} command can take the \texttt{-h} flag to display the memory in human-readable format.
+The \lstinline|free| command can take the \lstinline|-h| flag to display the memory in human-readable format.
 
 \begin{lstlisting}[language=bash]
   $ free -h
@@ -705,7 +704,7 @@ The \texttt{free} command can take the \texttt{-h} flag to display the memory in
 
 \textbf{df}:
 
-The \texttt{df} command is used to display the amount of disk space available on the filesystems.
+The \lstinline|df| command is used to display the amount of disk space available on the filesystems.
 
 \begin{lstlisting}[language=bash]
   $ df
@@ -714,7 +713,7 @@ The \texttt{df} command is used to display the amount of disk space available on
   /dev/sda2       12345678  1234567  11111111  10% /home
 \end{lstlisting}
 
-The \texttt{df} command can take the \texttt{-h} flag to display the disk space in human-readable format.
+The \lstinline|df| command can take the \lstinline|-h| flag to display the disk space in human-readable format.
 
 \begin{lstlisting}[language=bash]
   $ df -h
@@ -725,7 +724,7 @@ The \texttt{df} command can take the \texttt{-h} flag to display the disk space 
 
 \textbf{du}:
 
-The \texttt{du} command is used to display the disk usage of directories and files.
+The \lstinline|du| command is used to display the disk usage of directories and files.
 By default, it displays the disk usage of the current directory.
 
 \begin{lstlisting}[language=bash]
@@ -739,8 +738,8 @@ By default, it displays the disk usage of the current directory.
   28
 \end{lstlisting}
 
-The \texttt{du} command can take the \texttt{-h} flag to display the disk usage in human-readable format.
-The \texttt{-s} flag displays the total disk usage of the directory.
+The \lstinline|du| command can take the \lstinline|-h| flag to display the disk usage in human-readable format.
+The \lstinline|-s| flag displays the total disk usage of the directory.
 
 \begin{lstlisting}[language=bash]
   $ du -sh
@@ -754,11 +753,11 @@ The \texttt{-s} flag displays the total disk usage of the directory.
 \end{qs}
 
 \begin{ans}
-  \texttt{uname -r} will print the kernel version of your system.
-  \texttt{uname} is a command to print system information.
-  The \texttt{-r} flag is to print the kernel release.
+  \lstinline|uname -r| will print the kernel version of your system.
+  \lstinline|uname| is a command to print system information.
+  The \lstinline|-r| flag is to print the kernel release.
   There are other flags to print other system information. \\
-  We can also run \texttt{uname -a} to get all fields and extract only the
+  We can also run \lstinline|uname -a| to get all fields and extract only the
   kernel info using commands taught in later weeks.
 \end{ans}
 
@@ -768,9 +767,9 @@ The \texttt{-s} flag displays the total disk usage of the directory.
 \end{qs}
 
 \begin{ans}
-  \texttt{uptime} will show how long the system is running for.\\
-  \texttt{uptime -s} will show the time the system was booted up. \\
-  The \texttt{-s} flag is to show the time of last boot.
+  \lstinline|uptime| will show how long the system is running for.\\
+  \lstinline|uptime -s| will show the time the system was booted up. \\
+  The \lstinline|-s| flag is to show the time of last boot.
 \end{ans}
 
 \begin{qs}
@@ -780,9 +779,9 @@ The \texttt{-s} flag displays the total disk usage of the directory.
 \end{qs}
 
 \begin{ans}
-  \texttt{free} will show the amount of free memory. \\
-  \texttt{df} will show the amount of free hard disk space. \\
-  \texttt{df -h} and \texttt{free -h}
+  \lstinline|free| will show the amount of free memory. \\
+  \lstinline|df| will show the amount of free hard disk space. \\
+  \lstinline|df -h| and \lstinline|free -h|
   will convert the numbers to human readable format. \\
   MB is Megabyte, and MiB is Mebibyte. \\
   1 MB = 1000 KB, 1 GB = 1000 MB, 1 TB = 1000 GB, this is SI unit. \\
@@ -793,7 +792,7 @@ The \texttt{-s} flag displays the total disk usage of the directory.
 
 \textbf{file}:
 
-The \texttt{file} command is used to determine the type of a file.
+The \lstinline|file| command is used to determine the type of a file.
 It can take multiple file names as arguments.
 
 \begin{lstlisting}[language=bash]
@@ -806,7 +805,7 @@ It can take multiple file names as arguments.
 
 \textbf{mkdir}:
 
-The \texttt{mkdir} command is used to create new directories.
+The \lstinline|mkdir| command is used to create new directories.
 It can take multiple directory names as arguments.
 
 \begin{lstlisting}[language=bash]
@@ -816,14 +815,14 @@ It can take multiple directory names as arguments.
 \end{lstlisting}
 
 \begin{exercise}
-  Run \texttt{man ls} to find out what the \texttt{-F} flag does, and why we used it in the above example.
+  Run \lstinline|man ls| to find out what the \lstinline|-F| flag does, and why we used it in the above example.
 \end{exercise}
 
 \textbf{touch}:
 
-The \texttt{touch} command is used to create new files.
+The \lstinline|touch| command is used to create new files.
 It can take multiple file names as arguments.
-If a file is already present, the \texttt{touch} command updates the last modified date and time of the file, but does not modify the contents of the file.
+If a file is already present, the \lstinline|touch| command updates the last modified date and time of the file, but does not modify the contents of the file.
 
 \begin{lstlisting}[language=bash]
   $ touch file1 file2 file3
@@ -840,13 +839,13 @@ If a file is already present, the \texttt{touch} command updates the last modifi
 \end{lstlisting}
 
 \begin{exercise}
-  Notice the difference in the last modified date and time of the \texttt{file3} file from the other files.
-  Also notice the \texttt{sleep} command used to pause the shell for 60 seconds.
+  Notice the difference in the last modified date and time of the \lstinline|file3| file from the other files.
+  Also notice the \lstinline|sleep| command used to pause the shell for 60 seconds.
 \end{exercise}
 
 \textbf{rmdir}:
 
-The \texttt{rmdir} command is used to remove directories.
+The \lstinline|rmdir| command is used to remove directories.
 It can take multiple directory names as arguments.
 
 \begin{lstlisting}[language=bash]
@@ -857,14 +856,14 @@ It can take multiple directory names as arguments.
 \end{lstlisting}
 
 \begin{remark}
-  The \texttt{rmdir} command can only remove empty directories.
+  The \lstinline|rmdir| command can only remove empty directories.
   This is a safety feature so that users dont accidentally delete directories with files in them.
-  To remove directories with files in them along with those files, use the \texttt{rm} command.
+  To remove directories with files in them along with those files, use the \lstinline|rm| command.
 \end{remark}
 
 \textbf{rm}:
 
-The \texttt{rm} command is used to remove files and directories.
+The \lstinline|rm| command is used to remove files and directories.
 It can take multiple file and directory names as arguments.
 
 \begin{lstlisting}[language=bash]
@@ -876,7 +875,7 @@ It can take multiple file and directory names as arguments.
   file3
 \end{lstlisting}
 
-However, using \texttt{rm} to delete a directory will give an error.
+However, using \lstinline|rm| to delete a directory will give an error.
 
 \begin{lstlisting}[language=bash]
   $ mkdir a
@@ -884,25 +883,25 @@ However, using \texttt{rm} to delete a directory will give an error.
   rm: cannot remove 'a': Is a directory
 \end{lstlisting}
 
-This is because the \texttt{rm} command does not remove directories by default.
+This is because the \lstinline|rm| command does not remove directories by default.
 This is a safety feature to prevent users from accidentally deleting directories with files in them.
 
-To remove directories along with their files, use the \texttt{-r} flag.
+To remove directories along with their files, use the \lstinline|-r| flag.
 
 \begin{lstlisting}[language=bash]
   $ rm -r a
 \end{lstlisting}
 
-To force the removal of files and directories without a confirmation, use the \texttt{-f} flag.
+To force the removal of files and directories without a confirmation, use the \lstinline|-f| flag.
 
 \begin{warn}
-  The \texttt{rm} command is a dangerous command.
+  The \lstinline|rm| command is a dangerous command.
   It does not move the files to the trash, but permanently deletes them.
-  Be \textbf{extremely} careful when using the \texttt{rm} command.
-  Only use the \texttt{-f} flag if you are absolutely sure that you want to delete the files.
+  Be \textbf{extremely} careful when using the \lstinline|rm| command.
+  Only use the \lstinline|-f| flag if you are absolutely sure that you want to delete the files.
 \end{warn}
 
-To force \texttt{rm} to always ask for confirmation before deleting files, use the \texttt{-i} flag.
+To force \lstinline|rm| to always ask for confirmation before deleting files, use the \lstinline|-i| flag.
 
 \begin{lstlisting}[language=bash]
   $ rm -i file3
@@ -911,7 +910,7 @@ To force \texttt{rm} to always ask for confirmation before deleting files, use t
 
 \textbf{cp}:
 
-The \texttt{cp} command is used to copy files.
+The \lstinline|cp| command is used to copy files.
 It takes the source file and the destination file as arguments.
 
 \begin{lstlisting}[language=bash]
@@ -923,7 +922,7 @@ It takes the source file and the destination file as arguments.
   file1  file2
 \end{lstlisting}
 
-The \texttt{cp} command can also take the \texttt{-r} flag to copy directories.
+The \lstinline|cp| command can also take the \lstinline|-r| flag to copy directories.
 
 \begin{lstlisting}[language=bash]
   $ mkdir a
@@ -941,10 +940,10 @@ The \texttt{cp} command can also take the \texttt{-r} flag to copy directories.
 \end{lstlisting}
 
 \begin{exercise}
-  Why did we use the \texttt{-R} flag in the above example? What does it do?
+  Why did we use the \lstinline|-R| flag in the above example? What does it do?
 \end{exercise}
 
-There are three ways to copy files using \texttt{cp}:
+There are three ways to copy files using \lstinline|cp|:
 
 \begin{lstlisting}[language=bash]
 SYNOPSIS
@@ -954,17 +953,17 @@ SYNOPSIS
 \end{lstlisting}
 
 \begin{exercise}
-  There are three ways of running the \texttt{cp} command to copy a file.
+  There are three ways of running the \lstinline|cp| command to copy a file.
   Here we have demonstrated only one.
-  Read the manual page of the \texttt{cp} command to find out the other two ways and try them out yourself.
+  Read the manual page of the \lstinline|cp| command to find out the other two ways and try them out yourself.
 \end{exercise}
 
 \textbf{mv}:
 
-The \texttt{mv} command is used to move files.
-The syntax is similar to the \texttt{cp} command.
+The \lstinline|mv| command is used to move files.
+The syntax is similar to the \lstinline|cp| command.
 \sidenote{
-  This means that \texttt{mv} also has three ways of running it.
+  This means that \lstinline|mv| also has three ways of running it.
 }
 It is used to move files from one location to another, or to rename files.
 
@@ -978,17 +977,17 @@ It is used to move files from one location to another, or to rename files.
 \end{lstlisting}
 
 \begin{exercise}
-  Create a directory \texttt{dir1} using the \texttt{mkdir} command, then create a file \texttt{file1} inside \texttt{dir1}.
-  Now move (rename) the \texttt{dir1} directory to \texttt{dir2} using the \texttt{mv} command.
-  The newly created directory should be named \texttt{dir2} and should contain the \texttt{file1} file.
-  Were you require to use the \texttt{-r} flag with the \texttt{mv} command like you would have in \texttt{cp} command?
+  Create a directory \lstinline|dir1| using the \lstinline|mkdir| command, then create a file \lstinline|file1| inside \lstinline|dir1|.
+  Now move (rename) the \lstinline|dir1| directory to \lstinline|dir2| using the \lstinline|mv| command.
+  The newly created directory should be named \lstinline|dir2| and should contain the \lstinline|file1| file.
+  Were you require to use the \lstinline|-r| flag with the \lstinline|mv| command like you would have in \lstinline|cp| command?
 \end{exercise}
 
 \subsection{Text Processing and Pagers}
 
 \textbf{echo}:
 
-The \texttt{echo} command is used to print a message to the terminal.
+The \lstinline|echo| command is used to print a message to the terminal.
 It can take multiple arguments and print them to the terminal.
 
 \begin{lstlisting}[language=bash]
@@ -996,7 +995,7 @@ It can take multiple arguments and print them to the terminal.
   Hello, World!
 \end{lstlisting}
 
-The \texttt{echo} command can also take the \texttt{-e} flag to interpret backslash escapes.
+The \lstinline|echo| command can also take the \lstinline|-e| flag to interpret backslash escapes.
 
 \begin{lstlisting}[language=bash]
   $ echo -e "Hello, \nWorld!"
@@ -1007,24 +1006,24 @@ The \texttt{echo} command can also take the \texttt{-e} flag to interpret backsl
 Some escape characters in \textbf{echo} are listed in \vreftab{echo-escapes}.
 
 \begin{table}[h!]
-\caption{Escape Characters in \texttt{echo}}
+\caption{Escape Characters in \lstinline|echo|}
 \labtab{echo-escapes}
 \begin{tabular}{ c l }
   \toprule
  Escape & Description \\
  \midrule
-  \texttt{\textbackslash\textbackslash} & backslash \\
-  \texttt{\textbackslash a} & alert (BEL) \\
-  \texttt{\textbackslash b} & backspace \\
-  \texttt{\textbackslash c} & produce no further output \\
-  \texttt{\textbackslash e} & escape \\
-  \texttt{\textbackslash f} & form feed \\
-  \texttt{\textbackslash n} & new line \\
-  \texttt{\textbackslash r} & carriage return \\
-  \texttt{\textbackslash t} & horizontal tab \\
-  \texttt{\textbackslash v} & vertical tab \\
-  \texttt{\textbackslash 0NNN} & byte with octal value NNN (1 to 3 digits) \\
-  \texttt{\textbackslash xHH} & byte with hexadecimal value HH (1 to 2 digits) \\
+  \lstinline|\\| & backslash \\
+  \lstinline|\a| & alert (BEL) \\
+  \lstinline|\b| & backspace \\
+  \lstinline|\c| & produce no further output \\
+  \lstinline|\e| & escape \\
+  \lstinline|\f| & form feed \\
+  \lstinline|\n| & new line \\
+  \lstinline|\r| & carriage return \\
+  \lstinline|\t| & horizontal tab \\
+  \lstinline|\v| & vertical tab \\
+  \lstinline|\0NNN| & byte with octal value NNN (1 to 3 digits) \\
+  \lstinline|\xHH| & byte with hexadecimal value HH (1 to 2 digits) \\
   \bottomrule
 \end{tabular}
 \end{table}
@@ -1036,14 +1035,14 @@ Some escape characters in \textbf{echo} are listed in \vreftab{echo-escapes}.
 
 \textbf{cat}:
 
-The \texttt{cat} command is used to concatenate and display the contents of files.
+The \lstinline|cat| command is used to concatenate and display the contents of files.
 
 \begin{lstlisting}[language=bash]
   $ cat file1
   Hello, World! from file1
 \end{lstlisting}
 
-The \texttt{cat} command can take multiple files as arguments and display their contents one after another.
+The \lstinline|cat| command can take multiple files as arguments and display their contents one after another.
 
 \begin{lstlisting}[language=bash]
   $ cat file1 file2
@@ -1056,7 +1055,7 @@ The \texttt{cat} command can take multiple files as arguments and display their 
 Sometimes the contents of a file are too large to be displayed at once.
 Nowadays modern terminal emulators can scroll up and down to view the contents of the file,
 but actual \textbf{tty}s cannot do that.
-To view the contents of a file one page at a time, use the \texttt{less} command.
+To view the contents of a file one page at a time, use the \lstinline|less| command.
 \textbf{less} is a pager program that displays the contents of a file one page at a time.
 \sidenote{
   \textbf{more} is another pager program that displays the contents of a file one page at a time.
@@ -1070,16 +1069,16 @@ To view the contents of a file one page at a time, use the \texttt{less} command
   $ less file1
 \end{lstlisting}
 
-To scroll up and down, use the arrow keys, or the \texttt{j} and \texttt{k} keys.
+To scroll up and down, use the arrow keys, or the \lstinline|j| and \lstinline|k| keys.
 \sidenote{
-  Using \texttt{j} and \texttt{k} to move the cursor up and down is a common keybinding in many terminal applications.
+  Using \lstinline|j| and \lstinline|k| to move the cursor up and down is a common keybinding in many terminal applications.
   This originates from the \textit{vi} text editor which will be covered later in the course.
 }
-Press \texttt{q} to exit the \texttt{less} command.
+Press \lstinline|q| to exit the \lstinline|less| command.
 
 \textbf{head}:
 
-The \texttt{head} command is used to display the first few lines of a file.
+The \lstinline|head| command is used to display the first few lines of a file.
 By default, it displays the first 10 lines of a file.
 
 \begin{lstlisting}[language=bash]
@@ -1096,9 +1095,9 @@ By default, it displays the first 10 lines of a file.
   systemd-network:x:982:982:systemd Network Management:/:/usr/bin/nologin
 \end{lstlisting}
 
-The \texttt{head} command can take the \texttt{-n} flag to display the first \textit{n} lines of a file.
+The \lstinline|head| command can take the \lstinline|-n| flag to display the first \textit{n} lines of a file.
 \sidenote{
-  We can also directly run \texttt{ head -5 /etc/passwd } to display the first 5 lines of the file.
+  We can also directly run \lstinline| head -5 /etc/passwd | to display the first 5 lines of the file.
 }
 
 \begin{lstlisting}[language=bash]
@@ -1111,7 +1110,7 @@ The \texttt{head} command can take the \texttt{-n} flag to display the first \te
 \end{lstlisting}
 
 \begin{remark}
-  Here we are listing the file \texttt{/etc/passwd} which contains information about the users on the system.
+  Here we are listing the file \lstinline|/etc/passwd| which contains information about the users on the system.
   The file will usually be present on all Unix-like systems and have a lot of system users.
   \sidenote{
     A system user is a user that is used by the system to run services and daemons.
@@ -1122,7 +1121,7 @@ The \texttt{head} command can take the \texttt{-n} flag to display the first \te
 
 \textbf{tail}:
 
-The \texttt{tail} command is used to display the last few lines of a file.
+The \lstinline|tail| command is used to display the last few lines of a file.
 By default, it displays the last 10 lines of a file.
 
 \begin{lstlisting}[language=bash]
@@ -1137,7 +1136,7 @@ By default, it displays the last 10 lines of a file.
   saned:x:957:957:SANE daemon user:/:/usr/bin/nologin
 \end{lstlisting}
 
-The \texttt{tail} command can take the \texttt{-n} flag to display the last \textit{n} lines of a file.
+The \lstinline|tail| command can take the \lstinline|-n| flag to display the last \textit{n} lines of a file.
 
 \begin{lstlisting}[language=bash]
   $ tail -n 5 /etc/passwd
@@ -1149,14 +1148,14 @@ The \texttt{tail} command can take the \texttt{-n} flag to display the last \tex
 \end{lstlisting}
 
 \begin{exercise}
-  Notice that the UID (3rd column) of the \texttt{sayan} user is 1000.
-  The last column is \texttt{/bin/bash} instead of \texttt{/usr/bin/nologin} like others.
+  Notice that the UID (3rd column) of the \lstinline|sayan| user is 1000.
+  The last column is \lstinline|/bin/bash| instead of \lstinline|/usr/bin/nologin| like others.
   This is because it is a regular user and not a system user.
 \end{exercise}
 
 \textbf{wc}:
 
-The \texttt{wc} command is used to count the number of lines, words, and characters in a file.
+The \lstinline|wc| command is used to count the number of lines, words, and characters in a file.
 By default, it displays the number of lines, words, and characters in a file.
 
 \begin{lstlisting}[language=bash]
@@ -1164,7 +1163,7 @@ $ wc /etc/passwd
   43  103 2426 /etc/passwd
 \end{lstlisting}
 
-We can also use the \texttt{-l}, \texttt{-w}, and \texttt{-c} flags to display only the number of lines, words, and characters respectively.
+We can also use the \lstinline|-l|, \lstinline|-w|, and \lstinline|-c| flags to display only the number of lines, words, and characters respectively.
 
 \begin{lstlisting}[language=bash]
 $ wc -l /etc/passwd
@@ -1178,19 +1177,19 @@ $ wc -l /etc/passwd
 \end{qs}
 
 \begin{ans}
-  \texttt{cat file1 file2 file3} will print the contents of \texttt{file1}, \texttt{file2}, and \texttt{file3}
+  \lstinline|cat file1 file2 file3| will print the contents of \lstinline|file0|, \lstinline|file2|, and \lstinline|file3|
   in the order given. The contents of the files will be printed one after the other.
 \end{ans}
 
 \begin{qs}
-  Can \texttt{cat} also be used to write to a file?
+  Can \lstinline|cat| also be used to write to a file?
 \end{qs}
 
 \begin{ans}
-  Yes, \texttt{cat > file1} will write to \texttt{file1}. The input will be taken from the
-  terminal and written to \texttt{file1}. The input will be written to \texttt{file1} until
-  the user presses \texttt{Ctrl+D} to indicate end of input.
-  This is \texttt{redirection}, which we see in later weeks.
+  Yes, \lstinline|cat > file1| will write to \lstinline|file1|. The input will be taken from the
+  terminal and written to \lstinline|file1|. The input will be written to \lstinline|file1| until
+  the user presses \lstinline|Ctrl+D| to indicate end of input.
+  This is \lstinline|redirection|, which we see in later weeks.
 \end{ans}
 
 \begin{qs}
@@ -1199,11 +1198,11 @@ $ wc -l /etc/passwd
 \end{qs}
 
 \begin{ans}
-  \texttt{head filename} will list the first 10 lines of \texttt{filename}. \\
-  \texttt{head -n 5 filename} will list the first 5 lines of \texttt{filename}. \\
-  \texttt{tail -n 5 filename} will list the last 5 lines of \texttt{filename}. \\
-  \texttt{head -n 152 filename | tail -n 48} will list lines 105 to 152 of \texttt{filename}.
-  This uses \texttt{|} which is a pipe, which we will see in later weeks.
+  \lstinline|head filename| will list the first 10 lines of \lstinline|filename|. \\
+  \lstinline|head -n 5 filename| will list the first 5 lines of \lstinline|filename|. \\
+  \lstinline|tail -n 5 filename| will list the last 5 lines of \lstinline|filename|. \\
+  \lstinline|head -n 152 filename | tail -n 48| will list lines 105 to 152 of \lstinline|filename|.
+  This uses \lstinline||| which is a pipe, which we will see in later weeks.
 \end{ans}
 
 \begin{qs}
@@ -1212,10 +1211,10 @@ $ wc -l /etc/passwd
 \end{qs}
 
 \begin{ans}
-  \texttt{wc filename} will count the number of lines, words, and characters in \texttt{filename}. \\
-  \texttt{wc -l filename} will count the number of lines in \texttt{filename}. \\
-  \texttt{wc -w filename} will count the number of words in \texttt{filename}. \\
-  \texttt{wc -c filename} will count the number of characters in \texttt{filename}.
+  \lstinline|wc filename| will count the number of lines, words, and characters in \lstinline|filename|. \\
+  \lstinline|wc -l filename| will count the number of lines in \lstinline|filename|. \\
+  \lstinline|wc -w filename| will count the number of words in \lstinline|filename|. \\
+  \lstinline|wc -c filename| will count the number of characters in \lstinline|filename|.
 \end{ans}
 
 \begin{qs}
@@ -1223,8 +1222,8 @@ $ wc -l /etc/passwd
 \end{qs}
 
 \begin{ans}
-  \texttt{rmdir dirname} will delete an empty directory. \\
-  \texttt{rm -r dirname} will delete a non-empty directory.
+  \lstinline|rmdir dirname| will delete an empty directory. \\
+  \lstinline|rm -r dirname| will delete a non-empty directory.
 \end{ans}
 
 \begin{qs}
@@ -1233,10 +1232,10 @@ $ wc -l /etc/passwd
 \end{qs}
 
 \begin{ans}
-  \texttt{cp -r sourcefolder targetfolder} will copy an entire folder to another name. \\
-  \texttt{mv sourcefolder targetfolder} will move an entire folder to another name. \\
-  The difference in flags is because \texttt{cp} is used to copy, and \texttt{mv} is used to move or rename a file or folder.
-  The \texttt{-r} flag is to copy recursively, and is not needed for \texttt{mv} as it is not recursive
+  \lstinline|cp -r sourcefolder targetfolder| will copy an entire folder to another name. \\
+  \lstinline|mv sourcefolder targetfolder| will move an entire folder to another name. \\
+  The difference in flags is because \lstinline|cp| is used to copy, and \lstinline|mv| is used to move or rename a file or folder.
+  The \lstinline|-r| flag is to copy recursively, and is not needed for \lstinline|mv| as it is not recursive
   and simply changes the name of the folder (or the path).
 \end{ans}
 
@@ -1244,7 +1243,7 @@ $ wc -l /etc/passwd
 
 \textbf{alias}:
 
-The \texttt{alias} command is used to create an alias for a command.
+The \lstinline|alias| command is used to create an alias for a command.
 An alias is a custom name given to a command that can be used to run the command.
 \sidenote{
   Aliases are used to create shortcuts for long commands.
@@ -1263,7 +1262,7 @@ An alias is a custom name given to a command that can be used to run the command
   drwxr-xr-x 2 username group 4096 Mar  1 12:00 Videos
 \end{lstlisting}
 
-The alias \texttt{ll} is created for the \texttt{ls -l} command.
+The alias \lstinline|ll| is created for the \lstinline|ls -l| command.
 
 \begin{warn}
   Be careful when creating aliases.
@@ -1273,14 +1272,14 @@ The alias \texttt{ll} is created for the \texttt{ls -l} command.
 
 But this alias is temporary and will be lost when the shell is closed.
 To make the alias permanent, add it to the shell configuration file.
-For \textbf{bash}, this is the \texttt{.bashrc} file in the home directory.
+For \textbf{bash}, this is the \lstinline|.bashrc| file in the home directory.
 
 \begin{lstlisting}[language=bash]
   $ echo "alias ll='ls -l'" >> ~/.bashrc
 \end{lstlisting}
 
-This will add the alias to the \texttt{.bashrc} file.
-To make the changes take effect, either close the terminal and open a new one, or run the \texttt{source} command.
+This will add the alias to the \lstinline|.bashrc| file.
+To make the changes take effect, either close the terminal and open a new one, or run the \lstinline|source| command.
 
 \begin{lstlisting}[language=bash]
   $ source ~/.bashrc
@@ -1293,50 +1292,50 @@ To make the changes take effect, either close the terminal and open a new one, o
   Always keep a backup of the configuration files before editing them.
 \end{warn}
 
-We can see the aliases that are currently set using the \texttt{alias} command.
+We can see the aliases that are currently set using the \lstinline|alias| command.
 
 \begin{lstlisting}[language=bash]
   $ alias
   alias ll='ls -l'
 \end{lstlisting}
 
-We can also see what a particular alias expands to using the \texttt{alias} command with the alias name as an argument.
+We can also see what a particular alias expands to using the \lstinline|alias| command with the alias name as an argument.
 
 \begin{lstlisting}[language=bash]
   $ alias ll
   alias ll='ls -l'
 \end{lstlisting}
 
-To remove an alias, use the \texttt{unalias} command.
+To remove an alias, use the \lstinline|unalias| command.
 
 \begin{lstlisting}[language=bash]
   $ unalias ll
 \end{lstlisting}
 
 \begin{exercise}
-  Create an alias \texttt{la} for the \texttt{ls -a} command.
-  Make it permanent by adding it to the \texttt{.bashrc} file.
-  Check if the alias is set using the \texttt{alias} command.
+  Create an alias \lstinline|la| for the \lstinline|ls -a| command.
+  Make it permanent by adding it to the \lstinline|.bashrc| file.
+  Check if the alias is set using the \lstinline|alias| command.
 \end{exercise}
 
 \begin{exercise}
-  Create an alias \texttt{rm} for the \texttt{rm -i} command.
-  Make it permanent by adding it to the \texttt{.bashrc} file.
-  Check if the alias is set using the \texttt{alias} command.
-  Try to delete a file using the \texttt{rm} command.
+  Create an alias \lstinline|rm| for the \lstinline|rm -i| command.
+  Make it permanent by adding it to the \lstinline|.bashrc| file.
+  Check if the alias is set using the \lstinline|alias| command.
+  Try to delete a file using the \lstinline|rm| command.
   What happens?
 \end{exercise}
 
 \textbf{which}:
 
-The \texttt{which} command is used to show the path of the command that will be executed.
+The \lstinline|which| command is used to show the path of the command that will be executed.
 
 \begin{lstlisting}[language=bash]
 $ which ls
 /sbin/ls
 \end{lstlisting}
 
-We can also list all the paths where the command is present using the \texttt{-a} flag.
+We can also list all the paths where the command is present using the \lstinline|-a| flag.
 
 \begin{lstlisting}[language=bash]
 $ which -a ls
@@ -1346,11 +1345,11 @@ $ which -a ls
 /usr/sbin/ls
 \end{lstlisting}
 
-This means that if we delete the \texttt{/sbin/ls} file, the \texttt{/bin/ls} file will be executed when we run the \texttt{ls} command.
+This means that if we delete the \lstinline|/sbin/ls| file, the \lstinline|/bin/ls| file will be executed when we run the \lstinline|ls| command.
 
 \textbf{whatis}:
 
-The \texttt{whatis} command is used to show a short description of the command.
+The \lstinline|whatis| command is used to show a short description of the command.
 
 \begin{lstlisting}[language=bash]
 $ whatis ls
@@ -1363,7 +1362,7 @@ This short exerpt is taken from its man page itself.
 
 \textbf{whereis}:
 
-The \texttt{whereis} command is used to show the location of the command, source
+The \lstinline|whereis| command is used to show the location of the command, source
 files, and man pages.
 
 \begin{lstlisting}[language=bash]
@@ -1371,15 +1370,15 @@ $ whereis ls
 ls: /usr/bin/ls /usr/share/man/man1/ls.1.gz /usr/share/man/man1p/ls.1p.gz
 \end{lstlisting}
 
-Here we can see that the \texttt{ls} command is present in \texttt{/usr/bin/ls},
-and its man pages are present in \texttt{/usr/share/man/man1/ls.1.gz} and
-\texttt{/usr/share/man/man1p/ls.1p.gz}.
+Here we can see that the \lstinline|ls| command is present in \lstinline|/usr/bin/ls|,
+and its man pages are present in \lstinline|/usr/share/man/man1/ls.1.gz| and
+\lstinline|/usr/share/man/man1p/ls.1p.gz|.
 
 \textbf{locate}:
 
-The \texttt{locate} command is used to find files by name.
+The \lstinline|locate| command is used to find files by name.
 The file can be present anywhere in the system and if it is
-indexed by the \texttt{mlocate} database, it can be found using the \texttt{locate} command.
+indexed by the \lstinline|mlocate| database, it can be found using the \lstinline|locate| command.
 
 \begin{lstlisting}[language=bash]
 $ touch tmp/48/hellohowareyou
@@ -1389,14 +1388,14 @@ $ locate hellohowareyou
 /home/sayan/tmp/48/hellohowareyou
 \end{lstlisting}
 
-Note: you may have to run \texttt{updatedb} to update the database before using \texttt{locate}.
-This can only be run by the root user or using \texttt{sudo}.
+Note: you may have to run \lstinline|updatedb| to update the database before using \lstinline|locate|.
+This can only be run by the root user or using \lstinline|sudo|.
 
 \textbf{type}:
 
-The \texttt{type} command is used to show how the shell will interpret a command.
+The \lstinline|type| command is used to show how the shell will interpret a command.
 Usually some commands are both an executable and a shell built-in.
-The \texttt{type} command will show which one will be executed.
+The \lstinline|type| command will show which one will be executed.
 
 \begin{lstlisting}[language=bash]
 $ type ls
@@ -1405,9 +1404,9 @@ $ type cd
 cd is a shell builtin
 \end{lstlisting}
 
-This shows that the \texttt{ls} command is an executable, and the \texttt{cd} command is a shell built-in.
+This shows that the \lstinline|ls| command is an executable, and the \lstinline|cd| command is a shell built-in.
 
-We can also use the \texttt{-a} flag to show all the ways the command can be interpreted.
+We can also use the \lstinline|-a| flag to show all the ways the command can be interpreted.
 
 \begin{lstlisting}[language=bash]
 $ type -a pwd
@@ -1418,12 +1417,12 @@ pwd is /usr/bin/pwd
 pwd is /usr/sbin/pwd
 \end{lstlisting}
 
-Here we can see that the \texttt{pwd} command is a shell built-in, and is also present in multiple locations in the system.
-But if we run the \texttt{pwd} command, the shell built-in will be executed.
+Here we can see that the \lstinline|pwd| command is a shell built-in, and is also present in multiple locations in the system.
+But if we run the \lstinline|pwd| command, the shell built-in will be executed.
 
-\texttt{type} is also useful when you are not sure whether to use \texttt{man} or \texttt{help} for a command.
-Generally for a shell built-in, \texttt{help} is used, and for an executable
-the \texttt{info} and the \texttt{man} pages are used.
+\lstinline|type| is also useful when you are not sure whether to use \lstinline|man| or \lstinline|help| for a command.
+Generally for a shell built-in, \lstinline|help| is used, and for an executable
+the \lstinline|info| and the \lstinline|man| pages are used.
 
 
 \textbf{Types of Commands}:
@@ -1431,7 +1430,7 @@ A command can be an \textbf{alias}, a \textbf{shell built-in},
 a \textbf{shell function}, \textbf{keyword},
 or an \textbf{executable}.
 
-The \texttt{type} command will show which type the command is.
+The \lstinline|type| command will show which type the command is.
 \begin{itemize}
   \item \textbf{alias}: A command that is an alias to another command defined
     by the user or the system.
@@ -1447,9 +1446,9 @@ The \texttt{type} command will show which type the command is.
 \end{itemize}
 
 \begin{exercise}
-  Find the path of the \texttt{true} command using \texttt{which}.
-  Find a short description of the \texttt{true} command using \texttt{whatis}.
-  Is the executable you found actually the one that is executed when you run \texttt{true}? Check using \texttt{type true}
+  Find the path of the \lstinline|true| command using \lstinline|which|.
+  Find a short description of the \lstinline|true| command using \lstinline|whatis|.
+  Is the executable you found actually the one that is executed when you run \lstinline|true|? Check using \lstinline|type true|
 \end{exercise}
 
 
@@ -1460,10 +1459,10 @@ The \texttt{type} command will show which type the command is.
 \end{qs}
 
 \begin{ans}
-  \texttt{alias name='command'} will create an alias. \\
-  \texttt{unalias name} will unset the alias. \\
-  To make them permanent, add the alias to the \texttt{$\sim$/.bashrc} file. \\
-  The \texttt{$\sim$/.bashrc} file is a script that is executed whenever a new terminal is opened.
+  \lstinline|alias name='command'| will create an alias. \\
+  \lstinline|unalias name| will unset the alias. \\
+  To make them permanent, add the alias to the \lstinline|$\sim$/.bashrc| file. \\
+  The \lstinline|$\sim$/.bashrc| file is a script that is executed whenever a new terminal is opened.
 \end{ans}
 
 \begin{qs}
@@ -1471,21 +1470,21 @@ The \texttt{type} command will show which type the command is.
 \end{qs}
 
 \begin{ans}
-  \texttt{\textbackslash command} will run the normal version of \texttt{command} if it is aliased.
+  \lstinline|\command| will run the normal version of \lstinline|command| if it is aliased.
 \end{ans}
 
 \begin{qs}
-  What is the difference between \texttt{which}, \texttt{whatis}, \texttt{whereis}, \texttt{locate}, and \texttt{type}?
+  What is the difference between \lstinline|which|, \lstinline|whatis|, \lstinline|whereis|, \lstinline|locate|, and \lstinline|type|?
 \end{qs}
 
 \begin{ans}
   Each of the commands serve a different purpose:
   \begin{itemize}
-    \item \texttt{which} will show the path of the command that will be executed.
-    \item \texttt{whatis} will show a short description of the command.
-    \item \texttt{whereis} will show the location of the command, source files, and man pages.
-    \item \texttt{locate} is used to find files by name.
-    \item \texttt{type} will show how the command will be interpreted by the shell.
+    \item \lstinline|which| will show the path of the command that will be executed.
+    \item \lstinline|whatis| will show a short description of the command.
+    \item \lstinline|whereis| will show the location of the command, source files, and man pages.
+    \item \lstinline|locate| is used to find files by name.
+    \item \lstinline|type| will show how the command will be interpreted by the shell.
   \end{itemize}
 \end{ans}
 
@@ -1494,7 +1493,7 @@ The \texttt{type} command will show which type the command is.
 
 \textbf{whoami}:
 
-The \texttt{whoami} command is used to print the username of the current user.
+The \lstinline|whoami| command is used to print the username of the current user.
 
 \begin{lstlisting}[language=bash]
   $ whoami
@@ -1503,7 +1502,7 @@ The \texttt{whoami} command is used to print the username of the current user.
 
 \textbf{groups}:
 
-The \texttt{groups} command is used to display the groups that the current user belongs to.
+The \lstinline|groups| command is used to display the groups that the current user belongs to.
 
 \begin{lstlisting}[language=bash]
   $ groups
@@ -1512,16 +1511,16 @@ The \texttt{groups} command is used to display the groups that the current user 
 
 \textbf{passwd}
 
-The \texttt{passwd} command is used to change the password of the current user.
+The \lstinline|passwd| command is used to change the password of the current user.
 The root user can also change the password of other users.
 \sidenote{
   This executable is a special one, as it is a setuid program.
-  This will be discussed in detail in \refsubsec{special-permissions}.
+  This will be discussed in detail in \refsec{special-permissions}.
 }
 
 \textbf{who}:
 
-The \texttt{who} command is used to display the users who are currently logged in.
+The \lstinline|who| command is used to display the users who are currently logged in.
 
 \begin{lstlisting}[language=bash]
 $ who
@@ -1542,13 +1541,13 @@ sayan    pts/12       2024-05-22 18:24 (tmux(1082933).%11)
 \end{lstlisting}
 
 \begin{exercise}
-  Run the \texttt{who} command on the system commands VM.
+  Run the \lstinline|who| command on the system commands VM.
   What is the output?
 \end{exercise}
 
 \textbf{w}:
 
-The \texttt{w} command is used to display the users who are currently logged in and what they are doing.
+The \lstinline|w| command is used to display the users who are currently logged in and what they are doing.
 
 \begin{lstlisting}[language=bash]
 $ w
@@ -1557,14 +1556,14 @@ USER     TTY       LOGIN@   IDLE   JCPU   PCPU  WHAT
 sayan    tty2      13:49    5:57m 19:10  21.82s dwm
 \end{lstlisting}
 
-This is different from the \texttt{who} command as it only considers the login shell.
-Here \textbf{dwm} is the window manager running on the \texttt{tty2} terminal.
+This is different from the \lstinline|who| command as it only considers the login shell.
+Here \textbf{dwm} is the window manager running on the \lstinline|tty2| terminal.
 
 \subsection{Date and Time}
 
 \textbf{date}:
 
-The \texttt{date} command is used to print formatted date and time information.
+The \lstinline|date| command is used to print formatted date and time information.
 Without any arguments, it prints the current date and time.
 
 \begin{lstlisting}[language=bash]
@@ -1572,7 +1571,7 @@ Without any arguments, it prints the current date and time.
   Mon May 20 06:23:07 PM IST 2024
 \end{lstlisting}
 
-We can specify the date and time to be printed using the \texttt{-d} flag.
+We can specify the date and time to be printed using the \lstinline|-d| flag.
 
 \begin{lstlisting}[language=bash]
   $ date -d "2020-05-20 00:30:45"
@@ -1584,12 +1583,12 @@ We can specify the date and time to be printed using the \texttt{-d} flag.
 \end{lstlisting}
 
 \begin{exercise}
-  Why did we get an error when trying to print the date \texttt{2019-02-29}?
+  Why did we get an error when trying to print the date \lstinline|2019-02-29|?
 \end{exercise}
 
-We can also modify the format of the date and time using the \texttt{+} flag and different \textbf{format specifiers}.
+We can also modify the format of the date and time using the \lstinline|+| flag and different \textbf{format specifiers}.
 Some of the important format specifiers are listed in \vreftab{date-format-specifiers}.
-Rest of the format specifiers can be found in the \texttt{date} manual page.
+Rest of the format specifiers can be found in the \lstinline|date| manual page.
 
 \begin{lstlisting}[language=bash]
   $ date +"%Y-%m-%d %H:%M:%S"
@@ -1605,21 +1604,21 @@ Rest of the format specifiers can be found in the \texttt{date} manual page.
   \toprule
  Specifier & Description \\
  \midrule
-  \texttt{\%Y} & Year \\
-  \texttt{\%m} & Month \\
-  \texttt{\%d} & Day \\
-  \texttt{\%H} & Hour \\
-  \texttt{\%M} & Minute \\
-  \texttt{\%S} & Second \\
-  \texttt{\%A} & Full weekday name \\
-  \texttt{\%B} & Full month name \\
-  \texttt{\%a} & Abbreviated weekday name \\
-  \texttt{\%b} & Abbreviated month name \\
+  \lstinline|\%Y| & Year \\
+  \lstinline|\%m| & Month \\
+  \lstinline|\%d| & Day \\
+  \lstinline|\%H| & Hour \\
+  \lstinline|\%M| & Minute \\
+  \lstinline|\%S| & Second \\
+  \lstinline|\%A| & Full weekday name \\
+  \lstinline|\%B| & Full month name \\
+  \lstinline|\%a| & Abbreviated weekday name \\
+  \lstinline|\%b| & Abbreviated month name \\
   \bottomrule
 \end{tabular}
 \end{table}
 
-We can even mention relative dates and times using the \texttt{date} command.
+We can even mention relative dates and times using the \lstinline|date| command.
 
 \begin{lstlisting}[language=bash]
   $ date -d "next year"
@@ -1634,7 +1633,7 @@ We can even mention relative dates and times using the \texttt{date} command.
 
 \textbf{cal}:
 
-The \texttt{cal} command is used to print a calendar.
+The \lstinline|cal| command is used to print a calendar.
 By default, it prints the calendar of the current month.
 
 \begin{lstlisting}[language=bash]
@@ -1661,13 +1660,13 @@ We can specify the month and year to print the calendar of that month and year.
   25 26 27 28 29
 \end{lstlisting}
 
-There are multiple flags that can be passed to the \texttt{cal} command to display different types of calendars and of multiple months or of entire year.
+There are multiple flags that can be passed to the \lstinline|cal| command to display different types of calendars and of multiple months or of entire year.
 
 \begin{remark}
   In Linux, there are sometimes multiple implementations of the same command.
-  For example, there are two implementations of the \texttt{cal} command, one in the \textbf{bsdmainutils} package, which is the \textbf{BSD} implementation and also includes another binary named \textbf{ncal} for printing the calendar in vertical format.
+  For example, there are two implementations of the \lstinline|cal| command, one in the \textbf{bsdmainutils} package, which is the \textbf{BSD} implementation and also includes another binary named \textbf{ncal} for printing the calendar in vertical format.
   The other implementation is in the \textbf{util-linux} package, which does not contain a \textbf{ncal} binary.
-  The flags and the output of the \texttt{cal} command can differ between the two implementations.
+  The flags and the output of the \lstinline|cal| command can differ between the two implementations.
 \end{remark}
 
 \begin{qs}
@@ -1675,9 +1674,9 @@ There are multiple flags that can be passed to the \texttt{cal} command to displ
 \end{qs}
 
 \begin{ans}
-  \texttt{date -d today +\%Y-\%m-\%d} will print the current date in the format
-  \texttt{YYYY-MM-DD}. The format can be changed by changing the format specifiers.
-  The format specifiers are given in the \texttt{man date} page. The \texttt{-d today} can
+  \lstinline|date -d today +\%Y-\%m-\%d| will print the current date in the format
+  \lstinline|YYYY-MM-DD|. The format can be changed by changing the format specifiers.
+  The format specifiers are given in the \lstinline|man date| page. The \lstinline|-d today| can
   be dropped, but is mentioned to show that the date can be changed to any date.
   It can be strings like '2024-01-01' or '5 days ago' or 'yesterday', etc.
 \end{ans}
@@ -1702,11 +1701,11 @@ It is left as an exercise to the reader to explore the manual pages of these com
 
 \subsection{What is a File System?}
 
-Unlike Windows which has different drive letters for different partitions, Linux follows a unified file structure. The filesystem hierarchy is a tree of directories and files\sidenote{A non-directory is a leaf node of a tree.}. The root\sidenote{The root of a tree is the first node from which the tree originates. A tree can have only one root.} of the filesystem tree is the directory \texttt{/}. The basic filesystem hierarchy structure can be seen in \reffig{linuxfs} and \vreftab{linuxfs-table}.
+Unlike Windows which has different drive letters for different partitions, Linux follows a unified file structure. The filesystem hierarchy is a tree of directories and files\sidenote{A non-directory is a leaf node of a tree.}. The root\sidenote{The root of a tree is the first node from which the tree originates. A tree can have only one root.} of the filesystem tree is the directory \lstinline|/|. The basic filesystem hierarchy structure can be seen in \reffig{linuxfs} and \vreftab{linuxfs-table}.
 
 But what does so many directories mean? What do they do? What is the purpose of each directory?
 
-\begin{table}[h!]
+\begin{table*}[h!]
 \caption{Linux Filesystem Hierarchy}
 \labtab{linuxfs-table}
 \begin{tabular}{ c l }
@@ -1734,13 +1733,13 @@ But what does so many directories mean? What do they do? What is the purpose of 
   /var & Variable data \\
   \bottomrule
 \end{tabular}
-\end{table}
+\end{table*}
 
-\begin{marginfigure}
-	\includegraphics[width=0.9\marginparwidth]{linuxfs.pdf}
+\begin{figure}[h!]
+	\includegraphics[width=0.7\linewidth]{linuxfs.pdf}
 	\caption[Linux Filesystem Hierarchy]{Linux Filesystem Hierarchy}
 	\labfig{linuxfs}
-\end{marginfigure}
+\end{figure}
 
 Some directories do not store data on the disk, but are used to store information about the system.
 These directories are called \textit{virtual} directories.
@@ -1778,8 +1777,8 @@ The bootloader is the first program that runs when the computer is turned on. It
 Although the file system is a unified tree hierarchy, this doesn't mean that we cannot have multiple partitions on Linux: au contraire, it is easier to manage partitions on Unix.
 We simply need to mention which empty directory in the hierarchy should be used to mount a partition.
 As soon as that partition is mounted, it gets populated with the data stored on that disk with all the files and subdirectories, and when the device is unmounted the directory again becomes empty.
-Although a partition can be mounted on any directory, there are some dedicated folders in \texttt{/} as well for this purpose.
-For example, the \texttt{/mnt} directory is used to mount a filesystem temporarily, and the \texttt{/media} directory is used to mount removable media like USB drives, however it is not required to strictly follow this.
+Although a partition can be mounted on any directory, there are some dedicated folders in \lstinline|/| as well for this purpose.
+For example, the \lstinline|/mnt| directory is used to mount a filesystem temporarily, and the \lstinline|/media| directory is used to mount removable media like USB drives, however it is not required to strictly follow this.
 
 Finally, the biggest revelation in Linux is that, everything is a file.
 Not only are all the system configurations stored as \textbf{plain text} files which can be read by humans, but the processes running on your system are also stored as files in proc.
@@ -1829,7 +1828,7 @@ So these are stored in memory to speed up the access.
 
 \textbf{/dev} and \textbf{/run} are mounted as \textbf{tmpfs} filesystems.
 
-This can be seen by running the \texttt{mount} command or the \texttt{df} command.
+This can be seen by running the \lstinline|mount| command or the \lstinline|df| command.
 
 \begin{lstlisting}[language=bash]
   $ mount
@@ -1926,9 +1925,9 @@ There are some other files in the \textbf{/proc} directory that contain informat
 
 \begin{itemize}
   \item \textbf{cpuinfo} - stores cpu information.
-  \item \textbf{version} - stores system information, content similar to \texttt{uname -a} command.
-  \item \textbf{meminfo} - Diagnostic information about memory. Check \texttt{free} command.
-  \item \textbf{partitions} - Disk partition information. Check \texttt{df}.
+  \item \textbf{version} - stores system information, content similar to \lstinline|uname -a| command.
+  \item \textbf{meminfo} - Diagnostic information about memory. Check \lstinline|free| command.
+  \item \textbf{partitions} - Disk partition information. Check \lstinline|df|.
   \item \textbf{kcore} - The astronomical size ( $2^{47}$ bits) tells the maximum virtual memory (47 bits) the current Linux OS is going to handle.
 \end{itemize}
 
@@ -1940,13 +1939,13 @@ This highly uses symlinks to organize the folders while maintaining redundancy a
 \sidenote{
   A symlink is a special type of file that points to another file or directory.
   It is similar to a shortcut in Windows.
-  This will be discussed in detail in \refsubsec{inodes-links}.
+  This will be discussed in detail in \refsec{inodes-links}.
 }
 
 Try running the following code snippet in a terminal if you have a caps lock key on your keyboard and are running linux directly on your bare-metal.
 \sidenote{
   This will only work on your own system, not on the system commands VM, since you do not have the priviledge to modify the files there.
-  Make sure you have the ability to run commands as root and are able to use \texttt{sudo}.
+  Make sure you have the ability to run commands as root and are able to use \lstinline|sudo|.
   It is also unlikely to work on a virtual machine.
   It will also not work on linux systems older than 2.6.
 }
@@ -1961,20 +1960,20 @@ Most modern keyboards will quickly turn off the light again as the capslock is t
 
 \textbf{/sys vs /proc}:
 
-The \texttt{/proc} tree originated in System V Unix
+The \lstinline|/proc| tree originated in System V Unix
 \sidenote{
   Unix System V is one of the first commercial versions of the Unix operating system. It was originally developed by AT\&T and first released in 1983.
 }
 , where it only gave information about each running process, using a
-\texttt{/proc/\$PID/} format. Linux greatly extended that, adding all sorts of information about the running kernel's status. In addition to these read-only information files, Linux's \texttt{/proc} also has writable virtual files that can change the state of the running kernel.
+\lstinline|/proc/\$PID/| format. Linux greatly extended that, adding all sorts of information about the running kernel's status. In addition to these read-only information files, Linux's \lstinline|/proc| also has writable virtual files that can change the state of the running kernel.
 BSD
 \sidenote{
   BSD, or Berkeley Software Distribution, is a Unix-like operating system that was developed at the University of California, Berkeley. It was first released in 1977 and was based on the original Unix source code from AT\&T. BSD is not linux, it is a totally different kernel, with similar core utils to GNU.
 }
-type OSes generally do not have \texttt{/proc} at all, so much of what you find under proc is non-portable.
+type OSes generally do not have \lstinline|/proc| at all, so much of what you find under proc is non-portable.
 
-The intended solution for this mess in Linux's \texttt{/proc} is \texttt{/sys}. Ideally, all the non-process information that got crammed into the \texttt{/proc} tree should have moved to \texttt{/sys} by now, but historical inertia has kept a lot of stuff in \texttt{/proc}.
-Often there are two ways to effect a change in the running kernel: the old \texttt{/proc} way, kept for backwards compatibility, and the new \texttt{/sys} way that you're supposed to be using now.
+The intended solution for this mess in Linux's \lstinline|/proc| is \lstinline|/sys|. Ideally, all the non-process information that got crammed into the \lstinline|/proc| tree should have moved to \lstinline|/sys| by now, but historical inertia has kept a lot of stuff in \lstinline|/proc|.
+Often there are two ways to effect a change in the running kernel: the old \lstinline|/proc| way, kept for backwards compatibility, and the new \lstinline|/sys| way that you're supposed to be using now.
 % \sidecite{sysvproc}
 
 \subsection{Paths}
@@ -2032,14 +2031,14 @@ The file system can be navigated in the Linux command line using the following c
 
 More details about these commands can be found in their respective
 man pages. For example, to find more about the \textbf{ls} command,
-you can type \texttt{man ls}.
+you can type \lstinline|man ls|.
 
 \begin{qs}
   What is the command to list the contents of the current directory?
 \end{qs}
 
 \begin{ans}
-  \texttt{ls}
+  \lstinline|ls|
 \end{ans}
 
 
@@ -2049,7 +2048,7 @@ you can type \texttt{man ls}.
 \end{qs}
 
 \begin{ans}
-\texttt{ls -a}
+\lstinline|ls -a|
 \end{ans}
 
 \begin{qs}
@@ -2058,7 +2057,7 @@ you can type \texttt{man ls}.
 \end{qs}
 
 \begin{ans}
-\texttt{ls -l}
+\lstinline|ls -l|
 \end{ans}
 
 \begin{qs}
@@ -2067,18 +2066,18 @@ you can type \texttt{man ls}.
 \end{qs}
 
 \begin{ans}
-\texttt{ls -al} or \texttt{ls -la} or \texttt{ls -l -a} or \texttt{ls -a -l}
+\lstinline|ls -al| or \lstinline|ls -la| or \lstinline|ls -l -a| or \lstinline|ls -a -l|
 \end{ans}
 
 \begin{qs}
-  The output of \texttt{ls} gives multiple files and directories in a single
+  The output of \lstinline|ls| gives multiple files and directories in a single
   line. How can you make it print one file or directory per line?
 \end{qs}
 
 \begin{ans}
-  \texttt{ls -1}\\
-  This can also be done by passing the output of \texttt{ls} to \texttt{cat}
-  or storing the output of \texttt{ls} in a file and then using \texttt{cat}
+  \lstinline|ls -1|\\
+  This can also be done by passing the output of \lstinline|ls| to \lstinline|cat|
+  or storing the output of \lstinline|ls| in a file and then using \lstinline|cat|
   to print it. We will see these in later weeks.\sidenote{that is a one, not an L}
 \end{ans}
 
@@ -2110,13 +2109,13 @@ We have already briefly seen how to see the permissions of a file using the \lst
   drwxr-xr-x 2 sayan sayan 4096 May 21 15:21 world
 \end{lstlisting}
 
-Here, the first column of the output of \texttt{ls -l} shows the permissions of the file or directory.
+Here, the first column of the output of \lstinline|ls -l| shows the permissions of the file or directory.
 As seen in \reffig{perms}, the permissions are divided into four parts:
 
 \begin{itemize}
-  \item The first character shows the type of the file. \texttt{-} for a regular file and \texttt{d} for a directory and more.
+  \item The first character shows the type of the file. \lstinline|-| for a regular file and \lstinline|d| for a directory and more.
     \sidenote{
-      There are other types of files as well, like \texttt{l} for a symbolic link, \texttt{c} for a character device, \texttt{b} for a block device, \texttt{s} for a socket, and \texttt{p} for a pipe. These will be discussed later.
+      There are other types of files as well, like \lstinline|l| for a symbolic link, \lstinline|c| for a character device, \lstinline|b| for a block device, \lstinline|s| for a socket, and \lstinline|p| for a pipe. These will be discussed later.
     }
   \item The next three characters show the permissions for the owner of the file.
   \item The next three characters show the permissions for the group of the file.
@@ -2166,19 +2165,19 @@ These however, have different meanings for files and directories.
 
 \begin{itemize}
   \item For a file, the read permission allows the file to be read.
-    You can use commands like \texttt{cat} or \texttt{less} to read the contents of the file if the user has \textbf{read} permissions.
-  \item For a directory, the read permission allows the directory to be listed using \texttt{ls}.
+    You can use commands like \lstinline|cat| or \lstinline|less| to read the contents of the file if the user has \textbf{read} permissions.
+  \item For a directory, the read permission allows the directory to be listed using \lstinline|ls|.
 \end{itemize}
 
 \subsection{Write}
 
 \begin{itemize}
   \item For a file, the write permission allows the file to be modified.
-    You can use commands like \texttt{echo} along with redirection
+    You can use commands like \lstinline|echo| along with redirection
     \sidenote{
       Redirection is a way to send the output of a command to a file.
     }
-    or a text editor like \texttt{vim} or \texttt{nano}
+    or a text editor like \lstinline|vim| or \lstinline|nano|
       to write to the file if the user has \textbf{write} permissions.
   \item For a directory, the write permission allows the directory to be modified.
     You can create, delete, or rename files in the directory if the user has \textbf{write} permissions.
@@ -2192,7 +2191,7 @@ These however, have different meanings for files and directories.
     scripts, or libraries.
     You can run the file as a program if the user has \textbf{execute} permissions.
   \item For a directory, the execute permission allows the directory to be traversed into.
-    You can change to the directory if the user has \textbf{execute} permissions using \texttt{cd}.
+    You can change to the directory if the user has \textbf{execute} permissions using \lstinline|cd|.
     You can also only long-list the contents of the directory if the user has \textbf{execute} permissions on that directory.
 \end{itemize}
 
@@ -2226,8 +2225,8 @@ You cannot remove a directory if you do not have \textbf{write} permission on th
 
 \textbf{Can list names but not metadata?}
 
-If you have \textbf{read} permission on a directory but not \textbf{execute} permission, you cannot traverse into the directory, but you can still use \texttt{ls} to list the contents of the directory.
-However, you cannot use \texttt{ls -l} to long-list the contents of the directory.
+If you have \textbf{read} permission on a directory but not \textbf{execute} permission, you cannot traverse into the directory, but you can still use \lstinline|ls| to list the contents of the directory.
+However, you cannot use \lstinline|ls -l| to long-list the contents of the directory.
 That is, you only have access to the name of the files inside, not their metadata.
 
 \begin{lstlisting}[language=bash]
@@ -2318,7 +2317,7 @@ We are already familiar with what
 permissions mean, but what are the other permissions?
 
 \subsection{Special Permissions}
-\labsubsec{special-permissions}
+\labsec{special-permissions}
 
 \begin{definition}[SetUID/SetGID]
   The setuid and setgid bits are special permissions that can be set on executable files.
@@ -2330,13 +2329,13 @@ permissions mean, but what are the other permissions?
 
 This is useful for programs that need to access system resources that are only available to the owner or group of the file.
 
-A very notable example is the \texttt{passwd} command.
+A very notable example is the \lstinline|passwd| command.
 This command is used to set the password of an user.
-Although changing password of a user is a priviledged action that only the root user can do, the \texttt{passwd} command can be run by any user to change \textit{their} password.
-This is possible due to the setuid bit set on the \texttt{passwd} command.
-When the \texttt{passwd} command is run, it is run with the privileges of the root user, and thus can change the password of that user.
+Although changing password of a user is a priviledged action that only the root user can do, the \lstinline|passwd| command can be run by any user to change \textit{their} password.
+This is possible due to the setuid bit set on the \lstinline|passwd| command.
+When the \lstinline|passwd| command is run, it is run with the privileges of the root user, and thus can change the password of that user.
 
-You can check this out by running \texttt{ls -l /usr/bin/passwd} and seeing the \texttt{s} in the permissions.
+You can check this out by running \lstinline|ls -l /usr/bin/passwd| and seeing the \lstinline|s| in the permissions.
 
 \begin{lstlisting}[language=bash]
   $ ls -l /usr/bin/passwd
@@ -2394,9 +2393,9 @@ When the sticky bit is set on a directory, only the owner of the file, the owner
 
 This is useful when you have a directory where multiple users need to write files, but you want to restrict the deletion of files to only the owner of the file or the owner of the directory.
 
-The most common example of this is the \texttt{/tmp} directory.
-The \texttt{/tmp} directory is a directory where temporary files are stored.
-You want to let any user create files in the \texttt{/tmp} directory, but you do not want any user to delete files created by other users.
+The most common example of this is the \lstinline|/tmp| directory.
+The \lstinline|/tmp| directory is a directory where temporary files are stored.
+You want to let any user create files in the \lstinline|/tmp| directory, but you do not want any user to delete files created by other users.
 
 \begin{lstlisting}[language=bash]
   $ ls -ld /tmp
@@ -2404,9 +2403,9 @@ You want to let any user create files in the \texttt{/tmp} directory, but you do
 \end{lstlisting}
 
 \begin{exercise}
-  Log into the system commands VM and cd into the \texttt{/tmp} directory.
-  Create a file in the \texttt{/tmp} directory.
-  Try to find if there are files created by other users in the \texttt{/tmp} directory using \texttt{ls -l} command.
+  Log into the system commands VM and cd into the \lstinline|/tmp| directory.
+  Create a file in the \lstinline|/tmp| directory.
+  Try to find if there are files created by other users in the \lstinline|/tmp| directory using \lstinline|ls -l| command.
   If there are files created by other users, try to delete them.
   \footnote{
     You can create a file normally, or using the \textbf{mktemp} command.
@@ -2440,7 +2439,7 @@ Thus if a file has read, write, and execute permissions for the owner, read and 
 \labtab{octal-permissions-table}
 \begin{tabular}{ c c c c c c }
   \toprule
-  Octal & Read & Write & Execute & Symbolic Representation & Description \\
+  Octal & Read & Write & Execute & Representation & Description \\
  \midrule
   0 & 0 & 0 & 0 & --- & No permissions \\
   1 & 0 & 0 & 1 & --x & Execute only \\
@@ -2475,25 +2474,25 @@ Hello World!
 \end{qs}
 
 \begin{ans}
-  \texttt{ls -l} \\
+  \lstinline|ls -l| \\
   The permissions are the first 10 characters of the output.\\
-  \texttt{stat -c \%A filename} will list only the permissions of a file.\\
-  There are other format specifiers of \texttt{stat} to show different statistics
-  which can be found in \texttt{man stat}.
+  \lstinline|stat -c \%A filename| will list only the permissions of a file.\\
+  There are other format specifiers of \lstinline|stat| to show different statistics
+  which can be found in \lstinline|man stat|.
 \end{ans}
 
 \begin{qs}
   How to change permissions of a file?
-  Let's say we want to change \texttt{file1}'s permissions to \texttt{rwxr-xr--}
+  Let's say we want to change \lstinline|file1|'s permissions to \lstinline|rwxr-xr--|
   What is the octal form of that?
 \end{qs}
 
 \begin{ans}
-  \texttt{chmod u=rwx,g=rx,o=r file1} will change the permissions of \texttt{file1}\\
-  The octal form of \texttt{rwxr-xr--} is 754.\\
-  So we can also use \texttt{chmod 754 file1}\\
-  Providing the octal is same as using \texttt{=} to set the permissions.\\
-  We can also use \texttt{+} to add permissions and \texttt{-} to remove permissions.
+  \lstinline|chmod u=rwx,g=rx,o=r file1| will change the permissions of \lstinline|file1|\\
+  The octal form of \lstinline|rwxr-xr--| is 754.\\
+  So we can also use \lstinline|chmod 754 file1|\\
+  Providing the octal is same as using \lstinline|=| to set the permissions.\\
+  We can also use \lstinline|+| to add permissions and \lstinline|-| to remove permissions.
 \end{ans}
 
 % ----------------------------
@@ -2502,7 +2501,7 @@ Hello World!
 \pagebreak
 \section{Types of Files}
 
-We had briefly seen that the output of \texttt{ls -l} shows the type of the file as the first character of the permissions.
+We had briefly seen that the output of \lstinline|ls -l| shows the type of the file as the first character of the permissions.
 
 There are 7 types of files in a linux file system as shown in \vreftab{file-types-table}.
 
@@ -2563,8 +2562,8 @@ They are discussed in detail in \refsec{inodes-links}.
 Character devices are files that represent devices that are accessed as a stream of bytes.
 For example the keyboard, mouse, webcams, and most USB devices are character devices.
 These are not real files stored on the disk, but are files that represent devices.
-They can interacted with like a file using the \texttt{read} and \texttt{write} system calls to interact with the hardware directly.
-These files are made available by the kernel and are stored in the \texttt{/dev} directory.
+They can interacted with like a file using the \lstinline|read| and \lstinline|write| system calls to interact with the hardware directly.
+These files are made available by the kernel and are stored in the \lstinline|/dev| directory.
 Any read/write operation on a character device is monitored by the kernel and the data is sent to the device.
 
 \begin{lstlisting}
@@ -2599,7 +2598,7 @@ crw-rw---- 1 root input 13, 32 May 22 13:49 mouse0
 crw-rw---- 1 root input 13, 33 May 22 13:49 mouse1
 \end{lstlisting}
 
-Here the \texttt{event} and \texttt{mouse} files are character devices that represent input devices like the keyboard and mouse.
+Here the \lstinline|event| and \lstinline|mouse| files are character devices that represent input devices like the keyboard and mouse.
 Note the \textbf{c} in the permissions, which indicates that these are character devices.
 
 \subsection{Block Devices}
@@ -2608,17 +2607,17 @@ Block devices are files that represent devices that are accessed as a block of d
 For example hard drives, SSDs, and USB drives are block devices.
 These files also do not store actual data on the disk, but represent devices.
 Any block file can be mounted as a filesystem.
-We can interact with block devices using the \texttt{read} and \texttt{write} system calls to interact with the hardware directly.
-For example, the \texttt{/dev/sda} file represents the first hard drive in the system.
+We can interact with block devices using the \lstinline|read| and \lstinline|write| system calls to interact with the hardware directly.
+For example, the \lstinline|/dev/sda| file represents the first hard drive in the system.
 
-This makes it easy to write an image to a disk directly using the \texttt{dd} command.
+This makes it easy to write an image to a disk directly using the \lstinline|dd| command.
 \sidenote{
-  The \texttt{dd} command is a powerful tool that can be used to copy and convert files.
+  The \lstinline|dd| command is a powerful tool that can be used to copy and convert files.
   It is acronym of \textit{data duplicator}.
   However, it is also known as the \textit{disk destroyer} command, as it can be used to overwrite the entire disk if you are not careful with which disk you are writing the image to.
 }
 
-The following example shows how we can use the \texttt{dd} command to write an image
+The following example shows how we can use the \lstinline|dd| command to write an image
 \sidenote{
   ISO file
 }
@@ -2629,10 +2628,10 @@ It is this easy to create a bootable USB drive for linux.
   $ dd if=~/Downloads/archlinux.iso of=/dev/sdb bs=4M status=progress
 \end{lstlisting}
 
-Here \texttt{if} is the input file, \texttt{of} is the output file, \texttt{bs} is the block size, and \texttt{status} is to show the progress of the operation.
+Here \lstinline|if| is the input file, \lstinline|of| is the output file, \lstinline|bs| is the block size, and \lstinline|status| is to show the progress of the operation.
 
 \begin{warn}
-  Be very careful when using the \texttt{dd} command.
+  Be very careful when using the \lstinline|dd| command.
   Make sure you are writing to the correct disk.
   Writing to the wrong disk can cause data loss.
 \end{warn}
@@ -2657,7 +2656,7 @@ $ ls -l pipe1
 prw-r--r-- -1 sayan sayan 0 May 22 18:22 pipe1
 \end{lstlisting}
 
-Here the \texttt{p} in the permissions indicates that this is a named pipe.
+Here the \lstinline|p| in the permissions indicates that this is a named pipe.
 If you now try to write to the named pipe, the command will hang until another process reads from the named pipe.
 Try the following in two different terminals:
 
@@ -2698,14 +2697,14 @@ nc: socket.sock: Connection refused
 
 Only if we run them in correct order can you see the message "hello" being printed in terminal 1.
 \sidenote{
-  The \texttt{nc} command is the netcat command.
+  The \lstinline|nc| command is the netcat command.
   It is a powerful tool for network debugging and exploration.
   It can be used to create sockets, listen on ports, and send and receive data over the network.
   This will be discussed in more detail in the networking section and in the
   \textbf{Modern Application Development} course.
 }
 
-You can press \texttt{Ctrl+C} to stop the \texttt{nc} command in both terminals.
+You can press \lstinline|Ctrl+C| to stop the \lstinline|nc| command in both terminals.
 
 \subsection{Types of Regular Files}
 
@@ -2722,7 +2721,7 @@ It is thus common to have files without extensions in Linux systems, as they pro
   \url{https://en.wikipedia.org/wiki/List_of_file_signatures}
 }
 
-The \texttt{file} command can be used to determine the type of a file.
+The \lstinline|file| command can be used to determine the type of a file.
 
 \begin{lstlisting}[language=bash]
 $ file /etc/passwd
@@ -2738,13 +2737,13 @@ $ file /bin/bash
 \begin{ans}
   There are 7 types of files in a linux file system:
   \begin{itemize}
-    \item Regular Files (starts with \texttt{-})
-    \item Directories (starts with \texttt{d})
-    \item Symbolic Links (starts with \texttt{l})
-    \item Character Devices (starts with \texttt{c})
-    \item Block Devices (starts with \texttt{b})
-    \item Named Pipes (starts with \texttt{p})
-    \item Sockets (starts with \texttt{s})
+    \item Regular Files (starts with \lstinline|-|)
+    \item Directories (starts with \lstinline|d|)
+    \item Symbolic Links (starts with \lstinline|l|)
+    \item Character Devices (starts with \lstinline|c|)
+    \item Block Devices (starts with \lstinline|b|)
+    \item Named Pipes (starts with \lstinline|p|)
+    \item Sockets (starts with \lstinline|s|)
   \end{itemize}
 \end{ans}
 
@@ -2756,12 +2755,12 @@ How to get that?
 \end{qs}
 
 \begin{ans}
-  The \texttt{file} command can be used to determine the type of a file. \\
+  The \lstinline|file| command can be used to determine the type of a file. \\
   The extension of a file does not determine its type. \\
   The contents of a file can be used to determine its type. \\
   MIME stands for Multipurpose Internet Mail Extensions. \\
   It is a standard that indicates the nature and format of a document. \\
-  \texttt{file -i filename} will give the MIME type of \texttt{filename}.
+  \lstinline|file -i filename| will give the MIME type of \lstinline|filename|.
 \end{ans}
 
 % ----------------------------
@@ -2778,7 +2777,7 @@ How to get that?
   It serves as a unique identifier for a specific piece of metadata on a given filesystem.
 \end{definition}
 
-Whenever you run \texttt{ls -l} and see all the details of a file, you are seeing the metadata of the file.
+Whenever you run \lstinline|ls -l| and see all the details of a file, you are seeing the metadata of the file.
 These metadata, however, are not stored in the file itself.
 These data about the files are stored in a special data structure called an \textbf{inode}.
 
@@ -2786,7 +2785,7 @@ Each inode is stored in a common table and each filesystem mounted to your compu
 An inode number may be used more than once but never by the same filesystem.
 The filesystem id combines with the inode number to create a unique identification label.
 
-You can check how many inodes are used in a filesystem using the \texttt{df -i} command.
+You can check how many inodes are used in a filesystem using the \lstinline|df -i| command.
 
 \begin{lstlisting}
 $ df -i
@@ -2807,12 +2806,12 @@ You can notice the number of inodes present, number of inodes used, and number o
 The \textbf{IUse\%} column shows the percentage of inodes used.
 This however, does not mean how much of space is used, but how many files can be created.
 
-Observe that although the \texttt{/data} partition has only 1\% of inodes used, it has 91\% of space used.
-This is because the files in the \texttt{/data} partition are large files, and thus the number of inodes used is less.
+Observe that although the \lstinline|/data| partition has only $1\%$ of inodes used, it has $91\%$ of space used.
+This is because the files in the \lstinline|/data| partition are large files, and thus the number of inodes used is less.
 Remember that a file will take up one inode, no matter how large it is.
 But the space it takes up will be the size of the file.
 
-We can also see the inode number of a file using the \texttt{ls -i} command.
+We can also see the inode number of a file using the \lstinline|ls -i| command.
 
 \begin{lstlisting}[language=bash]
 $ ls -i
@@ -2832,7 +2831,7 @@ Here the first column is the \textbf{inode} number of the file.
 
 In UNIX systems, the data of a file and the metadata of a file are stored separately.
 The inodes are stored in a inode-array or table, and contain the metadata of the file and the pointer to it in the storage block.
-These metadata can be retrieved using the \texttt{stat} system call.
+These metadata can be retrieved using the \lstinline|stat| system call.
 \sidenote{
   A system call is a request in a operating system made via a software interrupt by an active process for a service performed by the kernel.
   The diagram in \reffig{system-calls} shows how system calls work.
@@ -2844,7 +2843,7 @@ These metadata can be retrieved using the \texttt{stat} system call.
   \labfig{system-calls}
 \end{marginfigure}
 
-Conveniently, a userland utility to list the metadata of a file is also called \texttt{stat}.
+Conveniently, a userland utility to list the metadata of a file is also called \lstinline|stat|.
 
 \begin{lstlisting}[language=bash]
 $ stat /etc/profile
@@ -2858,7 +2857,7 @@ Change: 2024-05-21 18:30:27.047718323 +0530
  Birth: 2024-05-21 18:30:27.047718323 +0530
 \end{lstlisting}
 
-We can also specify the format of the output of the \texttt{stat} command using the \texttt{--format} or \texttt{-c} flag to print only the metadata we want.
+We can also specify the format of the output of the \lstinline|stat| command using the \lstinline|--format| or \lstinline|-c| flag to print only the metadata we want.
 
 The data of the file is stored in the storage block.
 The inode number indexes a table of inodes on the file system.
@@ -2887,9 +2886,9 @@ Some Unix-style file systems such as JFS, XFS, ZFS, OpenZFS, ReiserFS, btrfs, an
   Device & Device ID of the file system \\
   Inode & Inode number of the file \\
   Links & Number of hard links to the file \\
-  Access & Access time of the file (\texttt{atime}) \\
-  Modify & Modification time of the file (\texttt{mtime}) \\
-  Change & Change time of the inode (\texttt{ctime}) \\
+  Access & Access time of the file (\lstinline|atime|) \\
+  Modify & Modification time of the file (\lstinline|mtime|) \\
+  Change & Change time of the inode (\lstinline|ctime|) \\
   Birth & Creation time of the file \\
  \bottomrule
  \end{tabular}
@@ -2936,13 +2935,13 @@ If someone accidentally deletes the file, the other hard links will still be the
 \end{definition}
 
 Hard links can be created for files only, and not directories.
-It can be created using the \texttt{ln} command.
+It can be created using the \lstinline|ln| command.
 
 \begin{lstlisting}[language=bash]
 $ ln file1 file2
 \end{lstlisting}
 
-This will create a hard link named \texttt{file2} that points to the same inode as \texttt{file1}.
+This will create a hard link named \lstinline|file2| that points to the same inode as \lstinline|file1|.
 
 \begin{remark}
   Hard links are not dependent on the original file.
@@ -2989,8 +2988,8 @@ Symbolic links pointing to moved or non-existing targets are sometimes called br
   relative from current working directory.\footnote{This is a common mistake.}
 \end{definition}
 
-Symlinks are created using the \texttt{symlink} system call.
-This can be done using the \texttt{ln -s} command.
+Symlinks are created using the \lstinline|symlink| system call.
+This can be done using the \lstinline|ln -s| command.
 
 \begin{lstlisting}[language=bash]
 $ echo "hello" > file1
@@ -3005,14 +3004,14 @@ hello
 
 \textbf{Interesting Observation:}
 
-Usually we have seen that if we use \texttt{ls -l} with a directory as its argument,
+Usually we have seen that if we use \lstinline|ls -l| with a directory as its argument,
 it lists the contents of the directory.
 
-The only way to list the directory itself is to use \texttt{ls -ld}.
+The only way to list the directory itself is to use \lstinline|ls -ld|.
 
-But if a symlink is made to a directory, then \texttt{ls -l} on that symlink will list only the symlink.
+But if a symlink is made to a directory, then \lstinline|ls -l| on that symlink will list only the symlink.
 
-To list the contents of the symlinked directory we have to append a \texttt{/} to the symlink.
+To list the contents of the symlinked directory we have to append a \lstinline|/| to the symlink.
 
 \begin{lstlisting}[language=bash]
 $ ln -s /etc /tmp/etc
@@ -3026,7 +3025,7 @@ drwxr-xr-x  3 root root    4096 Nov 17  2023 alsa
 drwxr-xr-x  4 root root    4096 May 19 00:44 apparmor.d
 \end{lstlisting}
 
-Here I used \texttt{head} to limit the number of lines shown as the directory is large.
+Here I used \lstinline|head| to limit the number of lines shown as the directory is large.
 \sidenote{
   This way of combining commands will be discussed later.
 }
@@ -3044,7 +3043,7 @@ This is retroactively called a \textbf{slow symlink}.
 
 This act of storing the target path in the inode is called \textbf{inlining}.
 
-Symlinks do not have a permission set, thus they always report \texttt{lrwxrwxrwx} as their permissions.
+Symlinks do not have a permission set, thus they always report \lstinline|lrwxrwxrwx| as their permissions.
 
 The size reported of a symlink file is independent of the actual file's size.
 
@@ -3071,7 +3070,7 @@ lrwxrwxrwx 1 sayan sayan 34 May 23 15:41 link1 -> /a/very/long/and/non-existant/
 lrwxrwxrwx 1 sayan sayan  5 May 23 15:41 link2 -> small
 \end{lstlisting}
 
-Notice that the size of \texttt{link1} is 34, the length of the target path, and the size of \texttt{link2} is 5, the length of the target path.
+Notice that the size of \lstinline|link1| is 34, the length of the target path, and the size of \lstinline|link2| is 5, the length of the target path.
 
 \subsection{Symlink vs Hard Links}
 
@@ -3102,7 +3101,7 @@ Other differences are listed in \reftab{symlink-hardlink}.
   Permissions & lrwxrwxrwx & Same as the original file \\
   Inode & Different & Same \\
   Dependency & Dependent on the original file & Independent of the original file \\
-  Creation & Can be created across filesystems & Can only be created in the same filesystem \\
+  Creation & across filesystems & in the same filesystem \\
   Target & Can point to directories & Can only point to files \\
  \bottomrule
  \end{tabular}
@@ -3112,25 +3111,25 @@ Other differences are listed in \reftab{symlink-hardlink}.
 
 \textbf{Soft Links}:
 
-To identify if a file is a symlink or a hard link, you can use the \texttt{ls -l} command.
-If the file is a symlink, the first character of the permissions will be \texttt{l}.
-\texttt{ls -l} will also show the target of the symlink after a \texttt{->} symbol.
+To identify if a file is a symlink or a hard link, you can use the \lstinline|ls -l| command.
+If the file is a symlink, the first character of the permissions will be \lstinline|l|.
+\lstinline|ls -l| will also show the target of the symlink after a \lstinline|->| symbol.
 However, you cannot acertain if a file has a sofy link pointing to it somewhere else or not.
 
 \textbf{Hard Links}:
 
-To identify if a file is a hard link, you can use the \texttt{ls -i} command.
+To identify if a file is a hard link, you can use the \lstinline|ls -i| command.
 Hard links will have the same inode number as each other.
-The inode number is the first column of the output of \texttt{ls -i}.
+The inode number is the first column of the output of \lstinline|ls -i|.
 
 Also the number of links to the file will be more than 1.
 The number of links is the second
 \sidenote{
-  third if using \texttt{ls -li}
+  third if using \lstinline|ls -li|
 }
-column of the output of \texttt{ls -l}.
+column of the output of \lstinline|ls -l|.
 
-Even if a hard link is not present in current directory, you can acertain that a file has a hard link pointing to it somewhere else using the \textbf{number of hardlinks} column of \texttt{ls -l}.
+Even if a hard link is not present in current directory, you can acertain that a file has a hard link pointing to it somewhere else using the \textbf{number of hardlinks} column of \lstinline|ls -l|.
 
 \begin{lstlisting}[language=bash]
 $ touch file1
@@ -3145,17 +3144,17 @@ total 0
 
 \subsection{What are . and ..?}
 
-\texttt{.} and \texttt{..} are special directory entries.
+\lstinline|.| and \lstinline|..| are special directory entries.
 They are hard links to the current directory and the parent directory respectively.
-Each directory has a \texttt{.} entry pointing to itself and a \texttt{..} entry pointing to its parent directory.
+Each directory has a \lstinline|.| entry pointing to itself and a \lstinline|..| entry pointing to its parent directory.
 
 Due to this, the number of hard links to a directory is exactly equal to the number of subdirectories it has plus 2.
 
-This is because each subdirectory has a \texttt{..} entry pointing to the parent directory, and the parent directory has a \texttt{.} entry pointing to itself.
+This is because each subdirectory has a \lstinline|..| entry pointing to the parent directory, and the parent directory has a \lstinline|.| entry pointing to itself.
 
 So the directory's name in its parent directory is 1 link,
-the \texttt{.} in the directory is 1 link,
-and all the subdirectories have a \texttt{..} entry pointing to the directory, which is 1 link each.
+the \lstinline|.| in the directory is 1 link,
+and all the subdirectories have a \lstinline|..| entry pointing to the directory, which is 1 link each.
 
 \[
   \text{Number of links to a directory} = \text{Number of subdirectories} + 2
@@ -3173,9 +3172,9 @@ This formula always stands because a user cannot create additional hard links to
 \end{qs}
 
 \begin{ans}
-  \texttt{ls -i} will list the inodes of a file.
-  The inodes are the first column of the output of \texttt{ls -i}
-  This can be combined with other flags like \texttt{-l} or \texttt{-a} to show more details.
+  \lstinline|ls -i| will list the inodes of a file.
+  The inodes are the first column of the output of \lstinline|ls -i|
+  This can be combined with other flags like \lstinline|-l| or \lstinline|-a| to show more details.
 \end{ans}
 
 \begin{qs}
@@ -3183,8 +3182,8 @@ This formula always stands because a user cannot create additional hard links to
 \end{qs}
 
 \begin{ans}
-  \texttt{ln -s sourcefile targetfile} will create a soft link of \texttt{sourcefile}
-  named \texttt{targetfile}.
+  \lstinline|ln -s sourcefile targetfile| will create a soft link of \lstinline|sourcefile|
+  named \lstinline|targetfile|.
   The soft link is a pointer to the original file.
 \end{ans}
 
@@ -3193,10 +3192,10 @@ This formula always stands because a user cannot create additional hard links to
 \end{qs}
 
 \begin{ans}
-  \texttt{ln sourcefile targetfile} will create a hard link of \texttt{sourcefile}
-  named \texttt{targetfile}. The hard link is same as the original file. It does
+  \lstinline|ln sourcefile targetfile| will create a hard link of \lstinline|sourcefile|
+  named \lstinline|targetfile|. The hard link is same as the original file. It does
   not depend on the original file anymore after creation. They are equals,
-  both are \texttt{hardlinks} of each other. There is no parent-child relationship.
+  both are \lstinline|hardlinks| of each other. There is no parent-child relationship.
   The other file can be deleted and the original file will still work.
 \end{ans}
 
@@ -3212,8 +3211,8 @@ This formula always stands because a user cannot create additional hard links to
 \end{qs}
 
 \begin{ans}
-  \texttt{realpath filename} will give the real path of \texttt{filename}. \\
-  You can also use \texttt{readlink -f filename} to get the real path.
+  \lstinline|realpath filename| will give the real path of \lstinline|filename|. \\
+  You can also use \lstinline|readlink -f filename| to get the real path.
 \end{ans}
 
 

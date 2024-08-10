@@ -1,10 +1,10 @@
-\setchapterpreamble[u]{\margintoc}
+% \setchapterpreamble[u]{\margintoc}
 \chapter{Process Management}
 \labch{procman}
 
 \section{What is sleep?}
 
-\texttt{sleep} is a command that is used to delay the execution of a process
+\lstinline|sleep| is a command that is used to delay the execution of a process
 for a specified amount of time. \textbf{sleep} itself is a no-op command,
 \footnote{
   NO-OP stands for No Operation. It is a command that does nothing.
@@ -27,9 +27,9 @@ Hello, World!
 
 If you run the above snippet, you will see that the output is delayed by 5 seconds.
 Moreover, the prompt itself will not be available for 5 seconds, as the shell is busy
-with executing the \texttt{sleep} command.
+with executing the \lstinline|sleep| command.
 To run the entire snippet as one process, simply put the two commands on
-separate lines of a file (say, \texttt{hello.sh}), and run the file as a script.
+separate lines of a file (say, \lstinline|hello.sh|), and run the file as a script.
 
 \begin{lstlisting}[language=bash]
 $ cat hello.sh
@@ -39,7 +39,7 @@ $ bash hello.sh
 Hello, World!
 \end{lstlisting}
 
-We will be using \texttt{sleep} in the examples throughout this chapter to demonstrate
+We will be using \lstinline|sleep| in the examples throughout this chapter to demonstrate
 process management since it is a simple command that can be used to quickly
 spawn an idempotent process for any arbitrary amount of time.
 
@@ -49,9 +49,9 @@ spawn an idempotent process for any arbitrary amount of time.
 sleep NUMBER[SUFFIX]...
 \end{lstlisting}
 
-Here the \texttt{NUMBER} is the amount of time to sleep.
-The \texttt{SUFFIX} can be \texttt{s} for seconds, \texttt{m} for minutes,
-\texttt{h} for hours, and \texttt{d} for days.
+Here the \lstinline|NUMBER| is the amount of time to sleep.
+The \lstinline|SUFFIX| can be \lstinline|s| for seconds, \lstinline|m| for minutes,
+\lstinline|h| for hours, and \lstinline|d| for days.
 
 \vfill
 \pagebreak
@@ -130,7 +130,7 @@ be killed, as the child process is owned by the shell.
 If you are using a linux operating system with a GUI server (X or Wayland),
 try the following to understand how process ownership works.
 
-Open two terminals, in the first one, run \texttt{echo \$\$} to see the
+Open two terminals, in the first one, run \lstinline|echo \$\$| to see the
 process ID of that shell.
 It should print out a random string of digits, that is the PID of the shell.
 Then run a GUI application, such as \textbf{firefox}.
@@ -145,7 +145,7 @@ $ echo $$
 $ firefox
 \end{lstlisting}
 
-Now in the other terminal, which is free, run \texttt{pgrep firefox}
+Now in the other terminal, which is free, run \lstinline|pgrep firefox|
 \sidenote{
   or whatever was your process's name
 }
@@ -153,7 +153,7 @@ It should print out another random string of digits, it is the PID of
 firefox.
 
 Now you can use the following command to find the parent process's process
-ID (PPID) to verify it is the same as the output of \texttt{\$\$} in the first terminal.
+ID (PPID) to verify it is the same as the output of \lstinline|$$| in the first terminal.
 
 \begin{lstlisting}[language=bash]
 $ pgrep firefox
@@ -176,7 +176,7 @@ sayan    2278276 2277503 2278276 2277503  1 16:59 pts/5    00:00:04 /usr/lib/fir
 \end{lstlisting}
 
 Now, what happens if we kill the parent process?
-To kill a process all we need to use is use the \texttt{kill}
+To kill a process all we need to use is use the \lstinline|kill|
 command with the PID of the process.
 
 \begin{lstlisting}[language=bash]
@@ -184,7 +184,7 @@ $ kill -9 2277503
 \end{lstlisting}
 
 \marginnote{
-  The \texttt{-9} flag is used to send a \textbf{SIGKILL} signal to the process.
+  The \lstinline|-9| flag is used to send a \textbf{SIGKILL} signal to the process.
   This signal is used to kill a process immediately.
   We will cover signals later.
 }
@@ -198,7 +198,7 @@ even firefox, being the child of the shell process, is killed.
 \subsection{Don't kill my children}
 
 However, there are also ways to create a new process in the background.
-The easiest way to do this is to append an ampersand (\texttt{\&}) to the
+The easiest way to do this is to append an ampersand (\lstinline|&|) to the
 end of the command. This is a shell syntax that tells the shell to fork the
 command as a child process and run it in the background. What this means is
 the shell will not wait for the command to finish, and will return the prompt
@@ -208,7 +208,7 @@ something to the standard output or standard error, it will be displayed on the
 terminal. Furthermore, the process is still owned by the shell, and if the shell
 is killed, the process's parent will be changed to the \textbf{init} process.
 
-Lets try the same exercise as earlier, but now with the \texttt{\&} at the end.
+Lets try the same exercise as earlier, but now with the \lstinline|&| at the end.
 
 Open two terminals, and in the first one, execute the following command.
 
@@ -226,7 +226,7 @@ $
 
 You can observe that the firefox window opens up similar to last time, but
 now the prompt returns immediately. You can also see that the output of the
-\texttt{echo} command is displayed on the terminal.
+\lstinline|echo| command is displayed on the terminal.
 
 If you try to perform some operations in the browser, it may also print
 some messages to the terminal screen, even though it is not waiting for
@@ -235,7 +235,7 @@ the command to finish. The "ATTENTION" message is an example of this.
 Also observe that as soon as we launched \textbf{firefox}, it printed out
 two numbers, [1] and 2401297. The number in the square brackets is the job
 id of the process, and the number after that is the PID of the process.
-So now we dont even need to use \texttt{pgrep} to find the PID of the process.
+So now we dont even need to use \lstinline|pgrep| to find the PID of the process.
 
 Now in the other terminal, run the following command.
 
@@ -264,7 +264,7 @@ UID          PID    PPID    PGID     SID  C STIME TTY          TIME CMD
 sayan    2401297       1 2401297 2400520  3 17:13 ?        00:00:09 /usr/lib/firefox/firefox
 \end{lstlisting}
 
-You can also see that the TTY column is now set to \texttt{?}, which means that
+You can also see that the TTY column is now set to \lstinline|?|, which means that
 the process is no longer tied to the terminal.
 
 However, if instead of killing the parent process using the \textbf{SIGKILL}
@@ -280,12 +280,12 @@ asynchronously, but not always do we want to see the output of the process
 in the terminal from where we launched it. We may also want the process
 to be owned by the \textbf{init} process from the get go.
 
-To do this, we can use the \texttt{setsid} command. This command is used to
+To do this, we can use the \lstinline|setsid| command. This command is used to
 run a command in a new session. This will create a new process group and
 set the PPID of the process to the \textbf{init} process. The TTY will also
-be set to \texttt{?}.
+be set to \lstinline|?|.
 
-Lets try the same exercise with the \texttt{setsid} command.
+Lets try the same exercise with the \lstinline|setsid| command.
 Open two terminals, in one of them, run the following command.
 
 \begin{lstlisting}[language=bash]
@@ -311,7 +311,7 @@ So the process will not be killed if the shell is killed.
 
 This is called a hang-up signal. We can still artificially send the
 \textbf{SIGHUP} signal, which tells firefox that its parent has stopped
-by using the \texttt{kill -1} command.
+by using the \lstinline|kill -1| command.
 
 \begin{lstlisting}[language=bash]
 $ kill -1 2454452
@@ -325,25 +325,25 @@ didn't actually get killed.
 If you do not want to give up the ownership of a child process,
 and also don't really need to get the prompt back, but you do not
 want to see the output of the command in your terminal. You can
-use the \texttt{nohup} command followed by the command you want to
+use the \lstinline|nohup| command followed by the command you want to
 run. It will still be tied to the terminal, and you can use
-\texttt{Ctrl+C} to stop it, \texttt{Ctrl+Z} to pause it, etc.
+\lstinline|Ctrl+C| to stop it, \lstinline|Ctrl+Z| to pause it, etc.
 The prompt will also be blocked till the process runs.
 However, the input given to the terminal will not be sent
 to the process, and the output of the process will not be
 shown on the terminal. Instead, the output will be saved
-in a file named \texttt{nohup.out} in the current directory.
+in a file named \lstinline|nohup.out| in the current directory.
 
 However, this is different from simply running the command
-with a redirection operator (\texttt{>}) at the end,
+with a redirection operator (\lstinline|>|) at the end,
 \sidenote{
   We will cover redirection operators in the next chapter.
 }
-because the \texttt{nohup} command also makes the process
+because the \lstinline|nohup| command also makes the process
 immune to the hang-up signal.
 
 \begin{exercise}
-  Try the same exercise as before, but this time use the \texttt{nohup}
+  Try the same exercise as before, but this time use the \lstinline|nohup|
   to run firefox, then in another terminal, find the PID and PPID of
   firefox. Then try to kill the parent process and see if firefox
   dies or not.
@@ -351,7 +351,7 @@ immune to the hang-up signal.
 
 \subsection{coproc}
 
-The \texttt{coproc} command is used to run a command in the background
+The \lstinline|coproc| command is used to run a command in the background
 and tie the standard input and standard output of the command to a
 file descriptor. This is useful when you want to run a command in the
 background, but still want to interact with it using the shell.
@@ -363,10 +363,10 @@ This creates a two way pipe between the shell and the command.
 $ coproc [NAME] command [redirections]
 \end{lstlisting}
 
-This creates a coprocess named \texttt{NAME} and runs the command in the background.
-If the \texttt{NAME} is not provided, the default name is \texttt{COPROC}.
+This creates a coprocess named \lstinline|NAME| and runs the command in the background.
+If the \lstinline|NAME| is not provided, the default name is \lstinline|COPROC|.
 
-However, the recommended way to use \texttt{coproc} is to use it in a
+However, the recommended way to use \lstinline|coproc| is to use it in a
 subshell, so that the file descriptors are automatically closed when
 the subshell exits.
 
@@ -381,10 +381,10 @@ loops or conditionals can be executed using coproc in a subshell.
 The name that is set becomes a array variable in the shell, and can be used
 to access the file descriptors for stdin, stdout, and stderr.
 
-For example, to provide input to the command, you can use \texttt{echo} and
+For example, to provide input to the command, you can use \lstinline|echo| and
 redirection operators to write to the file descriptor.
 
-Similarly you can use the \texttt{read} command to read from the file descriptor.
+Similarly you can use the \lstinline|read| command to read from the file descriptor.
 
 \begin{lstlisting}[language=bash]
 $ coproc BC { bc -l; }
@@ -439,7 +439,7 @@ process recieves a hang-up signal, it will not propagate it to the child
 job if it is removed from the job table.
 This is applicable only for processes started from a shell.
 
-Open two terminals, in one, open firefox in background using the \texttt{\&}
+Open two terminals, in one, open firefox in background using the \lstinline|&|
 
 \begin{lstlisting}[language=bash]
 $ firefox &
@@ -462,7 +462,7 @@ then it wont have the opportunity to propagate the hang-up signal to the child p
 This is a separate process than the natural killing of firefox running in
 foreground even when shell is killed with \textbf{SIGKILL} signal.
 
-Now, to fix this, we can simply run the \texttt{disown} command in the terminal
+Now, to fix this, we can simply run the \lstinline|disown| command in the terminal
 where we started the firefox process.
 
 Again open a terminal emulator and run the following command.
@@ -489,7 +489,7 @@ Firefox does not close anymore, even when the parent process is hanged up.
 
 \subsection{Jobs}
 
-To list the jobs that are running in a shell, you can use the \texttt{jobs} command.
+To list the jobs that are running in a shell, you can use the \lstinline|jobs| command.
 
 \begin{lstlisting}[language=bash]
 $ firefox &
@@ -499,13 +499,13 @@ $ jobs
 [2]+  Running                 sleep 50 &
 \end{lstlisting}
 
-Here \texttt{+} denotes the current job, and \texttt{-} denotes the previous job.
+Here \lstinline|+| denotes the current job, and \lstinline|-| denotes the previous job.
 The first column is the job number, it can also be used to refer to the job
 inside that same shell. The process ID of a process can be used to refer to
 the process from anywhere, but the job ID is only valid in the shell where
 it is created.
 
-The process id can be listed using the \texttt{jobs -l} command.
+The process id can be listed using the \lstinline|jobs -l| command.
 
 \begin{lstlisting}[language=bash]
 $ jobs -l
@@ -525,14 +525,14 @@ $ jobs
 [2]+  Running                 sleep 50 &
 \end{lstlisting}
 
-Whereas using \texttt{disown -a} will remove all jobs from the table.
-\texttt{disown -r} will remove only running jobs from the table.
+Whereas using \lstinline|disown -a| will remove all jobs from the table.
+\lstinline|disown -r| will remove only running jobs from the table.
 
 If you dont really want to lose the job from the table, but you want to
 prevent it from being killed when the shell is killed, you can use
-\texttt{disown -h} to mark the jobs to be ignored by the hang-up signal.
+\lstinline|disown -h| to mark the jobs to be ignored by the hang-up signal.
 It will have same effect as last exercise, but it will still be present
-in the output of the \texttt{jobs} command.
+in the output of the \lstinline|jobs| command.
 
 \subsection{Suspending and Resuming Jobs}
 
@@ -555,33 +555,33 @@ The signal number for \textbf{SIGCONT} is 18.
 \begin{exercise}
   Try to pause a job using the \textbf{SIGSTOP} signal, then resume it using the
   \textbf{SIGCONT} signal.
-  Open firefox from a terminal using \texttt{firefox \&} and note the PID,
+  Open firefox from a terminal using \lstinline|firefox \&| and note the PID,
   then pause it using
-  \texttt{kill -19 <PID>},
+  \lstinline|kill -19 <PID>|,
   try to click on the firefox window, and see if it responds.
-  Then resume it using \texttt{kill -18 <PID>}.
+  Then resume it using \lstinline|kill -18 <PID>|.
   Does the firefox window respond now?
 \end{exercise}
 
-If you start a command from the shell without using the \texttt{\&} operator,
-you can pause the command using \texttt{Ctrl+Z} and resume it using the
-\texttt{fg} command.
+If you start a command from the shell without using the \lstinline|&| operator,
+you can pause the command using \lstinline|Ctrl+Z| and resume it using the
+\lstinline|fg| command.
 This sends the same signals as above, and uses the shell's job table
 to keep track of the jobs.
 
 \begin{remark}
-  Just like disown, the \texttt{fg} command can also take the job number
+  Just like disown, the \lstinline|fg| command can also take the job number
   as an argument to bring that job to the foreground. The default job
-  is the current job. (Marked with a \texttt{+} in the \texttt{jobs} command))
+  is the current job. (Marked with a \lstinline|+| in the \lstinline|jobs| command))
 \end{remark}
 
-You can also use the \texttt{bg} command to resume a job, but in the background.
-This has same effect as using the \texttt{\&} operator at the end of the command.
+You can also use the \lstinline|bg| command to resume a job, but in the background.
+This has same effect as using the \lstinline|&| operator at the end of the command.
 
 \begin{remark}
   Since the disown, fg, and bg commands work on the shell's job table,
   they are shell builtins, and not a executable binary.
-  You can verify this using the \texttt{type} command.
+  You can verify this using the \lstinline|type| command.
 \end{remark}
 
 You cannot perform job control on a process that is not started from the shell,
@@ -589,7 +589,7 @@ or if you have disowned the process.
 
 \subsection{Killing Processes}
 
-We have been using the \texttt{kill} command to send signals to processes.
+We have been using the \lstinline|kill| command to send signals to processes.
 The kill command is a shell builtin and an executable command that is used
 to send signals to processes. The default signal that is sent is the
 \textbf{SIGTERM} signal, which is signal number 15.
@@ -605,13 +605,13 @@ $ kill [-signal|-s signal] PID|name...
 Let us also briefly discuss what the synopsis of the command means, and
 how to interpret it.
 
-The first word is the name of the command, which is \texttt{kill} in this case.
+The first word is the name of the command, which is \lstinline|kill| in this case.
 The argument \textbf{signal} inside square brackets means that it is optional.
 The argument \textbf{PID} is the process ID of the process that you want to kill.
 The argument \textbf{name} is the name of the process that you want to kill.
 The pipe between \textbf{PID} and \textbf{name} means that you can provide
 either the PID or the name of the process.
-The ellipsis (\texttt{...}) after \textbf{PID|name} means that you can provide
+The ellipsis (\lstinline|...|) after \textbf{PID|name} means that you can provide
 as many PIDs or names as you want.
 
 \begin{remark}
@@ -620,7 +620,7 @@ as many PIDs or names as you want.
   synopsis of the builtin. The bash builtin of kill does not support
   providing names of the processes, only the PIDs. Hence if you want
   to kill a process by its name, you will either have to use the
-  path of the kill binary, or use the \texttt{pkill} command.
+  path of the kill binary, or use the \lstinline|pkill| command.
 \end{remark}
 
 So for example, we can run kill in the following manners.
@@ -633,7 +633,7 @@ $ kill -SIGKILL 2525
 $ kill -SIGKILL 2525 732
 \end{lstlisting}
 
-The \texttt{kill} command can also be used to send other non-terminating signals
+The \lstinline|kill| command can also be used to send other non-terminating signals
 to the process. For example, the \textbf{SIGSTP} signal can be used to pause
 a process, and the \textbf{SIGCONT} signal can be used to resume a process.
 Similarly, there are some undefined signals that can be used to send custom
@@ -643,7 +643,7 @@ signals to the process.
 behaviour, and can be used by the user to send custom signals to the process.
 The behaviour of the process on receipt of these signals is decided by the
 process and told to the user by the process documentation. The user can
-then send these signals to the process using the \texttt{kill} command.
+then send these signals to the process using the \lstinline|kill| command.
 This helps user interact with processes that are not running directly in the
 foreground of a shell.
 
@@ -656,7 +656,7 @@ cannot be trapped, and the process will be killed immediately. Similarly
 the \textbf{SIGSTOP} signal, which is similar in definition to the \textbf{SIGSTP}
 signal, cannot be trapped.
 
-To see the list of the signals, we can run \texttt{kill -l}.
+To see the list of the signals, we can run \lstinline|kill -l|.
 
 \begin{lstlisting}[language=bash]
 $ kill -l
@@ -681,21 +681,21 @@ Some of the important signals are:
   terminal is closed. This is used to tell the process that the terminal
   is no longer available.
 \item \textbf{SIGINT} - Interrupt signal. This is sent to a process when the
-  user presses \texttt{Ctrl+C}. This is used to tell the process to stop
+  user presses \lstinline|Ctrl+C|. This is used to tell the process to stop
   what it is doing and exit.
 \item \textbf{SIGKILL} - Kill signal. This is used to kill a process immediately.
   This signal cannot be caught or ignored by the process.
 \item \textbf{SIGTERM} - Terminate signal. This is used to tell the process
   to exit gracefully. The process can catch this signal and do some cleanup
-  before exiting. This is the default signal sent by the \texttt{kill} command.
+  before exiting. This is the default signal sent by the \lstinline|kill| command.
 \item \textbf{SIGSTP} - Stop signal. This is used to pause a process.
-  This is sent when the user presses \texttt{Ctrl+Z}. This signal can be
+  This is sent when the user presses \lstinline|Ctrl+Z|. This signal can be
   caught or ignored by the process.
 \item \textbf{SIGSTOP} - Stop signal. This is used to pause a process.
   This signal cannot be caught or ignored by the process.
 \item \textbf{SIGCONT} - Continue signal. This is used to resume a process
   that has been paused using the \textbf{SIGSTOP} signal. This is sent
-  when the user presses \texttt{fg} or \texttt{bg}.
+  when the user presses \lstinline|fg| or \lstinline|bg|.
 \item \textbf{SIGUSR1} - User defined signal 1. This is a signal that can
   be used by the user to send a custom signal to the process.
 \item \textbf{SIGUSR2} - User defined signal 2. This is a signal that can
@@ -719,13 +719,13 @@ To do this, there are multiple tools in linux that can be used.
 
 \subsection{pgrep}
 
-The \texttt{pgrep} command is used to find the PID of a process based on its name.
+The \lstinline|pgrep| command is used to find the PID of a process based on its name.
 It can take the name of the process as an argument, and will print the PID of the
 processes that match the name. The search can also be a regex pattern.
 \sidenote{
   We will discuss regex patterns in the next chapter.
 }
-We have already seen how \texttt{pgrep} can be used to find the PID of a process.
+We have already seen how \lstinline|pgrep| can be used to find the PID of a process.
 
 \begin{lstlisting}[language=bash]
 $ pgrep firefox
@@ -746,10 +746,10 @@ $ pgrep sleep
 
 \subsection{pkill}
 
-Similarly, we also have the \texttt{pkill} command, which is used to kill a process
+Similarly, we also have the \lstinline|pkill| command, which is used to kill a process
 based on its name. It can take the name of the process as an argument, and will
 send the \textbf{SIGTERM} signal to the processes that match the name.
-Other signals can also be sent using the \texttt{-signal} flag, similar to the
+Other signals can also be sent using the \lstinline|-signal| flag, similar to the
 kill command.
 
 \begin{lstlisting}[language=bash]
@@ -758,12 +758,12 @@ $ pkill firefox
 
 \subsection{pidwait}
 
-The \texttt{pidwait} command is used to wait for a process to exit.
+The \lstinline|pidwait| command is used to wait for a process to exit.
 It searches for the process using its name, a part of its name, or any
 regex matching its name, and waits for the process to exit.
 
 \begin{exercise}
-  Open firefox from a terminal in the background, then use the \texttt{pidwait}
+  Open firefox from a terminal in the background, then use the \lstinline|pidwait|
   to wait till the process exits. After some time, close the firefox window
   and observe the terminal.
 \end{exercise}
@@ -816,7 +816,7 @@ There are hundreds of flags that can be used with the \textbf{ps} command.
 
 The \textbf{pstree} command is used to display the processes in a tree form.
 Although the \textbf{ps} command can also display the processes in a tree form
-using the \texttt{--forest} flag, the \textbf{pstree} command is more suited
+using the \lstinline|--forest| flag, the \textbf{pstree} command is more suited
 for this purpose. It has many features that ps lacks, such as collapsing
 branches of identical processes, better ASCII art, Unicode support, etc.
 
@@ -824,22 +824,22 @@ If the system and the terminal supports unicode, the \textbf{pstree} command
 will automatically use
 \href{https://en.wikipedia.org/wiki/Box-drawing\_character}{VT100 box-drawing characters}
 to make the tree look better. We can still force it to use ASCII with the
-\texttt{-A} flag.
+\lstinline|-A| flag.
 
-We can also disable the clubbing of identical processes using the \texttt{-c} flag.
+We can also disable the clubbing of identical processes using the \lstinline|-c| flag.
 
 The pstree command optionally takes a PID as an argument, and will display
 the tree rooted at that PID. If no PID is provided, it will display the
 tree rooted at the init process.
 
 I can find the PID of the tmux server I am running to develop this book
-using the \texttt{pgrep} command.
+using the \lstinline|pgrep| command.
 \begin{lstlisting}[language=bash]
 $ pgrep tmux
 62957
 \end{lstlisting}
 
-And then use the \texttt{pstree} command
+And then use the \lstinline|pstree| command
 to display the tree rooted at that PID.
 
 \begin{lstlisting}[language=bash]
@@ -924,8 +924,8 @@ One such command to run to simulate heavy CPU usage is to run the following comm
 $ cat /dev/urandom | gzip > /dev/null &
 \end{lstlisting}
 
-This will compress the random data from \texttt{/dev/urandom} and write it to
-\texttt{/dev/null}. This will use a lot of CPU, and you can see the CPU usage
+This will compress the random data from \lstinline|/dev/urandom| and write it to
+\lstinline|/dev/null|. This will use a lot of CPU, and you can see the CPU usage
 spike up. But this is a single core process, so the CPU usage will be limited
 to only one core. However, the CPU core used may keep changing.
 
@@ -933,10 +933,10 @@ to only one core. However, the CPU core used may keep changing.
   The above command is a simple way to generate CPU usage. It will not
   write any data to disk and not eat any disk space. However, the
   command should be typed carefully, since if you forget to add the
-  \texttt{> /dev/null} part, it will write the compressed data to the
-  terminal if \texttt{-f} is given to \texttt{gzip}, and the terminal
+  \lstinline|> /dev/null| part, it will write the compressed data to the
+  terminal if \lstinline|-f| is given to \lstinline|gzip|, and the terminal
   will be filled with random data and get messed up. In this case
-  you can type \texttt{tput reset} to reset the terminal after killing
+  you can type \lstinline|tput reset| to reset the terminal after killing
   the process.
 \end{remark}
 
@@ -966,7 +966,7 @@ process exited successfully or not. The exit code is a number between
 child process.
 
 The exit code of the last run process is stored in a variable
-called \texttt{\$?} in the shell. Successful processes return 0,
+called \lstinline|$?| in the shell. Successful processes return 0,
 whereas unsuccessful processes return a non-zero number.
 The exact return code is decided by the process itself, and usually
 has some meaning to the process. Some common exit codes are:
@@ -979,20 +979,20 @@ has some meaning to the process. Some common exit codes are:
   \item 127 - Command not found
   \item 128 - Invalid argument to exit
   \item 128+n - Fatal error signal "n"
-  \item 130 - Script terminated by \texttt{Ctrl+C}
+  \item 130 - Script terminated by \lstinline|Ctrl+C|
   \item 137 - Process killed with \textbf{SIGKILL}
   \item 255 - Exit status out of range
 \end{itemize}
 
 \begin{remark}
 Note that $130=128+2$, and $2$ is the signal number for \textbf{SIGINT},
-thus, the exit code for a process that is terminated by \texttt{Ctrl+C}
+thus, the exit code for a process that is terminated by \lstinline|Ctrl+C|
 is 130. Similarly, any other signal sent to the process causing it to
 exit abnormally will have an exit code of $128+n$, where $n$ is the signal
 number. Similarly $137=128+9$, and $9$ is the signal number for \textbf{SIGKILL}.
 \end{remark}
 
-To return any exit status from your script, you can use the \texttt{exit} command.
+To return any exit status from your script, you can use the \lstinline|exit| command.
 
 \begin{lstlisting}[language=bash]
 $ cat myscript.sh
@@ -1014,8 +1014,8 @@ $ echo $?
 25
 \end{lstlisting}
 
-The exit code is how shell constructs like \texttt{if}, \texttt{while},
-and \texttt{until} construct their conditions. If the exit code is 0,
+The exit code is how shell constructs like \lstinline|if|, \lstinline|while|,
+and \lstinline|until| construct their conditions. If the exit code is 0,
 then it is considered true, and if the exit code is non-zero, then it
 is considered false.
 

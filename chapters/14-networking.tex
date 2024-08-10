@@ -1,4 +1,4 @@
-\setchapterpreamble[u]{\margintoc}
+% \setchapterpreamble[u]{\margintoc}
 \chapter{Networking and SSH}
 \labch{ssh}
 
@@ -260,17 +260,19 @@ digits separated by colons. For example,
   zeros in each group. Further, any leading
   zeros can be omitted for each group.
   Making the above address as
-  \texttt{2001:db8:85a3:0:0:8a2e:370:7334}.
+  \lstinline|2001:db8:85a3:0:0:8a2e:370:7334|.
   Further, if there are multiple groups of zeros,
-  they can be compressed to \texttt{::}.
+  they can be compressed to \lstinline|::|.
   This can be used only once in an address.
   Doing this, the above address can be compressed
   further to
-  \texttt{2001:db8:85a3::8a2e:370:7334}.
+  \lstinline|2001:db8:85a3::8a2e:370:7334|.
 }
 
 This results in
-$2^{128} = 340282366920938463463374607431768211456$
+\[
+  2^{128} = 340282366920938463463374607431768211456
+\]
 possible IP addresses, which is a lot more than
 IPv4.
 
@@ -356,7 +358,7 @@ number where the first $n$ bits are 1s and the
 remaining bits are 0s. The number of 1s in the
 subnet mask indicates the number of bits used
 to identify the network. For example, for the
-IP Address \texttt{192.168.0.15}, it can be
+IP Address \lstinline|192.168.0.15|, it can be
 written in binary as
 \[
 1100 0000 - 1010 1000 - 0000 0000 - 0000 1111
@@ -371,7 +373,7 @@ host. So the default network mask is
 1111 1111 - 1111 1111 - 1111 1111 - 0000 0000
 \]
 
-or \texttt{255.255.255.0} in decimal.
+or \lstinline|255.255.255.0| in decimal.
 The network portion of the IP address is
 found by taking the bitwise AND
 \sidenote{
@@ -387,8 +389,8 @@ This results in the network address
 \[
 1100 0000 - 1010 1000 - 0000 0000 - 0000 0000
 \]
-which is \texttt{192.168.0.0} and the host address
-is \texttt{0000 1111} which is $15$.
+which is \lstinline|192.168.0.0| and the host address
+is \lstinline|0000 1111| which is $15$.
 
 However, if we do not require all the 8 bits in the
 host space
@@ -400,7 +402,7 @@ then we can use some of the initial bits of the
 host space to identify subnetworks. This is called
 subnetting.
 
-For example, the netmask of \texttt{255.255.255.0}
+For example, the netmask of \lstinline|255.255.255.0|
 leaves 8 bits for the host space, or $2^8 - 2 = 254$
 \sidenote{
   We subtract 2 from the total number of hosts
@@ -427,11 +429,11 @@ To do this, we change the subnet mask to
 \[
 1111 1111 - 1111 1111 - 1111 1111 - 1000 0000
 \]
-which can be represented as \texttt{255.255.255.128}.
+which can be represented as \lstinline|255.255.255.128|.
 
 This gives us two subnets, one with the address range
-of \texttt{192.168.0.1} to \texttt{192.168.0.127}, and
-another of \texttt{192.168.0.129} to \texttt{192.168.0.255}.
+of \lstinline|192.168.0.1| to \lstinline|192.168.0.127|, and
+another of \lstinline|192.168.0.129| to \lstinline|192.168.0.255|.
 
 \subsection{Private and Public IP Addresses}
 
@@ -463,11 +465,11 @@ that are reserved for private networks.
 \labtab{privateip}
 \begin{tabular}{c c c c}
 \toprule
-Class & Network Bits (CIDR) & Address Range & Number of Addresses \\
+Class & Network Bits & Address Range & Number of Addresses \\
 \midrule
-\textbf{Class A} & 8 & \texttt{10.0.0.0} - \texttt{10.255.255.255} & 16,777,216 \\
-\textbf{Class B} & 12 & \texttt{172.16.0.0} - \texttt{172.31.255.255} & 1,048,576 \\
-\textbf{Class C} & 16 & \texttt{192.168.0.0} - \texttt{192.168.255.255} & 65,536 \\
+\textbf{Class A} & 8 & \lstinline|10.0.0.0| - \lstinline|10.255.255.255| & 16,777,216 \\
+\textbf{Class B} & 12 & \lstinline|172.16.0.0| - \lstinline|172.31.255.255| & 1,048,576 \\
+\textbf{Class C} & 16 & \lstinline|192.168.0.0| - \lstinline|192.168.255.255| & 65,536 \\
 \bottomrule
 \end{tabular}
 \end{table*}
@@ -482,9 +484,9 @@ the network and how many bits are used to identify the
 host.
 
 For example, we could express the idea that the IP address
-\texttt{192.168.0.15} is associated with the netmask
-\texttt{255.255.255.0} by using the CIDR notation of
-\texttt{192.168.0.15/24}. This means that the first
+\lstinline|192.168.0.15| is associated with the netmask
+\lstinline|255.255.255.0| by using the CIDR notation of
+\lstinline|192.168.0.15/24|. This means that the first
 $24$ bits of the IP address given are considered
 significant for the network routing.
 
@@ -528,10 +530,10 @@ and are not registered.
 
 Whenever you send a request to a web server for example,
 the request is sent to the server's IP address and the
-port number \texttt{80} which is the default port for
+port number \lstinline|80| which is the default port for
 HTTP
 \sidenote{
-  or \texttt{443} for HTTPS.
+  or \lstinline|443| for HTTPS.
 }
 but the port number from your (the client) side is
 usually a random port number from the dynamic port range.
@@ -551,15 +553,15 @@ Port Number & Service & Protocol \\
 20 & File Transfer Protocol (FTP) Data Transfer & TCP \\
 21 & File Transfer Protocol (FTP) Command Control & TCP \\
 22 & Secure Shell (SSH) Secure Login & TCP \\
-23 & Telnet remote login service, unencrypted text messages & TCP \\
-25 & Simple Mail Transfer Protocol (SMTP) email delivery & TCP \\
+23 & Telnet remote login service& TCP \\
+25 & Simple Mail Transfer Protocol (SMTP)& TCP \\
 53 & Domain Name System (DNS) service & TCP/UDP \\
 67, 68 & Dynamic Host Configuration Protocol (DHCP) & UDP \\
-80 & Hypertext Transfer Protocol (HTTP) used in the World Wide Web & TCP \\
+80 & Hypertext Transfer Protocol (HTTP) & TCP \\
 110 & Post Office Protocol (POP3) & TCP \\
 119 & Network News Transfer Protocol (NNTP) & TCP \\
 123 & Network Time Protocol (NTP) & UDP \\
-143 & Internet Message Access Protocol (IMAP) Management of digital mail & TCP \\
+143 & Internet Message Access Protocol (IMAP) & TCP \\
 161 & Simple Network Management Protocol (SNMP) & UDP \\
 194 & Internet Relay Chat (IRC) & TCP \\
 443 & HTTP Secure (HTTPS) HTTP over TLS/SSL & TCP \\
@@ -663,10 +665,10 @@ $ ls -lZ
 \end{lstlisting}
 
 However, if SELinux is not enabled, it will show
-a \texttt{?} in the context.
+a \lstinline|?| in the context.
 
 If SELinux is enabled, you can set the context of a
-file or a directory using the \texttt{chcon} command.
+file or a directory using the \lstinline|chcon| command.
 
 \textbf{RBAC Items}
 
@@ -716,7 +718,7 @@ processes to files and directories, as shown in
 \end{itemize}
 
 You can change the mode of SELinux by editing the
-\texttt{/etc/selinux/config} file.
+\lstinline|/etc/selinux/config| file.
 
 \begin{lstlisting}[language=bash]
 $ sudo vim /etc/selinux/config
@@ -745,16 +747,16 @@ important tools are listed in \reftab{networktools}.
     \toprule
     \textbf{Tool} & \textbf{Description} \\
     \midrule
-    \texttt{ip} & Show / manipulate routing, devices, policy routing and tunnels \\
-    \texttt{ping} & To see if the remote machine is up \\
-    \texttt{traceroute} & Diagnostics the hop timings to the remote machine \\
-    \texttt{nslookup} & Ask for conversion of IP address to name \\
-    \texttt{dig} & DNS lookup utility \\
-    \texttt{netstat} & Print network connections \\
+    \lstinline|ip| & Show / manipulate routing, devices, policy routing and tunnels \\
+    \lstinline|ping| & To see if the remote machine is up \\
+    \lstinline|traceroute| & Diagnostics the hop timings to the remote machine \\
+    \lstinline|nslookup| & Ask for conversion of IP address to name \\
+    \lstinline|dig| & DNS lookup utility \\
+    \lstinline|netstat| & Print network connections \\
     \href{https://mxtoolbox.com/}{mxtoolbox} & Public accessibility of your server \\
     \href{https://whois.com/}{whois} & Information about the domain \\
-    \texttt{nmap} & Network port scanner \\
-    \texttt{wireshark} & Network protocol analyzer and packet sniffer \\
+    \lstinline|nmap| & Network port scanner \\
+    \lstinline|wireshark| & Network protocol analyzer and packet sniffer \\
     \bottomrule
   \end{tabular}
 \end{table*}
@@ -762,9 +764,9 @@ important tools are listed in \reftab{networktools}.
 \textbf{ip}
 
 To find out the private IP address of the NICs of your system,
-you can run the \texttt{ip addr} command.
+you can run the \lstinline|ip addr| command.
 \sidenote{
-  \texttt{ip a} also works.
+  \lstinline|ip a| also works.
 }
 
 \begin{lstlisting}[language=bash]
@@ -784,11 +786,11 @@ $ ip addr
        valid_lft forever preferred_lft forever
 \end{lstlisting}
 
-Here you can see there are two interfaces, \texttt{lo}
-and \texttt{eno1}. The \texttt{lo} interface is the
-loopback interface, and the \texttt{eno1} interface
+Here you can see there are two interfaces, \lstinline|lo|
+and \lstinline|eno1|. The \lstinline|lo| interface is the
+loopback interface, and the \lstinline|eno1| interface
 is the actual network interface. The IP address of
-the \textbf{lo} interface is usually always \texttt{127.0.0.1}.
+the \textbf{lo} interface is usually always \lstinline|127.0.0.1|.
 This address is used to refer to the same system in terms
 of IP address without knowing the actual private IP of
 the system in the LAN.
@@ -806,21 +808,21 @@ at any time. This is done by the DHCP server in your router.
 
 \begin{remark}
 The NIC name can be different in different systems.
-For a ethernet connection, it is usually \texttt{eno1}
-or \texttt{eth0} which is the legacy name. For a wifi
-NIC, it is usually \texttt{wlan0}.
+For a ethernet connection, it is usually \lstinline|eno1|
+or \lstinline|eth0| which is the legacy name. For a wifi
+NIC, it is usually \lstinline|wlan0|.
 \end{remark}
 
 \begin{remark}
   Earlier the tool used to check the network status
-  was \texttt{ifconfig}. However, this tool is deprecated
+  was \lstinline|ifconfig|. However, this tool is deprecated
   now and should not be used. The new tool to check the
-  network status is \texttt{ip}.
+  network status is \lstinline|ip|.
 \end{remark}
 
 \textbf{ping}
 
-The \texttt{ping} command is used to check if a remote
+The \lstinline|ping| command is used to check if a remote
 server is up and running. It sends an \textbf{ICMP}
 \sidenote{
   Internet Control Message Protocol (ICMP) is a
@@ -852,14 +854,14 @@ PING google.com (172.217.163.206) 56(84) bytes of data.
 rtt min/avg/max/mdev = 45.316/45.524/45.791/0.181 ms
 \end{lstlisting}
 
-The response of the \texttt{ping} command shows the
+The response of the \lstinline|ping| command shows the
 time taken for the packet to reach the server and
 also the resolved IP address of the server.
 
 \textbf{nslookup}
 
 Another tool to lookup the associated IP address of
-a domain name is the \texttt{nslookup} command.
+a domain name is the \lstinline|nslookup| command.
 
 \begin{lstlisting}[language=bash]
 $ nslookup google.com
@@ -874,7 +876,7 @@ Address: 2404:6800:4007:810::200e
 \end{lstlisting}
 
 Here you can see the resolved IP address of the domain
-is \texttt{172.217.163.206}. If you copy this IP address
+is \lstinline|172.217.163.206|. If you copy this IP address
 and paste it in your browser, you can see that the
 website of google opens up.
 The second address returned is the IPv6 IP Address.
@@ -890,7 +892,7 @@ domain name.
   address of the router in the LAN which acts as
   the DNS Server cache. However if you type the
   domain of a website which you have not visited,
-  or have visited long ago into \texttt{nslookup},
+  or have visited long ago into \lstinline|nslookup|,
   then the DNS Server mentioned will be the public
   address of the DNS Server, which might be your
   ISP's DNS Server, or some other public DNS Server.
@@ -902,7 +904,7 @@ IP address of your server from the public internet.
 \textbf{dig}
 
 Another tool to lookup the associated IP address of
-a domain name is the \texttt{dig} command.
+a domain name is the \lstinline|dig| command.
 It can also reverse lookup the IP address to find
 the associated domain name.
 
@@ -1012,9 +1014,9 @@ cannonical name.
   compared to someone in the US.
 \end{remark}
 
-To get the output of \texttt{dig} in a more readable
-and concise format, you can use the \texttt{+short}
-or \texttt{+noall} option.
+To get the output of \lstinline|dig| in a more readable
+and concise format, you can use the \lstinline|+short|
+or \lstinline|+noall| option.
 
 \begin{lstlisting}[language=bash]
 $ dig +noall +answer google.com
@@ -1023,7 +1025,7 @@ google.com.		244	IN	A	172.217.163.206
 
 \textbf{netstat}
 
-The \texttt{netstat} command is used to print network
+The \lstinline|netstat| command is used to print network
 connections, routing tables, interface statistics,
 masquerade connections, and multicast memberships.
 
@@ -1069,7 +1071,7 @@ from another computer over the network, to execute
 any command in the terminal that they have access to.
 
 SSH can also be used to transfer files between two
-computers using the \texttt{scp} command.
+computers using the \lstinline|scp| command.
 
 \subsection{History}
 
@@ -1101,7 +1103,7 @@ since they are encrypted.
 
 To login into a remote server, all you need to do is
 provide the username and the IP address or the domain
-name of the server to the \texttt{ssh} command.
+name of the server to the \lstinline|ssh| command.
 
 \begin{marginfigure}
   \includegraphics{encrypt}
@@ -1154,7 +1156,7 @@ create, but also understand SSH keys.
 Let us quickly see how to create a ssh key-pair
 which can be used to login into a remote server.
 
-We need to use the \texttt{ssh-keygen}
+We need to use the \lstinline|ssh-keygen|
 command to create a new public-private
 key pair.
 
@@ -1178,8 +1180,8 @@ keys, it is recommended to use the default location.
   it is shorter yet more secure than RSA.
   If you have an outdated version of OpenSSH, you
   might get the default RSA algorithm.
-  To change the algorithm, you can use the \texttt{-t}
-  flag along with the \texttt{ssh-keygen} command.
+  To change the algorithm, you can use the \lstinline|-t|
+  flag along with the \lstinline|ssh-keygen| command.
   \begin{lstlisting}[language=bash]
   $ ssh-keygen -t rsa \end{lstlisting}
   will create a RSA key pair and using
@@ -1219,9 +1221,9 @@ The key's randomart image is:
 \end{lstlisting}
 
 Our key pair has been generated. The private key
-is stored in \texttt{/home/username/.ssh/id\_ed25519}
+is stored in \lstinline|/home/username/.ssh/id\_ed25519|
 and the public key is stored in
-\texttt{/home/username/.ssh/id\_ed25519.pub}.
+\lstinline|/home/username/.ssh/id\_ed25519.pub|.
 
 Make sure to \textbf{never} share your private key with anyone.
 Ideally, you dont even need to see the private key yourself.
@@ -1235,7 +1237,7 @@ you want to login to.
 Finally, to share the public key with the server,
 there are usually multiple ways. If the server
 allows you to login using a password, you can
-simply use the \texttt{ssh-copy-id} command.
+simply use the \lstinline|ssh-copy-id| command.
 This command will take your username and password
 to login to the server, and then copy the public
 key which you provide to the server.
@@ -1245,10 +1247,10 @@ $ ssh-copy-id -i /key/to/public/key username@ipaddress
 \end{lstlisting}
 
 \begin{remark}
-  The \texttt{-i} flag is used to specify the path
-  to the public key. You can drop the \texttt{.pub}
+  The \lstinline|-i| flag is used to specify the path
+  to the public key. You can drop the \lstinline|.pub|
   from the path as well (making it the path to the
-  private key), since \texttt{ssh-copy-id} will
+  private key), since \lstinline|ssh-copy-id| will
   automatically look for the public key.
   However, this flag is not required if you
   are using the default location.
@@ -1258,7 +1260,7 @@ $ ssh-copy-id -i /key/to/public/key username@ipaddress
   \begin{lstlisting}[language=bash]
   $ ssh-copy-id username@ipaddress \end{lstlisting}
   The same applies for logging into the server
-  using the \texttt{ssh} command.
+  using the \lstinline|ssh| command.
 \end{remark}
 
 \textbf{manual install}
@@ -1270,7 +1272,7 @@ need to somehow copy the public key to the server.
 
 If you have physical access to the server, you
 can simply copy the public key to the server
-in the \texttt{~/.ssh/authorized\_keys} file
+in the \lstinline|~/.ssh/authorized\_keys| file
 of the server.
 
 \begin{lstlisting}[language=bash]
@@ -1280,10 +1282,10 @@ $ cat ~/someoneskey.pub >> ~/.ssh/authorized_keys
 \end{lstlisting}
 
 \begin{remark}
-  Make sure to use the \texttt{>>} operator and
-  not the \texttt{>} operator. The \texttt{>>}
+  Make sure to use the \lstinline|>>| operator and
+  not the \lstinline|>| operator. The \lstinline|>>|
   operator appends the contents of the file to
-  the end of the file, while the \texttt{>}
+  the end of the file, while the \lstinline|>|
   operator overwrites the file, we do not want that.
 \end{remark}
 
@@ -1297,7 +1299,7 @@ using your institute credentials, and then submit
 your public key in the form provided.
 
 You can print out the contents of the public key
-using the \texttt{cat} command and copy the contents
+using the \lstinline|cat| command and copy the contents
 into the form.
 
 \begin{lstlisting}[language=bash]
@@ -1310,7 +1312,7 @@ your username and hostname.
 
 \subsection{How to login to a remote server}
 
-You can then login into the server using the \texttt{ssh}
+You can then login into the server using the \lstinline|ssh|
 command.
 
 \begin{lstlisting}[language=bash]
@@ -1334,14 +1336,14 @@ Last login: Mon Jun  3 07:43:22 2024 from 192.168.2.3
 29f1001234@se2001:~$
 \end{lstlisting}
 
-Notice that the prompt has changed from \texttt{test1@rex}
+Notice that the prompt has changed from \lstinline|test1@rex|
 which was the prompt of your local machine, to
-\texttt{rollnumber@se2001} which is the prompt of the
+\lstinline|rollnumber@se2001| which is the prompt of the
 server.
 
 \subsection{Call an exorcist, there's a daemon in my computer}
 
-What is \texttt{sshd}?
+What is \lstinline|sshd|?
 It is a daemon.
 
 \begin{definition}[Daemon]
@@ -1352,7 +1354,7 @@ It is a daemon.
 \end{definition}
 
 There are many daemons running in your computer.
-You can use \texttt{systemctl status} to see the
+You can use \lstinline|systemctl status| to see the
 loaded and active daemons in your computer.
 
 \begin{lstlisting}[language=bash]
@@ -1384,9 +1386,9 @@ $ systemctl status
 \end{lstlisting}
 
 Here you can see some of the important daemons running,
-such as \texttt{NetworkManager} which is used to manage
-the network connections, \texttt{cronie} which is used
-to run scheduled tasks, \texttt{cups} which is used to
+such as \lstinline|NetworkManager| which is used to manage
+the network connections, \lstinline|cronie| which is used
+to run scheduled tasks, \lstinline|cups| which is used to
 manage printers, etc.
 
 \textbf{sshd}
@@ -1395,10 +1397,10 @@ sshd is the daemon that runs on the server and listens
 to any incoming SSH connections. It is the daemon that
 lets you login into the server using the SSH protocol.
 
-Your own system might not be running the \texttt{sshd}
+Your own system might not be running the \lstinline|sshd|
 daemon, since you are not running a server. However,
-you can check if the \texttt{sshd} daemon is running
-using the \texttt{systemctl} command.
+you can check if the \lstinline|sshd| daemon is running
+using the \lstinline|systemctl| command.
 
 \begin{lstlisting}[language=bash]
 $ systemctl status sshd
@@ -1407,7 +1409,7 @@ $ systemctl status sshd
      Active: inactive (dead)
 \end{lstlisting}
 
-Here you can see that the \texttt{sshd} daemon is
+Here you can see that the \lstinline|sshd| daemon is
 currently inactive. This is because I am not running
 a server and don't usually login remotely to my
 system. However, the output of the same command
@@ -1437,6 +1439,14 @@ that it is running. However, we wont be able to
 read the logs of the server, since we are not
 authorized.
 
+
+\marginnote{
+  I have set the \lstinline|LC\_ALL| environment variable
+  to the locale C while generating the
+  above outputs to prevent latex errors.
+  Ideally if you run the command, you will see
+  a prettier unicode output.
+}
 \begin{lstlisting}
 $ ssh username@se2001.ds.study.iitm.ac.in
 username@se2001:~$ systemctl status sshd
@@ -1460,10 +1470,10 @@ Warning: some journal files were not opened due to insufficient permissions.
   Notice that there are some differences in the output
   when run from my local system and from the system
   commands server. Such as, the name of the service
-  is \texttt{ssh} on the server, while it is \texttt{sshd}
-  on my local system. Also the full name is \texttt{OpenBSD
+  is \lstinline|ssh| on the server, while it is \lstinline|sshd|
+  on my local system. Also the full name is \textbf{OpenBSD
   Secure Shell server} on the server, while it is
-  \texttt{OpenSSH Daemon} on my local system.
+  \lstinline|OpenSSH Daemon| on my local system.
   The path of the service file is also different.
   This is because the server is running a ubuntu
   distribution whereas my local system runs an arch
@@ -1471,10 +1481,26 @@ Warning: some journal files were not opened due to insufficient permissions.
   ssh, and hence the differences.
 \end{remark}
 
-\footnotetext{
-  I have set the \texttt{LC\_ALL} environment variable
-  to the locale C while generating the
-  above outputs to prevent latex errors.
-  Ideally if you run the command, you will see
-  a prettier unicode output.
-}
+\subsection{SCP}
+
+\textbf{scp} is a command used to copy files between
+remote servers.
+It uses the \lstinline|ssh| protocol to copy files
+in an encrypted manner over the network.
+
+The syntax of the \lstinline|scp| command is similar
+to the \lstinline|cp| command.
+
+\begin{lstlisting}[language=bash]
+$ scp username@ipaddress:/path/to/file /path/to/destination
+\end{lstlisting}
+
+This will copy a file from the remote server to your
+local machine.
+
+\begin{lstlisting}[language=bash]
+$ scp /path/to/file username@ipaddress:/path/to/destination
+\end{lstlisting}
+
+This will copy a file from your local machine to the
+remote server.

@@ -1,4 +1,4 @@
-\setchapterpreamble[u]{\margintoc}
+% \setchapterpreamble[u]{\margintoc}
 \chapter{Pattern Matching}
 \labch{regex}
 
@@ -6,7 +6,7 @@
 
 We have been creating files and directories for a while now,
 and we have often required to search for files or directories
-in a directory. Till now we used to use the \texttt{ls} command
+in a directory. Till now we used to use the \lstinline|ls| command
 to list out all the files in a directory and then check if the
 file we are looking for is present in the list or not. This
 works fine when the number of files is less, but when the number
@@ -14,7 +14,7 @@ of files is large, this method becomes cumbersome. This is where
 we can use pattern matching to search for files or directories
 or even text in a file.
 
-You would have also used the popular \texttt{Ctrl+F} shortcut
+You would have also used the popular \lstinline|Ctrl+F| shortcut
 on most text editors or browsers to search for text in a file
 or on a webpage. This is also an example of pattern matching.
 
@@ -32,11 +32,11 @@ expansively across multiple filenames or paths.
 In bash, we can use the following wildcards to match filenames:
 
 \begin{itemize}
-    \item \texttt{*} - Matches zero or more characters.
-    \item \texttt{?} - Matches exactly one character.
-    \item \texttt{[abc]} - Matches any one of the characters within the square brackets.
-    \item \texttt{[a-z]} - Matches any one of the characters in the range.
-    \item \texttt{[!abc]} - Matches any character except the ones within the square brackets.
+    \item \lstinline|*| - Matches zero or more characters.
+    \item \lstinline|?| - Matches exactly one character.
+    \item \lstinline|[abc]| - Matches any one of the characters within the square brackets.
+    \item \lstinline|[a-z]| - Matches any one of the characters in the range.
+    \item \lstinline|[!abc]| - Matches any character except the ones within the square brackets.
 \end{itemize}
 
 Let us explore these in detail.
@@ -83,9 +83,9 @@ directly typed the filenames.
 
 A glob always expands to a space separated list of filenames. However, how
 the command interprets this list of filenames is up to the command. Some
-commands such as \texttt{ls -1} will print each filename on a new line,
-whereas some commands such as \texttt{echo} will print all filenames on
-the same line separated by a space. \texttt{echo} does not care if the
+commands such as \lstinline|ls -1| will print each filename on a new line,
+whereas some commands such as \lstinline|echo| will print all filenames on
+the same line separated by a space. \lstinline|echo| does not care if the
 arguments passed to it are filenames or not. It just prints them as is.
 
 \begin{lstlisting}[language=bash]
@@ -131,9 +131,9 @@ Change: 2024-07-12 19:10:22.055523865 +0530
 
 As seen above, the globs simply expand to the filenames in the current path
 and pass it as arguments to the command. The output of the command depends
-on what command it is. The \texttt{wc} command counts the number of lines,
-words, and characters in a file. The \texttt{stat} command prints out the
-metadata of the files. Similarly, we can use the \texttt{file} command to
+on what command it is. The \lstinline|wc| command counts the number of lines,
+words, and characters in a file. The \lstinline|stat| command prints out the
+metadata of the files. Similarly, we can use the \lstinline|file| command to
 print the type of the files. Try it out.
 
 \begin{exercise}
@@ -165,7 +165,7 @@ $ echo ?bd
 \end{lstlisting}
 
 As echo does not care if the arguments passed to it are filenames or not,
-it simply prints the arguments as is. The \texttt{ls} command, however,
+it simply prints the arguments as is. The \lstinline|ls| command, however,
 will not print the filenames if they do not exist and will instead print
 to the standard error that the file does not exist. Use this knowledge
 to decipher why the above exercise behaves the way it does.
@@ -220,8 +220,8 @@ used flavors in Unix-like systems.
 
 Basic Regular Expressions (BRE) are the simplest form of regular expressions.
 They are supported by most Unix-like systems and are the default regular
-expressions used by most text processing utilities such as \texttt{grep},
-and \texttt{sed}.
+expressions used by most text processing utilities such as \lstinline|grep|,
+and \lstinline|sed|.
 \sidenote{
   awk uses ERE by default, not BRE.
 }
@@ -232,24 +232,24 @@ There are some subtle differences between the two.
 The following are the basic regular expressions that can be used in BRE:
 
 \begin{itemize}
-  \item \texttt{a} - Matches the character a.
-  \item \texttt{.} - Matches any single character exactly once.
-  \item \texttt{*} - Matches zero or more occurrences of the previous character.
-  \item \texttt{\textasciicircum} - Matches the null string at the start of a line.
-  \item \texttt{\$} - Matches the null string at the end of a line.
-  \item \texttt{[abc]} - Matches any one of the characters within the square brackets.
-  \item \texttt{[a-z]} - Matches any one of the characters in the range, both ends inclusive.
-  \item \texttt{[\^{}abc]} - Matches any character except the ones within the square brackets; the caret symbol has a different meaning when inside the brackets.
-  \item \texttt{\textbackslash+} - Matches one or more occurrences of the previous character.
-  \item \texttt{\textbackslash?} - Matches zero or one occurrence of the previous character.
-  \item \texttt{\{n\}} - Matches exactly n occurrences of the previous character.
-  \item \texttt{\{n,\}} - Matches n or more occurrences of the previous character.
-  \item \texttt{\{n,m\}} - Matches n to m occurrences of the previous character.
-  \item \texttt{\textbackslash} - Escapes a special character such as \texttt{*}, \texttt{.}, \texttt{[}, \textbackslash{}, \texttt{\$}, or \texttt{\textasciicircum}.
-  \item \texttt{regex1|regex2} - Matches either regex1 or regex2.
-  \item \texttt{(regex)} - Groups the regex.
-    \item \texttt{\textbackslash 2} - Matches the 2-nd \texttt{(…)} parenthesized subexpression in the regular expression. This is called a back reference. Subexpressions are implicitly numbered by counting occurrences of \texttt{(} left-to-right.
-  \item \texttt{\textbackslash n} - Matches a newline character.
+  \item \lstinline|a| - Matches the character a.
+  \item \lstinline|.| - Matches any single character exactly once.
+  \item \lstinline|*| - Matches zero or more occurrences of the previous character.
+  \item \lstinline|^| - Matches the null string at the start of a line.
+  \item \lstinline|$| - Matches the null string at the end of a line.
+  \item \lstinline|[abc]| - Matches any one of the characters within the square brackets.
+  \item \lstinline|[a-z]| - Matches any one of the characters in the range, both ends inclusive.
+  \item \lstinline|[^abc]| - Matches any character except the ones within the square brackets; the caret symbol has a different meaning when inside the brackets.
+  \item \lstinline|\+| - Matches one or more occurrences of the previous character.
+  \item \lstinline|\?| - Matches zero or one occurrence of the previous character.
+  \item \lstinline|{n}| - Matches exactly n occurrences of the previous character.
+  \item \lstinline|{n,}| - Matches n or more occurrences of the previous character.
+  \item \lstinline|{n,m}| - Matches n to m occurrences of the previous character.
+  \item \lstinline|\| - Escapes a special character such as \lstinline|*|, \lstinline|.|, \lstinline|[|, \lstinline|\|, \lstinline|$|, or \lstinline|^|.
+  \item \lstinline/regex1|regex2/ - Matches either regex1 or regex2.
+  \item \lstinline|(regex)| - Groups the regex.
+    \item \lstinline|\2| - Matches the 2-nd \lstinline|(...)| parenthesized subexpression in the regular expression. This is called a back reference. Subexpressions are implicitly numbered by counting occurrences of \lstinline|(| left-to-right.
+  \item \lstinline|\n| - Matches a newline character.
 \end{itemize}
 
 \subsection{Character Classes}
@@ -353,14 +353,14 @@ literally if it is not the first character in the list.
 
 Example for \lstinline|]|:
 \marginnote{
-  From this example, we have started using the \texttt{grep} command to match
-  regex quickly instead of creating a script. We will discuss the \texttt{grep}
-  command in more detail later in this chapter. The \texttt{-o} flag is used
+  From this example, we have started using the \lstinline|grep| command to match
+  regex quickly instead of creating a script. We will discuss the \lstinline|grep|
+  command in more detail later in this chapter. The \lstinline|-o| flag is used
   to print only the matching part of the line, instead of the entire line.
   If you omit it, and run the command, you will see the entire line that
   has the matching part being printed, however the matching part may still
   be highlighted using color, As it is not possible to highlight the matching
-  part in this book, we are using the \texttt{-o} flag to print only the
+  part in this book, we are using the \lstinline|-o| flag to print only the
   matching part.
 }
 \begin{lstlisting}[language=bash]
@@ -604,7 +604,7 @@ aaaa
 
 \marginnote{
   Here we are using the \lstinline|-E| flag to enable ERE mode in \lstinline|grep|.
-  If we are using the default BRE mode, we need to escape the \lstinline|+|, \lstinline|?|, \lstinline|\{|, and \lstinline|\}| characters to use them.
+  If we are using the default BRE mode, we need to escape the \lstinline|+|, \lstinline|?|, \lstinline|\{|, and \lstinline|\}|, \lstinline|(|, \lstinline|)|, \lstinline/|/ characters to use them.
 }
 
 Let us also see how the \lstinline|*|, \lstinline|+| and \lstinline|?| quantifiers work.
@@ -824,7 +824,7 @@ Observe a few things here:
 
 \subsection{Grouping}
 
-Grouping is used to group multiple characters or patterns together. This is useful when we want to apply a quantifier to multiple characters or patterns. The syntax for grouping is \lstinline|(regex)|. The regex will match if the pattern inside the parentheses is matched. The parenthesis will not be matched. However, grouping is not present unescaped in BRE, so if we want to match literal parenthesis then we use \lstinline|(regex)|, and if we want to group the regex without matching the parenthesis, then we use \lstinline|\(regex\)|.
+Grouping is used to group multiple characters or patterns together. This is useful when we want to apply a quantifier to multiple characters or patterns. The syntax for grouping is \lstinline|(regex)|. The regex will match if the pattern inside the parentheses is matched. The parenthesis will not be matched. However, grouping is not present unescaped in BRE, so if we want to match literal parenthesis then we use \lstinline|(regex)|, and if we want to group the regex without matching the parenthesis, then we use \lstinline|(regex)|.
 
 Let's revisit one of the earlier examples of alternation, and group the patterns inside the alternation.
 
@@ -843,7 +843,7 @@ Also, grouping is useful when we want to apply a quantifier to the entire group.
 
 
 \marginnote{
-  Notice the subtly different way of providing the string to the stdin of the \texttt{grep} command. We have covered here-strings earler.
+  Notice the subtly different way of providing the string to the stdin of the \lstinline|grep| command. We have covered here-strings earler.
 }
 \begin{lstlisting}[language=bash]
 $ grep -E "([b-d]|[f-h]|[j-n]|[p-t]|[v-z]){2}" -o <<< "this is a sentence"
@@ -881,7 +881,7 @@ $ grep -E "([b-d]|[f-h]|[j-n]|[p-t]|[v-z])\1" -o <<< "this is an attached senten
 tt
 \end{lstlisting}
 
-Backreferences are also useful in tools such as \texttt{sed} and \texttt{awk} where we can replace the string with another string and can use the matched group and in the replacement string.
+Backreferences are also useful in tools such as \lstinline|sed| and \lstinline|awk| where we can replace the string with another string and can use the matched group and in the replacement string.
 
 For example, if we want to make the first letter of either \lstinline|apple| or \lstinline|banana| uppercase, we can use the following command.
 
@@ -891,12 +891,12 @@ $ echo "apple & banana" | sed -E 's/\<([ab])/\U\1/g'
 Apple & Banana
 \end{lstlisting}
 
-Here we are using the \texttt{sed} command to replace the matched pattern with the uppercase version of the first character. The \texttt{\textbackslash 1} is used to refer to the first matched group, which is the first character of the word.
+Here we are using the \lstinline|sed| command to replace the matched pattern with the uppercase version of the first character. The \lstinline|\1| is used to refer to the first matched group, which is the first character of the word.
 The syntax of sed is \lstinline|s/pattern/replacement/flags|, where \lstinline|pattern| is the regex to match, \lstinline|replacement| is the string to replace the matched pattern with, and \lstinline|flags| are the flags to apply to the regex.
 The replacement string has to be a string, and not a regex, however, we can use backreferences in the replacement string.
-The \texttt{\textbackslash U} is used to convert the matched group to uppercase.
-The \texttt{g} flag is used to replace all occurrences of the pattern in the line.
-The \lstinline|\\\<| is used to match the start of the word, otherwise the \lstinline|a| inside \lstinline|banana| will also be capitalized.
+The \lstinline|\U| is used to convert the matched group to uppercase.
+The \lstinline|g| flag is used to replace all occurrences of the pattern in the line.
+The \lstinline|\<| is used to match the start of the word, otherwise the \lstinline|a| inside \lstinline|banana| will also be capitalized.
 We will cover \lstinline|sed| in details in later chapters.
 
 Let us use backreferences to find three letter palindromes in a string.
@@ -907,7 +907,7 @@ You should have a dictionary of words in \lstinline|/usr/share/dict/words|.
 }
 
 \marginnote{
-  Here we are preprocessing the dictionary to convert all the words to lowercase using the \texttt{tr} command. Then we are passing the output of \lstinline|tr| to \lstinline|grep| to find the lines that match the pattern
+  Here we are preprocessing the dictionary to convert all the words to lowercase using the \lstinline|tr| command. Then we are passing the output of \lstinline|tr| to \lstinline|grep| to find the lines that match the pattern
   \lstinline|^([a-z])[a-z]\1$|. This pattern matches any three letter palindrome. The \lstinline|^| and \lstinline|$| are used to match the start and end of the line respectively.
   The \lstinline|([a-z])| is used to match any lowercase letter, and the \lstinline|\1| is used to match the same letter as the first matched group. This is used to match the palindrome.
   Finally, as the output is too large, we are using the \lstinline|tail| command to print only the last 50 lines.
@@ -1003,7 +1003,7 @@ When we want to only match the symbols literally, it might thus be better to use
 
 The following table (\reftab{bre-vs-ere}) shows when to escape the character in which mode.
 
-\begin{table}[h!]
+\begin{table*}[h!]
   \caption{Differences between BRE and ERE}
   \labtab{bre-vs-ere}
   \centering
@@ -1013,7 +1013,7 @@ The following table (\reftab{bre-vs-ere}) shows when to escape the character in 
     \textbf{BRE} & \lstinline|+| & \lstinline|\+| \\
     \textbf{ERE} & \lstinline|\+| & \lstinline|+| \\
   \end{tabular}
-\end{table}
+\end{table*}
 
 Let us also demonstrate this using an example.
 

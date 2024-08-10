@@ -25,7 +25,7 @@
 %----------------------------------------------------------------------------------------
 
 \documentclass[
-	a4paper, % Page size
+	a5paper, % Page size
 	fontsize=10pt, % Base font size
 	twoside=true, % Use different layouts for even and odd pages (in particular, if twoside=true, the margin column will be always on the outside)
 	%open=any, % If twoside=true, uncomment this to force new chapters to start on any page, not only on right (odd) pages
@@ -77,6 +77,8 @@
 
 \newcommand\ytl[2]{
 \parbox[b]{8em}{\hfill{\color{cyan}\bfseries #1}~$\cdots\cdots$~}\makebox[0pt][c]{$\bullet$}\vrule\quad \parbox[c]{4.5cm}{\vspace{7pt}\color{black}\raggedright #2.\\[7pt]}\\[-3pt]}
+
+\usepackage{pdflscape}
 %----------------------------------------------------------------------------------------
 
 \begin{document}
@@ -231,18 +233,18 @@ to understand the simplicity.\\
 \mainmatter % Denotes the start of the main document content, resets page numbering and uses arabic numbers
 \setchapterstyle{kao} % Choose the default chapter heading style
 
-% \input{chapters/1-basic.tex}
-% \input{chapters/7-editors.tex}
-% \input{chapters/14-networking.tex}
-% \input{chapters/3-procman.tex}
-% \input{chapters/4-redirection.tex}
-% % \input{chapters/5-pacman.tex}
-% \input{chapters/6-regex.tex}
-% \input{chapters/8-grep.tex}
-% \input{chapters/2-variables.tex}
-% \input{chapters/9-scripts.tex}
+\input{chapters/1-basic.tex}
+\input{chapters/7-editors.tex}
+\input{chapters/14-networking.tex}
+\input{chapters/3-procman.tex}
+\input{chapters/4-redirection.tex}
+\input{chapters/6-regex.tex}
+\input{chapters/8-grep.tex}
+\input{chapters/2-variables.tex}
+\input{chapters/9-scripts.tex}
 \input{chapters/10-sed.tex}
 % \input{chapters/11-awk.tex}
+% \input{chapters/5-pacman.tex}
 % \input{chapters/12-hardware.tex}
 % \input{chapters/13-git.tex}
 % \input{chapters/15-storage.tex}

@@ -1,4 +1,4 @@
-\setchapterpreamble[u]{\margintoc}
+% \setchapterpreamble[u]{\margintoc}
 \chapter{Command Line Editors}
 \labch{clie}
 
@@ -159,7 +159,7 @@ keybindings such as \textit{Ctrl+O} to save and \textit{Ctrl+X} to exit.
 
 The history of Vim is a very long and interesting one.
 
-\begin{table}[h!]
+\begin{table*}[h!]
 \caption{History of Vim}
 \labtab{vimhistory}
 \centering
@@ -178,7 +178,7 @@ The history of Vim is a very long and interesting one.
 \bigskip
 \rule{\linewidth}{1pt}
 \end{minipage}
-\end{table}
+\end{table*}
 
 \textbf{Teletypes}
 
@@ -266,7 +266,7 @@ Ken Thompson wrote \textbf{ed} in 1969.
 This was now written in the newly developed B language, a predecessor to C.
 This implementation was much simpler than QED, and was line oriented.
 It stripped out much of regular expression support, and only had the support
-for \texttt{*}.
+for \lstinline|*|.
 It also got rid of multiple buffers and executing contents of buffer.
 
 Slowly, with time, Dennis Ritchie created the C language, which is widely in use
@@ -429,13 +429,13 @@ Bill and Chuck Haley built upon em to make en, which later became ex.
 
 This editor had a lot of improvements over em,
 such as adding the ability to add abbreviations
-(using the \texttt{ab} command),
+(using the \lstinline|ab| command),
 and adding keybindings (maps).
 
 It also added the ability to mark some line
-using the \texttt{k} key followed by any letter,
+using the \lstinline|k| key followed by any letter,
 and then jump to that line from any arbitrary line
-using the \texttt{'} key followed by the letter.
+using the \lstinline|'| key followed by the letter.
 
 Slowly, with time, the modern systems were able able
 to handle the raw mode, and real time editing more and more.
@@ -450,7 +450,7 @@ Bill added the \textbf{visual mode} to ex in 1977.
 }
 This was not a separate editor, but rather just another mode
 of the \textbf{ex} editor.
-You could open ex in visual mode using the \texttt{-v} flag to
+You could open ex in visual mode using the \lstinline|-v| flag to
 ex.
 
 \begin{lstlisting}[language=bash]
@@ -489,15 +489,15 @@ editor called \textbf{bravo}, which was developed at Xerox PARC.
 }
 
 If you use vi/vim, you may notice that the key to
-exit the insert mode is \texttt{Esc}.
+exit the insert mode is \lstinline|Esc|.
 This may seem inconveniently placed at the top left corner,
 but this was because the original vi was developed on a
-ADM-3A terminal, which had the \texttt{Esc} key to the left
-of the \textbf{Q} key, where modern keyboards have the \texttt{Tab} key.
+ADM-3A terminal, which had the \lstinline|Esc| key to the left
+of the \textbf{Q} key, where modern keyboards have the \lstinline|Tab| key.
 \sidenote{
   Since the placement of the Escape key is inconvenient
   in modern keyboard layouts, many people remap the
-  Escape key to the \texttt{Caps Lock} key either in vim
+  Escape key to the \lstinline|Caps Lock| key either in vim
   or in the operating system itself.
 }
 
@@ -667,48 +667,48 @@ These will also be useful in vim, since the
 ex mode of vim is based on ed/ex where we can
 directly use ed commands on our file in the buffer.
 
-\begin{table}[h!]
+\begin{table*}[h!]
   \caption{Ed Commands}
   \labtab{edcommands}
   \begin{tabular}{l l}
     \toprule
     Description & Commands \\
     \midrule
-    Show the \textbf{P}rompt & \texttt{P} \\
-    Command Format & \texttt{[addr[,addr]]cmd[params]} \\
-    Commands for location & \texttt{1} \texttt{.} \texttt{\$} \texttt{\%} \texttt{+} \texttt{-} \texttt{,} \texttt{;} \texttt{/RE/} \\
-    Commands for editing & \texttt{f} \texttt{p} \texttt{a} \texttt{c} \texttt{d} \texttt{i} \texttt{j} \texttt{s} \texttt{m} \texttt{u} \\
-    Execute a shell \textit{command} & \texttt{!command} \\
-    \textbf{e}dit a file & \texttt{e filename} \\
-    \textbf{r}ead file contents into buffer & \texttt{r filename} \\
-    \textbf{r}ead \textit{command} output into buffer & \texttt{r !command} \\
-    \textbf{w}rite buffer to filename & \texttt{w filename} \\
-    \textbf{q}uit & \texttt{q} \\
+    Show the \textbf{P}rompt & \lstinline|P| \\
+    Command Format & \lstinline|[addr[,addr]]cmd[params]| \\
+    Commands for location & \lstinline|1| \lstinline|.| \lstinline|$| \lstinline|\%| \lstinline|+| \lstinline|-| \lstinline|,| \lstinline|;| \lstinline|/RE/| \\
+    Commands for editing & \lstinline|f| \lstinline|p| \lstinline|a| \lstinline|c| \lstinline|d| \lstinline|i| \lstinline|j| \lstinline|s| \lstinline|m| \lstinline|u| \\
+    Execute a shell \textit{command} & \lstinline|!command| \\
+    \textbf{e}dit a file & \lstinline|e filename| \\
+    \textbf{r}ead file contents into buffer & \lstinline|r filename| \\
+    \textbf{r}ead \textit{command} output into buffer & \lstinline|r !command| \\
+    \textbf{w}rite buffer to filename & \lstinline|w filename| \\
+    \textbf{q}uit & \lstinline|q| \\
     \bottomrule
   \end{tabular}
-\end{table}
+\end{table*}
 
 \textbf{Commands for location}
 
-\begin{table}[h!]
+\begin{table*}[h!]
   \caption{Commands for location}
   \labtab{ed-location}
 \begin{tabular}{ c l }
 \toprule
 Commands & Description \\
 \midrule
-a number like \texttt{2} & refers to second line of file \\
-\texttt{.} & refers to current line \\
-\texttt{\$} & refers to last line \\
-\texttt{\%} & refers to all the lines \\
-\texttt{+} & line after the cursor (current line) \\
-\texttt{-} & line before the cursor (current line) \\
-\texttt{,} & refers to buffer holding the file or last line in buffer \\
-\texttt{;} & refers to current position to end of the file \\
-\texttt{/RE/} & refers line matched by pattern specified by 'RE' \\
+a number like \lstinline|2| & refers to second line of file \\
+\lstinline|.| & refers to current line \\
+\lstinline|$| & refers to last line \\
+\lstinline|%| & refers to all the lines \\
+\lstinline|+| & line after the cursor (current line) \\
+\lstinline|-| & line before the cursor (current line) \\
+\lstinline|,| & refers to buffer holding the file or last line in buffer \\
+\lstinline|;| & refers to current position to end of the file \\
+\lstinline|/RE/| & refers line matched by pattern specified by 'RE' \\
 \bottomrule
 \end{tabular}
-\end{table}
+\end{table*}
 
 
 \textbf{Commands for Editing}
@@ -720,16 +720,16 @@ a number like \texttt{2} & refers to second line of file \\
     \toprule
     Commands & Description \\
     \midrule
-    \texttt{f} & show name of \textbf{f}ile being edited \\
-    \texttt{p} & \textbf{p}rint the current line \\
-    \texttt{a} & \textbf{a}ppend at the current line \\
-    \texttt{c} & \textbf{c}hange the current line \\
-    \texttt{d} & \textbf{d}elete the current line \\
-    \texttt{i} & \textbf{i}nsert line at the current position \\
-    \texttt{j} & \textbf{j}oin lines \\
-    \texttt{s} & \textbf{s}earch for regex pattern \\
-    \texttt{m} & \textbf{m}ove current line to position \\
-    \texttt{u} & \textbf{u}ndo latest change \\
+    \lstinline|f| & show name of \textbf{f}ile being edited \\
+    \lstinline|p| & \textbf{p}rint the current line \\
+    \lstinline|a| & \textbf{a}ppend at the current line \\
+    \lstinline|c| & \textbf{c}hange the current line \\
+    \lstinline|d| & \textbf{d}elete the current line \\
+    \lstinline|i| & \textbf{i}nsert line at the current position \\
+    \lstinline|j| & \textbf{j}oin lines \\
+    \lstinline|s| & \textbf{s}earch for regex pattern \\
+    \lstinline|m| & \textbf{m}ove current line to position \\
+    \lstinline|u| & \textbf{u}ndo latest change \\
     \bottomrule
   \end{tabular}
 \end{table}
@@ -747,10 +747,10 @@ line-4 end of file" > test.txt
 \end{lstlisting}
 
 This creates a file in the current working directory
-with the name \texttt{test.txt} and the contents as
+with the name \lstinline|test.txt| and the contents as
 given above.
 
-We invoke ed by using the executable \texttt{ed}
+We invoke ed by using the executable \lstinline|ed|
 and providing the filename as an argument.
 
 \begin{lstlisting}[language=bash]
@@ -767,8 +767,8 @@ print the contents of the file on the screen.
 
 Off the bat, we can observe the terseness of the ed editor
 since it does not even print a prompt.
-To turn it on, we can use the \texttt{P} command.
-The default prompt is \texttt{*}.
+To turn it on, we can use the \lstinline|P| command.
+The default prompt is \lstinline|*|.
 
 \begin{lstlisting}[language=bash]
 ed test.txt
@@ -777,11 +777,11 @@ P
 *
 \end{lstlisting}
 
-Now we can see the prompt \texttt{*} is always present,
+Now we can see the prompt \lstinline|*| is always present,
 whenever the ed editor expects a command from the user.
 
-Lets go to the first line of the file using the \texttt{1} command.
-We can also go to the last line of the file using the \texttt{\$} command.
+Lets go to the first line of the file using the \lstinline|1| command.
+We can also go to the last line of the file using the \lstinline|$| command.
 
 \begin{lstlisting}[language=bash]
 *1
@@ -792,7 +792,7 @@ line-4 end of file
 \end{lstlisting}
 
 To print out all the lines of the file,
-we can use the \texttt{,} or \texttt{\%} with \texttt{p} command.
+we can use the \lstinline|,| or \lstinline|\%| with \lstinline|p| command.
 
 \begin{lstlisting}[language=bash]
 *,p
@@ -810,8 +810,8 @@ line-3 ed is perhaps the oldest editor out there
 line-4 end of file
 \end{lstlisting}
 
-However, if we use the \texttt{,} command without
-the \texttt{p} command, it will not print all the lines.
+However, if we use the \lstinline|,| command without
+the \lstinline|p| command, it will not print all the lines.
 Rather, it will just move the cursor to the last line
 and print the last line.
 
@@ -822,7 +822,7 @@ line-4 end of file
 
 We can also print any arbitrary line range
 using the line numbers separated by a comma
-and followed by the \texttt{p} command.
+and followed by the \lstinline|p| command.
 
 \begin{lstlisting}[language=bash]
 *2,3p
@@ -842,10 +842,10 @@ explain the syntax of the search command.
 line-1 hello world
 \end{lstlisting}
 
-We may or may not include the \texttt{p} command
-after the last \texttt{/{}} in the search command.
+We may or may not include the \lstinline|p| command
+after the last \lstinline|/| in the search command.
 
-We can advance to the next line using the \texttt{+} command.
+We can advance to the next line using the \lstinline|+| command.
 
 \begin{lstlisting}[language=bash]
 *p
@@ -854,7 +854,7 @@ line-1 hello world
 line-2 welcome to line editor
 \end{lstlisting}
 
-And go to the previous line using the \texttt{-} command.
+And go to the previous line using the \lstinline|-| command.
 
 
 \begin{lstlisting}[language=bash]
@@ -865,7 +865,7 @@ line-1 hello world
 \end{lstlisting}
 
 We can also print all the lines from the current line
-to the end of the file using the \texttt{;p} command.
+to the end of the file using the \lstinline|;p| command.
 
 \begin{lstlisting}[language=bash]
 *.
@@ -876,7 +876,7 @@ line-3 ed is perhaps the oldest editor out there
 line-4 end of file
 \end{lstlisting}
 
-We can also run arbitrary shell commands using the \texttt{!} command.
+We can also run arbitrary shell commands using the \lstinline|!| command.
 
 \begin{lstlisting}[language=bash]
 *! date
@@ -888,7 +888,7 @@ The output of the command is shown to the screen,
 however, it is not saved in the buffer.
 
 To read the output of a command into the buffer,
-we can use the \texttt{r} command.
+we can use the \lstinline|r| command.
 
 \begin{lstlisting}[language=bash]
 *r !date
@@ -901,9 +901,9 @@ line-4 end of file
 Mon Jun 10 11:37:42 PM IST 2024
 \end{lstlisting}
 
-The output after running the \texttt{r !date} command
+The output after running the \lstinline|r !date| command
 is the number of characters read into the buffer.
-We can then print the entire buffer using the \texttt{\%p} command.
+We can then print the entire buffer using the \lstinline|\%p| command.
 
 The read data is appended to the end of the file.
 
@@ -913,22 +913,22 @@ We can write the buffer
   and any changes made to the buffer are not saved to the file
   until we write the buffer to the file.
 }
-to the disk using the \texttt{w} command.
+to the disk using the \lstinline|w| command.
 
 \begin{lstlisting}[language=bash]
 *w
 149
 \end{lstlisting}
 
-The output of the \texttt{w} command is the number of characters written to the file.
+The output of the \lstinline|w| command is the number of characters written to the file.
 
-To exit ed, we can use the \texttt{q} command.
+To exit ed, we can use the \lstinline|q| command.
 
 \begin{lstlisting}[language=bash]
 *q
 \end{lstlisting}
 
-To delete a line, we can use the \texttt{d} command.
+To delete a line, we can use the \lstinline|d| command.
 Lets say we do not want the date output in the file.
 We can re-open the file in ed and remove the last line.
 
@@ -948,11 +948,11 @@ line-4 end of file
 117
 \end{lstlisting}
 
-We can add lines to the file using the \texttt{a} command.
+We can add lines to the file using the \lstinline|a| command.
 This appends the line after the current line.
 On entering this mode, the editor will keep on taking
 input for as many lines as we want to add.
-To end the input, we can use the \texttt{.} command on a new line.
+To end the input, we can use the \lstinline|.| command on a new line.
 
 \begin{lstlisting}[language=bash]
 $ ed test.txt
@@ -1001,14 +1001,14 @@ line-4 end of file
 \end{lstlisting}
 
 We can print the name of the currently opened file
-using the \texttt{f} command.
+using the \lstinline|f| command.
 
 \begin{lstlisting}[language=bash]
 *f
 test.txt
 \end{lstlisting}
 
-If we wish to join two lines, we can use the \texttt{j} command.
+If we wish to join two lines, we can use the \lstinline|j| command.
 Let us join lines 4,5, and 6.
 
 \begin{lstlisting}[language=bash]
@@ -1034,7 +1034,7 @@ first the lines 4 and 5 are joined,
 and then the newly modified line 4 and 5 are joined.
 
 We can move a line from its current position to another
-line using the \texttt{m} command.
+line using the \lstinline|m| command.
 
 Lets insert a line-0 at the end of the file
 and then move it to the beginning of the file.
@@ -1056,12 +1056,12 @@ line-3 ed is perhaps the oldest editor out there
 *
 \end{lstlisting}
 
-We can also undo the last change using the \texttt{u} command.
+We can also undo the last change using the \lstinline|u| command.
 \sidenote{
   The undo command in ed is not as powerful as the undo command in vim.
-  In vim, we can undo multiple changes using the \texttt{u} command.
+  In vim, we can undo multiple changes using the \lstinline|u| command.
   In ed, we can only undo the last change.
-  If we run the \texttt{u} command multiple times,
+  If we run the \lstinline|u| command multiple times,
   it will undo the last change of undoing the last change,
   basically redoing the last change.
 }
@@ -1078,7 +1078,7 @@ line-0 in the beginning, there was light
 \end{lstlisting}
 
 If search and replace is not exactly what we want, and
-we want to totally change the line, we can use the \texttt{c} command.
+we want to totally change the line, we can use the \lstinline|c| command.
 It will let us type a new line, which will replace the current line.
 
 \begin{lstlisting}[language=bash]
@@ -1099,7 +1099,7 @@ line-4 ed is the standard editor for UNIX
 *
 \end{lstlisting}
 
-Just like the \texttt{a} command, we can also use the \texttt{i} command
+Just like the \lstinline|a| command, we can also use the \lstinline|i| command
 to insert a line at the current position. This will move the current line
 to the next line.
 
@@ -1115,7 +1115,7 @@ line-4 end of file
 *
 \end{lstlisting}
 
-Finally, we can also number the lines using the \texttt{n} command.
+Finally, we can also number the lines using the \lstinline|n| command.
 
 \begin{lstlisting}[language=bash]
 *%p
@@ -1146,7 +1146,7 @@ We wont be able to cover all of them in this course.
 Only the basic commands required to get started
 with using vim as your primary editor would be
 covered. A detailed tutorial on vim can be found
-by running the command \texttt{vimtutor} in your terminal.
+by running the command \lstinline|vimtutor| in your terminal.
 
 \begin{lstlisting}
 $ vimtutor
@@ -1174,7 +1174,7 @@ $ vim test.txt
 \marginnote{
   Sometimes the normal mode is called command mode
   or escape mode, since we can run commands in this mode
-  and we press the \texttt{Esc} key to go to this mode.
+  and we press the \lstinline|Esc| key to go to this mode.
   However, the ex mode is also called command mode,
   since we can run ex commands in this mode.
   To avoid confusions, we will refer to the navigational(default)
@@ -1193,7 +1193,7 @@ that it operates in. The primary modes are:
   \item Ex Mode - The mode where we can run ex commands.
 \end{itemize}
 
-Pressing the \texttt{Esc} key takes you to the normal mode
+Pressing the \lstinline|Esc| key takes you to the normal mode
 from any other mode.
 
 \begin{figure}[h!]
@@ -1223,36 +1223,36 @@ Since we are already familar with commands in
 \textbf{ed}, most of the commands are same/similar
 in \textbf{ex} mode of vim.
 
-\begin{table}[h!]
+\begin{table*}[h!]
   \caption{Ex Commands in Vim}
   \labtab{ex-vim}
   \begin{tabular}{c l}
     \toprule
     Key & Description \\
     \midrule
-    \texttt{:f} & show name of file \\
-    \texttt{:p} & print current line \\
-    \texttt{:a} & append at current line \\
-    \texttt{:c} & change current line \\
-    \texttt{:d} & delete current line \\
-    \texttt{:i} & insert line at current position \\
-    \texttt{:j} & join lines \\
-    \texttt{:s} & search and replace regex pattern in current line \\
-    \texttt{:m} & move current line to position \\
-    \texttt{:u} & undo latest change \\
-    \texttt{:w [filename]} & write buffer to filename \\
-    \texttt{:q} & quit if no change \\
-    \texttt{:wq} & write buffer to filename and quit \\
-    \texttt{:x} & write buffer to filename and quit \\
-    \texttt{:q!} & quit without saving \\
-    \texttt{:r filename} & read file contents into buffer \\
-    \texttt{:r !command} & read command output into buffer \\
-    \texttt{:e filename} & edit a file \\
-    \texttt{:sp [filename]} & split the screen and open another file \\
-    \texttt{:vsp [filename]} & vertical split the screen and open another file \\
+    \lstinline|:f| & show name of file \\
+    \lstinline|:p| & print current line \\
+    \lstinline|:a| & append at current line \\
+    \lstinline|:c| & change current line \\
+    \lstinline|:d| & delete current line \\
+    \lstinline|:i| & insert line at current position \\
+    \lstinline|:j| & join lines \\
+    \lstinline|:s| & search and replace regex pattern in current line \\
+    \lstinline|:m| & move current line to position \\
+    \lstinline|:u| & undo latest change \\
+    \lstinline|:w [filename]| & write buffer to filename \\
+    \lstinline|:q| & quit if no change \\
+    \lstinline|:wq| & write buffer to filename and quit \\
+    \lstinline|:x| & write buffer to filename and quit \\
+    \lstinline|:q!| & quit without saving \\
+    \lstinline|:r filename| & read file contents into buffer \\
+    \lstinline|:r !command| & read command output into buffer \\
+    \lstinline|:e filename| & edit a file \\
+    \lstinline|:sp [filename]| & split the screen and open another file \\
+    \lstinline|:vsp [filename]| & vertical split the screen and open another file \\
     \bottomrule
   \end{tabular}
-\end{table}
+\end{table*}
 
 There are many more commands in the ex mode of vim.
 Along with implementing the original ed commands, it
@@ -1264,7 +1264,7 @@ normal mode commands in ex mode.
 \textbf{Basic Navigation}
 
 The basic keys for moving around in a text file in vim
-are the \texttt{h,j,k,l} keys. They move the cursor
+are the \lstinline|h,j,k,l| keys. They move the cursor
 one character to the left, down, up, and right respectively.
 These keys are chosen because they are present on the
 home row of the keyboard, and do not require the user
@@ -1278,51 +1278,51 @@ Along with these, we have keys to navigate word by word,
 or to move to the next pattern match, or the next
 paragraph, spelling error, etc.
 
-\begin{table}[h!]
+\begin{table*}[h!]
   \caption{Navigation Commands in Vim}
   \labtab{nav-vim}
   \begin{tabular}{c l}
     \toprule
     Key & Description \\
     \midrule
-    \texttt{h} & move cursor left \\
-    \texttt{j} & move cursor down \\
-    \texttt{k} & move cursor up \\
-    \texttt{l} & move cursor right \\
-    \texttt{w} & move to the beginning of the next word \\
-    \texttt{e} & move to the end of the current word \\
-    \texttt{b} & move to the beginning of the previous word \\
-    \texttt{\%} & move to the matching parenthesis, bracket, or brace \\
-    \texttt{0} & move to the beginning of the current line \\
-    \texttt{\$} & move to the end of the current line \\
-    \texttt{/} & search forward for a pattern \\
-    \texttt{?} & search backward for a pattern \\
-    \texttt{n} & repeat the last search in the same direction \\
-    \texttt{N} & repeat the last search in the opposite direction \\
-    \texttt{gg} & move to the first line of the file \\
-    \texttt{G} & move to the last line of the file \\
-    \texttt{1G} & move to the first line of the file \\
-    \texttt{1gg} & move to the first line of the file \\
-    \texttt{:1} & move to the first line of the file \\
-    \texttt{\{} & move to the beginning of the current paragraph \\
-    \texttt{\}} & move to the end of the current paragraph \\
-    \texttt{fg} & move cursor to next occurrence of `g' in the line \\
-    \texttt{Fg} & move cursor to previous occurrence of `g' in the line \\
+    \lstinline|h| & move cursor left \\
+    \lstinline|j| & move cursor down \\
+    \lstinline|k| & move cursor up \\
+    \lstinline|l| & move cursor right \\
+    \lstinline|w| & move to the beginning of the next word \\
+    \lstinline|e| & move to the end of the current word \\
+    \lstinline|b| & move to the beginning of the previous word \\
+    \lstinline|\%| & move to the matching parenthesis, bracket, or brace \\
+    \lstinline|0| & move to the beginning of the current line \\
+    \lstinline|$| & move to the end of the current line \\
+    \lstinline|/| & search forward for a pattern \\
+    \lstinline|?| & search backward for a pattern \\
+    \lstinline|n| & repeat the last search in the same direction \\
+    \lstinline|N| & repeat the last search in the opposite direction \\
+    \lstinline|gg| & move to the first line of the file \\
+    \lstinline|G| & move to the last line of the file \\
+    \lstinline|1G| & move to the first line of the file \\
+    \lstinline|1gg| & move to the first line of the file \\
+    \lstinline|:1| & move to the first line of the file \\
+    \lstinline|{| & move to the beginning of the current paragraph \\
+    \lstinline|}| & move to the end of the current paragraph \\
+    \lstinline|fg| & move cursor to next occurrence of `g' in the line \\
+    \lstinline|Fg| & move cursor to previous occurrence of `g' in the line \\
     \bottomrule
   \end{tabular}
-\end{table}
+\end{table*}
 
 \textbf{Wait you forgot your cursor behind!}
 
 All of the above commands move the cursor to the
 mentioned location. However, if you want to move
 the entire screen, and keep the cursor at the
-its current position, you can use the \texttt{z}
-command along with \texttt{t} to top the line,
-\texttt{b} to bottom the line, and \texttt{z} to
+its current position, you can use the \lstinline|z|
+command along with \lstinline|t| to top the line,
+\lstinline|b| to bottom the line, and \lstinline|z| to
 center the line.
 
-There are other commands using the \texttt{Ctrl} key
+There are other commands using the \lstinline|Ctrl| key
 that moves the screen, and not the cursor.
 
 \begin{table}[h!]
@@ -1332,12 +1332,12 @@ that moves the screen, and not the cursor.
     \toprule
     Key & Description \\
     \midrule
-    \texttt{Ctrl+F} & move forward one full screen \\
-    \texttt{Ctrl+B} & move backward one full screen \\
-    \texttt{Ctrl+D} & move forward half a screen \\
-    \texttt{Ctrl+U} & move backward half a screen \\
-    \texttt{Ctrl+E} & move screen up one line \\
-    \texttt{Ctrl+Y} & move screen down one line \\
+    \lstinline|Ctrl+F| & move forward one full screen \\
+    \lstinline|Ctrl+B| & move backward one full screen \\
+    \lstinline|Ctrl+D| & move forward half a screen \\
+    \lstinline|Ctrl+U| & move backward half a screen \\
+    \lstinline|Ctrl+E| & move screen up one line \\
+    \lstinline|Ctrl+Y| & move screen down one line \\
     \bottomrule
   \end{tabular}
 \end{table}
@@ -1350,57 +1350,57 @@ the backspace or delete key to remove the text, and then type
 the new text. However, in vim, there is a more efficient way
 to replace text.
 
-\begin{table}[h!]
+\begin{table*}[h!]
   \caption{Replacing Text Commands in Vim}
   \labtab{replace-vim}
   \begin{tabular}{c l}
     \toprule
     Key & Description \\
     \midrule
-    \texttt{r} & replace the character under the cursor \\
-    \texttt{R} & replace the character from the cursor till escape is pressed \\
-    \texttt{cw} & change the word under the cursor \\
-    \texttt{c4w} & change the next 4 words \\
-    \texttt{C} & delete from cursor till end of line and enter insert mode \\
-    \texttt{cc} & delete entire line and enter insert mode \\
-    \texttt{5cc} & delete next 5 lines and enter insert mode \\
-    \texttt{S} & delete entire line and enter insert mode \\
-    \texttt{s} & delete character under cursor and enter insert mode \\
+    \lstinline|r| & replace the character under the cursor \\
+    \lstinline|R| & replace the character from the cursor till escape is pressed \\
+    \lstinline|cw| & change the word under the cursor \\
+    \lstinline|c4w| & change the next 4 words \\
+    \lstinline|C| & delete from cursor till end of line and enter insert mode \\
+    \lstinline|cc| & delete entire line and enter insert mode \\
+    \lstinline|5cc| & delete next 5 lines and enter insert mode \\
+    \lstinline|S| & delete entire line and enter insert mode \\
+    \lstinline|s| & delete character under cursor and enter insert mode \\
     \bottomrule
   \end{tabular}
-\end{table}
+\end{table*}
 
 \textbf{Toggling Case}
 
 You can toggle the case of a character, word, line,
-or any arbitrary chunk of the file using the \texttt{~}
-or the \texttt{g~} command.
+or any arbitrary chunk of the file using the \lstinline|~|
+or the \lstinline|g~| command.
 
-\begin{table}[h!]
+\begin{table*}[h!]
   \caption{Toggling Case Commands in Vim}
   \labtab{togglecase-vim}
   \begin{tabular}{c l}
     \toprule
     Key & Description \\
     \midrule
-    \texttt{\textasciitilde} & toggle the case of the character under the cursor \\
-    \texttt{g~w} & toggle the case of the word under the cursor \\
-    \texttt{g~0} & toggle the case from cursor till beginning of line \\
-    \texttt{g~\$} & toggle the case from cursor till end of line \\
-    \texttt{g~\{} & toggle the case from cursor till previous empty line \\
-    \texttt{g~\{} & toggle the case from cursor till next empty line \\
-    \texttt{g~\%} & toggle the case from the bracket, brace, or parenthesis till its pair \\
+    \lstinline|~| & toggle the case of the character under the cursor \\
+    \lstinline|g~w| & toggle the case of the word under the cursor \\
+    \lstinline|g~0| & toggle the case from cursor till beginning of line \\
+    \lstinline|g~$| & toggle the case from cursor till end of line \\
+    \lstinline|g~{| & toggle the case from cursor till previous empty line \\
+    \lstinline|g~{| & toggle the case from cursor till next empty line \\
+    \lstinline|g~\%| & toggle the case from the bracket, brace, or parenthesis till its pair \\
     \bottomrule
   \end{tabular}
-\end{table}
+\end{table*}
 
 You might start to see a pattern emerging here.
 Many commands in vim do a particular command,
 and on which text it operates is determined by
-the character followed by it. Such as \texttt{c}
-to change, \texttt{d} to delete, \texttt{y} to yank,
+the character followed by it. Such as \lstinline|c|
+to change, \lstinline|d| to delete, \lstinline|y| to yank,
 etc. The text on which the command operates is
-mentioned using \texttt{w} for the word, \texttt{0}
+mentioned using \lstinline|w| for the word, \lstinline|0|
 for till beginning of line, etc.
 
 This is not a coincidence, but rather a design
@@ -1408,8 +1408,8 @@ of vim to make it more efficient to use.
 The first command is called the operator command,
 and the second command is called the motion command.
 
-Vim follows a \texttt{operator-count-motion} pattern.
-For example: \texttt{d2w} deletes the next 2 words.
+Vim follows a \lstinline|operator-count-motion| pattern.
+For example: \lstinline|d2w| deletes the next 2 words.
 This makes it very easy to learn and remember commands,
 since you are literally typing out what you want to do.
 
@@ -1424,40 +1424,40 @@ In Vim, the delete command is used to cut text from the file.
     \toprule
     Key & Description \\
     \midrule
-    \texttt{x} & delete the character under the cursor \\
-    \texttt{X} & delete the character before the cursor \\
-    \texttt{5x} & delete the next 5 characters \\
-    \texttt{dw} & delete the word under the cursor \\
-    \texttt{d4w} & delete the next 4 words \\
-    \texttt{D} & delete from cursor till end of line \\
-    \texttt{dd} & delete entire line \\
-    \texttt{6dd} & delete next 6 lines \\
+    \lstinline|x| & delete the character under the cursor \\
+    \lstinline|X| & delete the character before the cursor \\
+    \lstinline|5x| & delete the next 5 characters \\
+    \lstinline|dw| & delete the word under the cursor \\
+    \lstinline|d4w| & delete the next 4 words \\
+    \lstinline|D| & delete from cursor till end of line \\
+    \lstinline|dd| & delete entire line \\
+    \lstinline|6dd| & delete next 6 lines \\
     \bottomrule
   \end{tabular}
 \end{table}
 
 \textbf{Motion - till, in, around}
 
-By now you should notice that \texttt{dw} doesn't always
-delete the word under the cursor. Technically \texttt{dw}
+By now you should notice that \lstinline|dw| doesn't always
+delete the word under the cursor. Technically \lstinline|dw|
 means delete till the beginning of the next word.
-So if you press \texttt{dw} at the beginning of a word,
+So if you press \lstinline|dw| at the beginning of a word,
 it will delete the word under the cursor. But if your
-cursor is in the middle of a word and you type \texttt{dw},
+cursor is in the middle of a word and you type \lstinline|dw|,
 it will only delete the part of the word till the beginning
 of the next word from the cursor position.
 
 To delete the entire word under the cursor, regardless of
-where the cursor is in the word, you can use the \texttt{diw}
+where the cursor is in the word, you can use the \lstinline|diw|
 this means \textbf{d}elete \textbf{i}nside \textbf{w}ord.
 
-However, now you may notice that \texttt{diw} doesn't delete
+However, now you may notice that \lstinline|diw| doesn't delete
 the space after the word. This results in two consequtive spaces,
 one from the end of the word, and one from the beginning of the
 word being left behind. To delete the space as well, you can use
-\texttt{daw} which means \textbf{d}elete \textbf{a}round \textbf{w}ord.
+\lstinline|daw| which means \textbf{d}elete \textbf{a}round \textbf{w}ord.
 
-This works not just with \texttt{w} but with any other motion
+This works not just with \lstinline|w| but with any other motion
 such as \textbf{d}elete \textbf{i}nside \textbf{p}aragraph,
 which will delete the entire paragraph under the cursor,
 resulting in two empty lines being left behind,
@@ -1467,13 +1467,13 @@ and only one empty line being left behind.
 
 Try out the same with deleting inside other items, such as
 brackets, parenthesis, braces, quotes, etc. The syntax remains
-the same, \texttt{di\{}, \texttt{di[}, \texttt{di(}, \texttt{di"}, \texttt{di'}, etc.
+the same, \lstinline|di{|, \lstinline|di[|, \lstinline|di(|, \lstinline|di"|, \lstinline|di'|, etc.
 
 \textbf{Yanking and Pasting Text}
 
 Yes, copying is called yanking in vim. The command to yank
-is \texttt{y} and to paste is \texttt{p}.
-You can combine \texttt{y} with all the motions and
+is \lstinline|y| and to paste is \lstinline|p|.
+You can combine \lstinline|y| with all the motions and
 \textbf{in} and \textbf{around} motions as earlier.
 You can also add the count to yank multiple lines or words.
 
@@ -1484,11 +1484,11 @@ You can also add the count to yank multiple lines or words.
     \toprule
     Key & Description \\
     \midrule
-    \texttt{yy} & yank the entire line \\
-    \texttt{yw} & yank the word under the cursor \\
+    \lstinline|yy| & yank the entire line \\
+    \lstinline|yw| & yank the word under the cursor \\
     \vdots & \vdots \\
-    \texttt{p} & paste the yanked text after the cursor \\
-    \texttt{P} & paste the yanked text before the cursor \\
+    \lstinline|p| & paste the yanked text after the cursor \\
+    \lstinline|P| & paste the yanked text before the cursor \\
     \bottomrule
   \end{tabular}
 \end{table}
@@ -1504,16 +1504,16 @@ You can also add the count to yank multiple lines or words.
   including the newline character at the end of the line.
   The second one yanks the entire line, but does not include
   the newline character at the end of the line.
-  Thus if you directly press \texttt{p} after the first command,
+  Thus if you directly press \lstinline|p| after the first command,
   it will paste the line below the current line, and if you
-  press \texttt{p} after the second command, it will paste
+  press \lstinline|p| after the second command, it will paste
   the line at the end of the current line.
 \end{remark}
 
 \textbf{Undo and Redo}
 
-The undo command in vim is \texttt{u} and the redo command
-is \texttt{Ctrl+R}. You can undo multiple changes, unlike ed.
+The undo command in vim is \lstinline|u| and the redo command
+is \lstinline|Ctrl+R|. You can undo multiple changes, unlike ed.
 
 \begin{remark}
   If you want to use vim as your primary editor,
@@ -1532,29 +1532,29 @@ is \texttt{Ctrl+R}. You can undo multiple changes, unlike ed.
 
 \textbf{Searching and Replacing}
 
-The search command in vim is \texttt{/} for forward search
-and \texttt{?} for backward search. You can use the \texttt{n}
+The search command in vim is \lstinline|/| for forward search
+and \lstinline|?| for backward search. You can use the \lstinline|n|
 command to repeat the last search in the same direction,
-and the \texttt{N} command to repeat the last search in the
+and the \lstinline|N| command to repeat the last search in the
 opposite direction. For example, if you perform forward search
-then using the \texttt{n} command will search for the next
+then using the \lstinline|n| command will search for the next
 occurrence of the pattern in the forward direction, and using
-the \texttt{N} command will search for the previous occurrence
+the \lstinline|N| command will search for the previous occurrence
 of the pattern in the backward direction. However if you perform
-a backward search using the \texttt{?} command, then using the
-\texttt{n} command will search for the previous occurrence of the
-pattern in the backward direction, and using the \texttt{N} command
+a backward search using the \lstinline|?| command, then using the
+\lstinline|n| command will search for the previous occurrence of the
+pattern in the backward direction, and using the \lstinline|N| command
 will search for the next occurrence of the pattern in the forward
 direction.
 
-You can also use the \texttt{*} command to search for the word
-under the cursor, and the \texttt{\#} command to search for the
+You can also use the \lstinline|*| command to search for the word
+under the cursor, and the \lstinline|#| command to search for the
 previous occurrence of the word under the cursor.
 
-You can perform search and replace using the \texttt{:s} command.
+You can perform search and replace using the \lstinline|:s| command.
 The command takes a line address on which to perform the search
-and replace. Usually you can use the \texttt{\%} address to
-search in the entire file, or the \texttt{.,\$} address to
+and replace. Usually you can use the \lstinline|\%| address to
+search in the entire file, or the \lstinline|.,$| address to
 search from cursor till the end of the file.
 
 You can also use any line number to specify the address range,
@@ -1574,56 +1574,56 @@ or a regular expression.
 
 Some examples of addresses are shown in \reftab{address-vim}.
 
-\begin{table}[h!]
+\begin{table*}[h!]
   \caption{Address Types in Search and Replace}
   \labtab{address-vim}
   \begin{tabular}{c l}
     \toprule
     Key & Description \\
     \midrule
-    \texttt{m,n} & from line m to line n \\
-    \texttt{m} & line m \\
-    \texttt{m,\$} & from line m to end of file \\
-    \texttt{.,\$} & from current line to end of file \\
-    \texttt{1,n} & from line 1 to line n \\
-    \texttt{/regex/,n} & from line containing regex to line n \\
-    \texttt{m,/regex/} & from line m to line containing regex \\
-    \texttt{.,/regex/} & from current line to line containing regex \\
-    \texttt{/regex/,.} & from line containing regex to current line \\
-    \texttt{1,/regex/} & from the first line to line containing regex \\
-    \texttt{/regex/,\$} & from line containing regex to the last line \\
-    \texttt{/regex1/;/regex2/} & from line containing regex1 to line containing regex2 \\
-    \texttt{\%} & entire file \\
+    \lstinline|m,n| & from line m to line n \\
+    \lstinline|m| & line m \\
+    \lstinline|m,$| & from line m to end of file \\
+    \lstinline|.,$| & from current line to end of file \\
+    \lstinline|1,n| & from line 1 to line n \\
+    \lstinline|/regex/,n| & from line containing regex to line n \\
+    \lstinline|m,/regex/| & from line m to line containing regex \\
+    \lstinline|.,/regex/| & from current line to line containing regex \\
+    \lstinline|/regex/,.| & from line containing regex to current line \\
+    \lstinline|1,/regex/| & from the first line to line containing regex \\
+    \lstinline|/regex/,$| & from line containing regex to the last line \\
+    \lstinline|/regex1/;/regex2/| & from line containing regex1 to line containing regex2 \\
+    \lstinline|\%| & entire file \\
     \bottomrule
   \end{tabular}
-\end{table}
+\end{table*}
 
 \textbf{Insert Mode}
 
-\begin{table}[h!]
+\begin{table*}[h!]
   \caption{Keys to enter Insert Mode}
   \labtab{insert-vim}
   \begin{tabular}{c l}
     \toprule
     Key & Description \\
     \midrule
-    \texttt{i} & enter insert mode before the cursor \\
-    \texttt{a} & enter insert mode after the cursor \\
-    \texttt{I} & enter insert mode at the beginning of the line \\
-    \texttt{A} & enter insert mode at the end of the line \\
-    \texttt{o} & add new line below the current line and enter insert mode \\
-    \texttt{O} & add new line above the current line and enter insert mode \\
+    \lstinline|i| & enter insert mode before the cursor \\
+    \lstinline|a| & enter insert mode after the cursor \\
+    \lstinline|I| & enter insert mode at the beginning of the line \\
+    \lstinline|A| & enter insert mode at the end of the line \\
+    \lstinline|o| & add new line below the current line and enter insert mode \\
+    \lstinline|O| & add new line above the current line and enter insert mode \\
     \bottomrule
   \end{tabular}
-\end{table}
+\end{table*}
 
 You can enter insert mode from escape mode using the
 keys listed in \reftab{insert-vim}.
 In insert mode, if you want to insert any non-graphical character,
-you can do that by pressing \texttt{Ctrl+V} followed by the
+you can do that by pressing \lstinline|Ctrl+V| followed by the
 key combination for the character. For example, to insert
-a newline character, you can press \texttt{Ctrl+V} followed
-by \texttt{Enter}.
+a newline character, you can press \lstinline|Ctrl+V| followed
+by \lstinline|Enter|.
 
 These are just the basic commands to get you started with vim.
 You can refer to vim cheat sheets present online to get
@@ -1651,7 +1651,7 @@ more familiar with the commands.
 
 Emacs was mostly developed by Richard Stallman and Guy Steele.
 
-\begin{table}[h!]
+\begin{table*}[h!]
 \caption{History of Emacs}
 \labtab{emacshistory}
 \centering
@@ -1667,14 +1667,7 @@ Emacs was mostly developed by Richard Stallman and Guy Steele.
 \bigskip
 \rule{\linewidth}{1pt}
 \end{minipage}
-\end{table}
-
-\begin{marginfigure}[-8cm]
-  \includegraphics{emacs}
-  \caption{Emacs Logo}
-  \labfig{emacs}
-\end{marginfigure}
-
+\end{table*}
 
 \begin{marginfigure}
   \includegraphics{stallman}
@@ -1852,10 +1845,10 @@ can be seen in \reffig{space-cadet}.
 \end{marginfigure}
 
 Notice how the ADM-3A has very limited modifier keys, and
-does not even have arrow keys. Instead it uses \texttt{h,j,k,l}
+does not even have arrow keys. Instead it uses \lstinline|h,j,k,l|
 keys as arrow keys with a modifier. This is why vi uses
 mostly key combinations and a modal interface.
-Vi also uses the \texttt{Esc} key to switch between modes,
+Vi also uses the \lstinline|Esc| key to switch between modes,
 which is present conveniently in place of the Caps Lock or Tab key
 in modern keyboard layouts.
 
@@ -1880,11 +1873,11 @@ $ emacs test.txt
 \end{lstlisting}
 
 Most of emacs keybindings use modifier keys such as
-the \texttt{Ctrl} key, and the \texttt{Meta} key.
-The \texttt{Meta} key is usually the \texttt{Alt} key
+the \lstinline|Ctrl| key, and the \lstinline|Meta| key.
+The \lstinline|Meta| key is usually the \lstinline|Alt| key
 in modern keyboards. In the reference manual and here,
-we will be representing the \texttt{Meta} key as \texttt{M-}
-and the \texttt{Ctrl} key as \texttt{C-}.
+we will be representing the \lstinline|Meta| key as \lstinline|M-|
+and the \lstinline|Ctrl| key as \lstinline|C-|.
 
 \textbf{Basic Navigation}
 
@@ -1900,20 +1893,20 @@ All the navigation can be done through the keyboard.
     \toprule
     Key & Description \\
     \midrule
-    \texttt{C-p} & move up one line \\
-    \texttt{C-b} & move left one char \\
-    \texttt{C-f} & move right one char \\
-    \texttt{C-n} & move down one line \\
-    \texttt{C-a} & goto beginning of current line \\
-    \texttt{C-e} & goto end of current line \\
-    \texttt{C-v} & move forward one screen \\
-    \texttt{M-<} & move to first line of the file \\
-    \texttt{M-b} & move left to previous word \\
-    \texttt{M-f} & move right to next word \\
-    \texttt{M->} & move to last line of the file \\
-    \texttt{M-a} & move to beginning of current sentence \\
-    \texttt{M-e} & move to end of current sentence \\
-    \texttt{M-v} & move back one screen \\
+    \lstinline|C-p| & move up one line \\
+    \lstinline|C-b| & move left one char \\
+    \lstinline|C-f| & move right one char \\
+    \lstinline|C-n| & move down one line \\
+    \lstinline|C-a| & goto beginning of current line \\
+    \lstinline|C-e| & goto end of current line \\
+    \lstinline|C-v| & move forward one screen \\
+    \lstinline|M-<| & move to first line of the file \\
+    \lstinline|M-b| & move left to previous word \\
+    \lstinline|M-f| & move right to next word \\
+    \lstinline|M->| & move to last line of the file \\
+    \lstinline|M-a| & move to beginning of current sentence \\
+    \lstinline|M-e| & move to end of current sentence \\
+    \lstinline|M-v| & move back one screen \\
     \bottomrule
   \end{tabular}
 \end{table}
@@ -1931,9 +1924,9 @@ This is a keymapping of the shell, and not of emacs.
     \toprule
     Key & Description \\
     \midrule
-    \texttt{C-x C-s} & save buffer to file \\
-    \texttt{C-z} & suspend emacs \\
-    \texttt{C-x C-c} & exit emacs and stop it \\
+    \lstinline|C-x C-s| & save buffer to file \\
+    \lstinline|C-z| & suspend emacs \\
+    \lstinline|C-x C-c| & exit emacs and stop it \\
     \bottomrule
   \end{tabular}
 \end{table}
@@ -1950,9 +1943,9 @@ and replace it with another string.
     \toprule
     Key & Description \\
     \midrule
-    \texttt{C-s} & search forward \\
-    \texttt{C-r} & search backward \\
-    \texttt{M-x} & replace string \\
+    \lstinline|C-s| & search forward \\
+    \lstinline|C-r| & search backward \\
+    \lstinline|M-x| & replace string \\
     \bottomrule
   \end{tabular}
 \end{table}
@@ -1968,13 +1961,13 @@ Copying can done by marking the region, and then copying it.
     \toprule
     Key & Description \\
     \midrule
-    \texttt{M-backspace} & cut the word before cursor \\
-    \texttt{M-d} & cut the word after cursor \\
-    \texttt{M-w} & copy the region \\
-    \texttt{C-w} & cut the region \\
-    \texttt{C-y} & paste the region \\
-    \texttt{C-k} & cut from cursor to end of line \\
-    \texttt{M-k} & cut from cursor to end of sentence \\
+    \lstinline|M-backspace| & cut the word before cursor \\
+    \lstinline|M-d| & cut the word after cursor \\
+    \lstinline|M-w| & copy the region \\
+    \lstinline|C-w| & cut the region \\
+    \lstinline|C-y| & paste the region \\
+    \lstinline|C-k| & cut from cursor to end of line \\
+    \lstinline|M-k| & cut from cursor to end of sentence \\
     \bottomrule
   \end{tabular}
 \end{table}
@@ -2056,7 +2049,7 @@ binary, which is actually a symbolic link to the
 \textbf{nano} binary.
 
 You can explore this by finding the path of the
-executable using the \texttt{which} command
+executable using the \lstinline|which| command
 and long-listing the executable.
 
 \begin{lstlisting}[language=bash]
@@ -2073,8 +2066,8 @@ lrwxrwxrwx 1 root root 9 Sep  6  2023 /etc/alternatives/pico -> /bin/nano
   Theoretically, you can extend to as many levels of
   chained symlinks as you want.
   Thus, to find the final sink of the symlink chain,
-  you can use the \texttt{readlink -f} command or
-  the \texttt{realpath} command.
+  you can use the \lstinline|readlink -f| command or
+  the \lstinline|realpath| command.
 \end{remark}
 
 \begin{lstlisting}[language=bash]
@@ -2085,7 +2078,7 @@ $ realpath $(which pico)
 \subsection{Exploring Nano}
 
 In nano, the Control key is represented by the \textasciicircum symbol.
-The Meta or Alt key is represented by the \texttt{M-}.
+The Meta or Alt key is represented by the \lstinline|M-|.
 
 \textbf{File Handling}
 
@@ -2103,9 +2096,9 @@ $ nano test.txt
     \toprule
     Key & Description \\
     \midrule
-    \texttt{\textasciicircum S} & save the file \\
-    \texttt{\textasciicircum O} & save the file with a new name \\
-    \texttt{\textasciicircum X} & exit nano \\
+    \lstinline|^S| & save the file \\
+    \lstinline|^O| & save the file with a new name \\
+    \lstinline|^X| & exit nano \\
     \bottomrule
   \end{tabular}
 \end{table}
@@ -2123,25 +2116,25 @@ are some more basic commands for editing text.
     \toprule
     Key & Description \\
     \midrule
-    \texttt{\textasciicircum K} & cut current line and save in cutbuffer \\
-    \texttt{M-6} & copy current line and save in cutbuffer \\
-    \texttt{\textasciicircum U} & paste contents of cutbuffer \\
-    \texttt{M-T} & cut until end of buffer \\
-    \texttt{\textasciicircum ]} & complete current word \\
-    \texttt{M-U} & undo last action \\
-    \texttt{M-E} & redo last undone action \\
-    \texttt{\textasciicircum J} & justify the current paragraph \\
-    \texttt{M-J} & justify the entire file \\
-    \texttt{M-:} & start/stop recording a macro \\
-    \texttt{M-;} & run the last recorded macro \\
-    \texttt{F12} & invoke the spell checker, if available \\
+    \lstinline|^K| & cut current line and save in cutbuffer \\
+    \lstinline|M-6| & copy current line and save in cutbuffer \\
+    \lstinline|^U| & paste contents of cutbuffer \\
+    \lstinline|M-T| & cut until end of buffer \\
+    \lstinline|^]| & complete current word \\
+    \lstinline|M-U| & undo last action \\
+    \lstinline|M-E| & redo last undone action \\
+    \lstinline|^J| & justify the current paragraph \\
+    \lstinline|M-J| & justify the entire file \\
+    \lstinline|M-:| & start/stop recording a macro \\
+    \lstinline|M-;| & run the last recorded macro \\
+    \lstinline|F12| & invoke the spell checker, if available \\
     \bottomrule
   \end{tabular}
 \end{table}
 
 There are many more commands in nano, but they are
 omitted from here for brevity. You can find the
-complete list of keybindings by pressing \texttt{\textasciicircum G}
+complete list of keybindings by pressing \lstinline|^G|
 key in nano, or by running \lstinline[language=bash]{info nano}.
 \marginnote{
   You can also find third-party cheat sheets
@@ -2178,24 +2171,24 @@ echo "Currently it is $date"
   later chapters.
 }
 
-Now save the file by pressing \texttt{\textasciicircum S}
+Now save the file by pressing \lstinline|^S|
 \begin{remark}
-  In some systems, the \texttt{\textasciicircum S} key
+  In some systems, the \lstinline|^S| key
   will freeze the terminal. Any key you press after this
   will seem to not have any effect.
-  This is because it is interpreted as the \texttt{XOFF}
+  This is because it is interpreted as the \lstinline|XOFF|
   and is used to lock the scrolling of the terminal.
-  To unfreeze the terminal, press \texttt{\textasciicircum Q}.
+  To unfreeze the terminal, press \lstinline|^Q|.
   In such a system, you can save the file by pressing
-  \texttt{\textasciicircum O} and then typing out the
+  \lstinline|^O| and then typing out the
   name of the file if not present already, and pressing
   Enter.
   To disable this behaviour, you can add the line
   \begin{lstlisting}[language=bash]
   set -ixon \end{lstlisting}
-  to your \texttt{.bashrc} file.
+  to your \lstinline|.bashrc| file.
 \end{remark}
-and exit nano by pressing \texttt{\textasciicircum X}.
+and exit nano by pressing \lstinline|^X|.
 
 Now you can run the script by typing
 

@@ -1,16 +1,16 @@
-\setchapterpreamble[u]{\margintoc}
+% \setchapterpreamble[u]{\margintoc}
 \chapter{Streams, Redirections, Piping}
 \labch{redirection}
 
 \section{Multiple Commands in a Single Line}
 
 Sometimes we may want to run multiple commands in a single line.
-For example, we may want to run two commands \texttt{ls} and \texttt{wc}
+For example, we may want to run two commands \lstinline|ls| and \lstinline|wc|
 in a single line. We can do this by separating the commands with a semicolon.
 This helps us see the output of both the commands without having the
 prompt in between.
 
-For example, the following command will run \texttt{ls} and \texttt{wc} in a single line.
+For example, the following command will run \lstinline|ls| and \lstinline|wc| in a single line.
 
 \begin{lstlisting}[language=bash]
 $ ls; wc .bashrc
@@ -33,9 +33,9 @@ ls: cannot access '/nonexistant': No such file or directory
 \subsection{Conjunction and Disjunction}
 
 We can also run multiple commands in a single line using conjunction
-and disjunction. The conjunction operator \texttt{\&\&} is used to run
+and disjunction. The conjunction operator \lstinline|&&| is used to run
 the second command only if the first command is successful. The disjunction
-operator \texttt{||} is used to run the second command only if the first
+operator \lstinline|||| is used to run the second command only if the first
 command fails. In computer science, these operators are also known as
 short-circuit logical \textbf{AND} and \textbf{OR} operators.
 \sidenote{
@@ -52,16 +52,16 @@ lost+found  sayan  test1
 ls successful
 \end{lstlisting}
 
-In the first command, the \texttt{ls} command fails, so the \texttt{echo}
-command is not executed. In the second command, the \texttt{ls} command
-is successful, so the \texttt{echo} command is executed.
+In the first command, the \lstinline|ls| command fails, so the \lstinline|echo|
+command is not executed. In the second command, the \lstinline|ls| command
+is successful, so the \lstinline|echo| command is executed.
 
 The success or failure of a command is determinted by the exit status
 of the command. If the exit status is 0, the command is successful.
 If the exit status is non-zero, the command is considered to have failed.
 
 The exit status of the last command can be accessed using the special
-variable \texttt{\$?}. This variable contains the exit status of the
+variable \lstinline|$?|. This variable contains the exit status of the
 last command executed.
 
 \begin{lstlisting}[language=bash]
@@ -71,8 +71,8 @@ $ echo $?
 2
 \end{lstlisting}
 
-Here, the exit status of the \texttt{ls} command is 2, because the
-file \texttt{/nonexistant} does not exist.
+Here, the exit status of the \lstinline|ls| command is 2, because the
+file \lstinline|/nonexistant| does not exist.
 
 \begin{lstlisting}[language=bash]
 $ ls /home
@@ -81,10 +81,10 @@ $ echo $?
 0
 \end{lstlisting}
 
-Here, the exit status of the \texttt{ls} command is 0, because the
-directory \texttt{/home} exists, and the command is successful.
+Here, the exit status of the \lstinline|ls| command is 0, because the
+directory \lstinline|/home| exists, and the command is successful.
 
-Similarly, we can use the disjunction operator \texttt{||} to run
+Similarly, we can use the disjunction operator \lstinline|||| to run
 the second command only if the first command fails.
 
 \begin{lstlisting}[language=bash]
@@ -93,18 +93,18 @@ ls: cannot access '/nonexistant': No such file or directory
 ls failed
 \end{lstlisting}
 
-In this case, the \texttt{ls} command fails, so the \texttt{echo}
+In this case, the \lstinline|ls| command fails, so the \lstinline|echo|
 command is executed. However, since the disjunction operator is a
-short-circuit operator, the \texttt{echo} command is executed only
-if the \texttt{ls} command fails. If the \texttt{ls} command is
-successful, the \texttt{echo} command is not executed.
+short-circuit operator, the \lstinline|echo| command is executed only
+if the \lstinline|ls| command fails. If the \lstinline|ls| command is
+successful, the \lstinline|echo| command is not executed.
 
 \begin{lstlisting}[language=bash]
 $ ls /home || echo "ls failed"
 lost+found  sayan  test1
 \end{lstlisting}
 
-In this case, the \texttt{ls} command is successful, so the \texttt{echo}
+In this case, the \lstinline|ls| command is successful, so the \lstinline|echo|
 command is not executed.
 
 We can also chain multiple commands using conjunction and disjunction.
@@ -117,8 +117,8 @@ ls: cannot access '/hello': No such file or directory
 echo
 \end{lstlisting}
 
-In this case, the \texttt{date} command is successful, so the \texttt{ls}
-is executed. The \texttt{ls} command fails, so the \texttt{echo} command
+In this case, the \lstinline|date| command is successful, so the \lstinline|ls|
+is executed. The \lstinline|ls| command fails, so the \lstinline|echo| command
 is executed.
 
 However, even if the first command fails, and the second command is
@@ -130,11 +130,11 @@ ls: cannot access '/hello': No such file or directory
 echo
 \end{lstlisting}
 
-In this case, the \texttt{ls} command fails, so the \texttt{date} command
-is not executed. However, the \texttt{echo} command is executed as the
-exit status of the \texttt{ls} command is non-zero.
+In this case, the \lstinline|ls| command fails, so the \lstinline|date| command
+is not executed. However, the \lstinline|echo| command is executed as the
+exit status of the \lstinline|ls| command is non-zero.
 
-To make the \texttt{echo} command execute only if the \texttt{date}
+To make the \lstinline|echo| command execute only if the \lstinline|date|
 command is run and fails, we can use parentheses.
 
 \begin{lstlisting}[language=bash]
@@ -147,7 +147,7 @@ they are actually a subshell. The commands inside the parentheses
 are executed in a subshell. The exit status of the subshell is the
 exit status of the last command executed in the subshell.
 
-We can see the subshell count using the \texttt{echo \$BASH\_SUBSHELL}.
+We can see the subshell count using the \lstinline|echo \$BASH\_SUBSHELL|.
 
 \begin{lstlisting}[language=bash]
 $ echo $BASH_SUBSHELL
@@ -164,8 +164,8 @@ $ (:;(:;(echo $BASH_SUBSHELL )))
   When nesting in more than one subshell, simply putting two parentheses
   side by side will not work. This is because the shell will interpret
   that as the mathematical evaluation of the expression inside the
-  parentheses. To avoid this, we can use a colon \texttt{:} no-op command
-  followed by a semicolon \texttt{;} to separate the two parentheses.
+  parentheses. To avoid this, we can use a colon \lstinline|:| no-op command
+  followed by a semicolon \lstinline|;| to separate the two parentheses.
 \end{remark}
 
 \begin{remark}
@@ -189,7 +189,7 @@ There are three standard streams in Unix-like operating systems:
     terminal.
 \end{enumerate}
 
-There are also other numbered streams, such as \texttt{3}, \texttt{4},
+There are also other numbered streams, such as \lstinline|3|, \lstinline|4|,
 etc., which can be used to read from or write to files.
 
 \begin{marginfigure}
@@ -245,9 +245,9 @@ does not have direct access to the file or inode tables.
   \labfig{fdtable}
 \end{marginfigure}
 
-The file descriptors of a process can be inspected in the \texttt{/proc}
-directory. The \texttt{/proc} directory is a pseudo-filesystem that
-provides an interface to kernel data structures. The \texttt{/proc/PID/fd}
+The file descriptors of a process can be inspected in the \lstinline|/proc|
+directory. The \lstinline|/proc| directory is a pseudo-filesystem that
+provides an interface to kernel data structures. The \lstinline|/proc/PID/fd|
 directory contains the file descriptors of the process with the PID.
 
 Most GNU core utilities that accept a file as an argument will also
@@ -265,7 +265,7 @@ Press Ctrl+D to exit
 Press Ctrl+D to exit
 \end{lstlisting}
 
-The \texttt{cat} command is usually used to print the contents of one
+The \lstinline|cat| command is usually used to print the contents of one
 or more files. However, when no file is provided, it reads from the
 standard input. In this case, the standard input is the keyboard.
 This is very useful when we want to repeat the input or when we want
@@ -276,8 +276,8 @@ to read from the standard input.
 \end{qs}
 
 \begin{ans}
-  Yes, we can use the \texttt{cat} command to write to a file. When
-  no file is provided, the \texttt{cat} command reads from the standard
+  Yes, we can use the \lstinline|cat| command to write to a file. When
+  no file is provided, the \lstinline|cat| command reads from the standard
   input. So the input will be printed back to the standard output.
   However, if we can somehow change the standard output to a file,
   then the input will be written to the file.
@@ -287,7 +287,7 @@ to read from the standard input.
 
 Redirection is the process of changing the standard streams of a process.
 This is done by the shell before the process is executed. The shell
-uses the \texttt{<}, \texttt{>}, and \texttt{2>} operators to redirect
+uses the \lstinline|<|, \lstinline|>|, and \lstinline|2>| operators to redirect
 the standard input, standard output, and standard error streams of a
 process.
 
@@ -297,14 +297,14 @@ it is given by the shell. The process does not know whether the file
 descriptor is a file, a terminal, or a pipe.
 
 However, there are ways for a process to guess whether the file descriptor
-is a terminal or a file. This is done by using the \texttt{isatty()}
-function. The \texttt{isatty()} function returns \texttt{1} if the file
-descriptor is a terminal, and \texttt{0} if the file descriptor is a file.
+is a terminal or a file. This is done by using the \lstinline|isatty()|
+function. The \lstinline|isatty()| function returns \lstinline|1| if the file
+descriptor is a terminal, and \lstinline|0| if the file descriptor is a file.
 
 \subsection{Standard Output Redirection}
 
 The standard output of a process can be redirected to a file using the
-\texttt{>} operator. Observe the following example.
+\lstinline|>| operator. Observe the following example.
 
 \begin{lstlisting}[language=bash]
 $ date > date.txt
@@ -312,12 +312,12 @@ $ cat date.txt
 Thu Jul  4 07:37:27 AM IST 2024
 \end{lstlisting}
 
-Here, the output of the \texttt{date} command is redirected to the file
-\texttt{date.txt}. The \texttt{cat} command is then used to print the
-contents of the file \texttt{date.txt}.
+Here, the output of the \lstinline|date| command is redirected to the file
+\lstinline|date.txt|. The \lstinline|cat| command is then used to print the
+contents of the file \lstinline|date.txt|.
 
 The process did not print the output to the terminal. Instead, the shell
-changed the standard output of the process to the file \texttt{date.txt}.
+changed the standard output of the process to the file \lstinline|date.txt|.
 
 We can also use redirection to create a file. If the file does not exist,
 the shell will create the file. If the file exists, the shell will truncate
@@ -327,11 +327,11 @@ the file.
 $ > empty.txt
 \end{lstlisting}
 
-This command creates an empty file \texttt{empty.txt}. The \texttt{>}
+This command creates an empty file \lstinline|empty.txt|. The \lstinline|>|
 operator is used to redirect the output of the command to the file
-\texttt{empty.txt}. Since there is no output, the file is empty.
+\lstinline|empty.txt|. Since there is no output, the file is empty.
 
-We can also use redirection along with the \texttt{echo} command to
+We can also use redirection along with the \lstinline|echo| command to
 create a file with some content.
 
 \begin{lstlisting}[language=bash]
@@ -340,9 +340,9 @@ $ cat hello.txt
 hello
 \end{lstlisting}
 
-Here, the output of the \texttt{echo} command is redirected to the file
-\texttt{hello.txt}. The \texttt{cat} command is then used to print the
-contents of the file \texttt{hello.txt}.
+Here, the output of the \lstinline|echo| command is redirected to the file
+\lstinline|hello.txt|. The \lstinline|cat| command is then used to print the
+contents of the file \lstinline|hello.txt|.
 
 Recall that the cat command will read from the standard input if no
 file is provided. We can use this to create a file with the input from
@@ -365,7 +365,7 @@ It is important to note that the process of creating the file if it
 does not exist, and truncating the file if it exists, along with redirecting
 the output, is done by the shell, not the process. All of this is done
 before the process is executed. This creates an interesting exemplar when
-using redirection with the \texttt{ls} command.
+using redirection with the \lstinline|ls| command.
 
 \textbf{Output contains output}
 
@@ -379,14 +379,14 @@ output.txt
 \end{lstlisting}
 
 Since the file is created even before the process is executed, the file
-is also a part of the output of the \texttt{ls} command. This is why the
-file \texttt{output.txt} is also printed by the \texttt{cat} command.
+is also a part of the output of the \lstinline|ls| command. This is why the
+file \lstinline|output.txt| is also printed by the \lstinline|cat| command.
 
 \textbf{Output format changes}
 
-Another interesting example using the \texttt{ls} command is when the
+Another interesting example using the \lstinline|ls| command is when the
 directory contains more than one file.
-The output of \texttt{ls} is usually formatted to fit the terminal.
+The output of \lstinline|ls| is usually formatted to fit the terminal.
 However, when the output is redirected to a file, the output is not
 in a column format. Instead, each file is printed on a new line.
 
@@ -399,15 +399,15 @@ hello
 output.txt
 \end{lstlisting}
 
-Observe that the output of the \texttt{ls} command is not in a column
-when redirected to a file. But how does \texttt{ls} know that the output
+Observe that the output of the \lstinline|ls| command is not in a column
+when redirected to a file. But how does \lstinline|ls| know that the output
 is not a terminal? It uses the file descriptor to guess whether the
 output is a terminal or a file. If the file descriptor is a terminal,
 then the output is formatted to fit the terminal. If the file descriptor
 is a file, then the output is not formatted.
 
 However, we can always force the output to be single-column using the
-\texttt{-1} option.
+\lstinline|-1| option.
 
 \begin{lstlisting}[language=bash]
 $ ls -1
@@ -415,19 +415,19 @@ hello
 output.txt
 \end{lstlisting}
 
-This behaviour is not limited to the \texttt{ls} command. Most commands
+This behaviour is not limited to the \lstinline|ls| command. Most commands
 usually strip out the formatting when the output is redirected to a file.
 
 If you are using a terminal that supports ANSI escape codes
 \sidenote{
   ANSI escape codes are special sequences of characters that are used
   to control the terminal. For example, to change the color of the text,
-  the ANSI escape code \texttt{\textbackslash033[31m} is used.
+  the ANSI escape code \lstinline|\[31m| is used.
   Similarly other ANSI escape codes are used to change the text style,
   and the position and state of the cursor.
 }
 , you can
-use the \texttt{ls} command with the \texttt{--color=auto} option to
+use the \lstinline|ls| command with the \lstinline|--color=auto| option to
 get colored output. However, when the output is redirected to a file,
 the ANSI escape codes are not printed. This is because the ANSI escape
 codes are not printable characters. They are control characters that
@@ -449,17 +449,17 @@ $
 \end{lstlisting}
 
 \begin{remark}
-  Although we can simply use \texttt{>} to redirect the output to a file,
-  the full syntax is \texttt{1>}. This is because the file descriptor
-  for the standard output is 1. The \texttt{1>} is used to redirect
+  Although we can simply use \lstinline|>| to redirect the output to a file,
+  the full syntax is \lstinline|1>|. This is because the file descriptor
+  for the standard output is 1. The \lstinline|1>| is used to redirect
   the standard output to a file. However, since the standard output
-  is the default output, we can omit the \texttt{1} and use only \texttt{>}.
+  is the default output, we can omit the \lstinline|1| and use only \lstinline|>|.
 \end{remark}
 
 \subsection{Standard Error Redirection}
 
 The standard error of a process can be redirected to a file using the
-\texttt{2>} operator. Observe the following example.
+\lstinline|2>| operator. Observe the following example.
 
 \begin{lstlisting}[language=bash]
 $ ls /nonexistant 2> error.txt
@@ -467,9 +467,9 @@ $ cat error.txt
 ls: cannot access '/nonexistant': No such file or directory
 \end{lstlisting}
 
-Here, the error message of the \texttt{ls} command is redirected to the
-file \texttt{error.txt}. The \texttt{cat} command is then used to print
-the contents of the file \texttt{error.txt}.
+Here, the error message of the \lstinline|ls| command is redirected to the
+file \lstinline|error.txt|. The \lstinline|cat| command is then used to print
+the contents of the file \lstinline|error.txt|.
 
 It is important to realise that each process has two streams to output
 to, the standard output and the standard error. The standard output is
@@ -489,12 +489,12 @@ $ cat output.txt
 /home
 \end{lstlisting}
 
-Here, the output of the \texttt{ls} command is redirected to the file
-\texttt{output.txt}. However, the error message is still printed to
+Here, the output of the \lstinline|ls| command is redirected to the file
+\lstinline|output.txt|. However, the error message is still printed to
 the terminal.
 
 We can redirect both the standard output and the standard error to
-files using the \texttt{>} and \texttt{2>} operators.
+files using the \lstinline|>| and \lstinline|2>| operators.
 
 \begin{lstlisting}[language=bash]
 $ ls -d /home /nonexistant > output.txt 2> error.txt
@@ -523,7 +523,7 @@ the same file, overwriting the error partially.
 Observe that only the first six characters of the
 error message are mangled, the same size of the output.
 \sidenote{
-  The output message is \texttt{/home}, followed by a newline character.
+  The output message is \lstinline|/home|, followed by a newline character.
   This makes the output message 6 characters long.
   The shell first writes the error message to the file (because that is
   printed first by the ls command), and then overwrites the first 6 bytes
@@ -532,10 +532,10 @@ error message are mangled, the same size of the output.
 }
 
 The correct way to redirect both the standard output and the standard
-error to the same file is to use the \texttt{2>\&1} operator.
+error to the same file is to use the \lstinline|2>\&1| operator.
 This means that the standard error is redirected to the standard output.
-Here, the \texttt{1} is the file descriptor for the standard output.
-The \texttt{\&} is used to tell the shell that the \texttt{1} is a file
+Here, the \lstinline|1| is the file descriptor for the standard output.
+The \lstinline|&| is used to tell the shell that the \lstinline|1| is a file
 descriptor, not a file.
 
 \begin{lstlisting}[language=bash]
@@ -545,7 +545,7 @@ ls: cannot access '/nonexistant': No such file or directory
 /home
 \end{lstlisting}
 
-However, the order is important. The \texttt{2>\&1} operator should
+However, the order is important. The \lstinline|2>\&1| operator should
 be placed at the end of the command. If it is placed at the beginning,
 then the standard error will be redirected to the standard output, which,
 at that point, is the terminal. Then the standard output will be redirected
@@ -560,10 +560,10 @@ $ cat output.txt
 
 \subsection{Appending to a File}
 
-The \texttt{>} operator is used to redirect the output to a file. If the
+The \lstinline|>| operator is used to redirect the output to a file. If the
 file does not exist, the shell will create the file. If the file exists,
 the shell will truncate the file. However, if we want to append the output
-to the file, we can use the \texttt{>>} operator.
+to the file, we can use the \lstinline|>>| operator.
 
 \begin{lstlisting}[language=bash]
 $ echo "hello" > hello.txt
@@ -579,10 +579,10 @@ hello
 world
 \end{lstlisting}
 
-Observe that the \texttt{>} operator truncates the file, while the
-\texttt{>>} operator appends to the file.
+Observe that the \lstinline|>| operator truncates the file, while the
+\lstinline|>>| operator appends to the file.
 
-We can also append the standard error to a file using the \texttt{2>>}
+We can also append the standard error to a file using the \lstinline|2>>|
 
 \begin{lstlisting}[language=bash]
 $ ls /nonexistant 2> error.txt
@@ -603,7 +603,7 @@ If we try to redirect the output of a command to the same file that
 we are reading from, we will get an empty file. However, if we append
 the output to the file, we will get an infinite loop of the output.
 This should not be done, as it will fill up the disk space.
-However, GNU core utilities \texttt{cat} is smart enough to detect
+However, GNU core utilities \lstinline|cat| is smart enough to detect
 this and will not read from the file.
 
 \begin{lstlisting}[language=bash]
@@ -633,26 +633,26 @@ reads from the pipe and writes to the file. Since the file is not
 read from and written to at the same time, we dont get into an infinite
 loop.
 
-However, BSD utilities like \texttt{cat} do not have this check, thus
+However, BSD utilities like \lstinline|cat| do not have this check, thus
 giving the same input and output file will result in an infinite loop.
 
 \subsection{Standard Input Redirection}
 
 The standard input of a process can be redirected from a file using
-the \texttt{<} operator. Although most commands accept a filename
+the \lstinline|<| operator. Although most commands accept a filename
 in the argument to read from, so we can directly provide the file
 in the argument. However, some commands do not accept a filename
 and only read from the standard input. In such cases, we can use
-the \texttt{<} operator to redirect the standard input from a file.
+the \lstinline|<| operator to redirect the standard input from a file.
 
 \begin{lstlisting}[language=bash]
 $ wc < ~/.bashrc
   340  1255 11238
 \end{lstlisting}
 
-Although the \texttt{wc} command accepts a filename as an argument,
-we can also redirect the standard input from a file using the \texttt{<}
-to the command. However, now the output of the \texttt{wc} command
+Although the \lstinline|wc| command accepts a filename as an argument,
+we can also redirect the standard input from a file using the \lstinline|<|
+to the command. However, now the output of the \lstinline|wc| command
 is different than when we provide the filename as an argument.
 
 \begin{lstlisting}[language=bash]
@@ -660,12 +660,12 @@ $ wc ~/.bashrc
   340  1255 11238 /home/sayan/.bashrc
 \end{lstlisting}
 
-When we provide the filename as an argument, the \texttt{wc} command
+When we provide the filename as an argument, the \lstinline|wc| command
 prints the number of lines, words, and characters in the file, followed
 by the filename. However, when we redirect the standard input from a
-file, the \texttt{wc} command prints only the number of lines, words,
+file, the \lstinline|wc| command prints only the number of lines, words,
 and characters in the file. This is because it does not know that the
-input is coming from a file. For \texttt{wc}, the input is just a stream
+input is coming from a file. For \lstinline|wc|, the input is just a stream
 coming from the standard input.
 
 \begin{lstlisting}[language=bash]
@@ -678,10 +678,10 @@ Stop by pressing Ctrl+D
       5      29     150
 \end{lstlisting}
 
-Another example where giving filename is not possible is the \texttt{read}
-command. The \texttt{read} command reads a line from the standard input
-and assigns it to a variable. The \texttt{read} command does not accept
-a filename as an argument. So we have to use the \texttt{<} operator to
+Another example where giving filename is not possible is the \lstinline|read|
+command. The \lstinline|read| command reads a line from the standard input
+and assigns it to a variable. The \lstinline|read| command does not accept
+a filename as an argument. So we have to use the \lstinline|<| operator to
 redirect the standard input from a file.
 
 \begin{lstlisting}[language=bash]
@@ -690,10 +690,10 @@ $ echo $myline
 rex
 \end{lstlisting}
 
-Here, the \texttt{read} command reads a line from the file \texttt{/etc/hostname}
-and assigns it to the variable \texttt{myline}. The \texttt{echo} command
-is then used to print the value of the variable \texttt{myline}.
-To access the value of the variable, we use the \texttt{\$} operator.
+Here, the \lstinline|read| command reads a line from the file \lstinline|/etc/hostname|
+and assigns it to the variable \lstinline|myline|. The \lstinline|echo| command
+is then used to print the value of the variable \lstinline|myline|.
+To access the value of the variable, we use the \lstinline|$| operator.
 \sidenote{
   This will be covered in depth in the \refch{variables} chapter.
 }
@@ -702,7 +702,7 @@ To access the value of the variable, we use the \texttt{\$} operator.
 
 A \textbf{here document} is a way to provide input to a command without
 using a file. The input is provided directly in the command itself.
-This is done by using the \texttt{<<} operator followed by a delimiter.
+This is done by using the \lstinline|<<| operator followed by a delimiter.
 
 \begin{lstlisting}[language=bash]
 $ wc <<EOF
@@ -716,7 +716,7 @@ EOF
       6      41     206
 \end{lstlisting}
 
-We can optionally provide a hyphen \texttt{-} after the \texttt{<<}
+We can optionally provide a hyphen \lstinline|-| after the \lstinline|<<|
 to ignore leading tabs. This is useful when the here document is
 indented.
 
@@ -739,7 +739,7 @@ hello
 this is tab
 \end{lstlisting}
 
-The delimiter can be any string. However, it is common to use \texttt{EOF}
+The delimiter can be any string. However, it is common to use \lstinline|EOF|
 as the delimiter. The delimiter should be on a new line.
 
 \begin{lstlisting}[language=bash]
@@ -771,7 +771,7 @@ This is a here document
 
 A \textbf{here string} is a way to provide input to a command without
 using a file. The input is provided directly in the command itself.
-This is done by using the \texttt{<<<} operator followed by the input.
+This is done by using the \lstinline|<<<| operator followed by the input.
 It is very similar to the here document, but the input is provided
 in a single line. Due to this, a delimiter is not required.
 
@@ -808,7 +808,7 @@ in Unix-like operating systems.
 \begin{definition}[Pipe]
   A \textbf{pipe} is a way to connect the standard output of one process
   to the standard input of another process. This is done by using the
-  \texttt{|} operator.
+  \lstinline||| operator.
 \end{definition}
 
 Think of the shell as a factory, and the commands as machines in the
@@ -860,15 +860,15 @@ find which word is present the most number of times. You can either
 write a program in C or Python, etc., or you can use the power of
 pipes to do it in a single line using simple GNU coreutils.
 
-I have a file \texttt{alice\_in\_wonderland.txt} which contains the
+I have a file \lstinline|alice\_in\_wonderland.txt| which contains the
 entire text of the book Alice in Wonderland. I want to find the words
 that are present the most number of times.
 
 There are some basic preprocessing you would do even if you were writing
 a program. You would convert all the words to lowercase, and remove
-any punctuation. This can be done using the \texttt{tr} command.
+any punctuation. This can be done using the \lstinline|tr| command.
 Then you would split the text into each word. This can be done using
-the \texttt{tr} command. Then you would find the count of each word.
+the \lstinline|tr| command. Then you would find the count of each word.
 There are two ways of doing this, either you can use a dictionary
 \sidenote{
   A dictionary in python is a hash map. It is a data structure that
@@ -881,9 +881,9 @@ over the entire text once. Or you can first sort the words, then
 simply count the number of times each word is repeated. Since repeated
 words would always be consecutive, you can simply count the number
 of repeated words without having to store the frequency of each word.
-This can be done using the \texttt{sort} and \texttt{uniq} commands.
+This can be done using the \lstinline|sort| and \lstinline|uniq| commands.
 Finally, you would sort the words based on the frequency and print
-the top 10 words. This can be done using the \texttt{sort} and \texttt{head}
+the top 10 words. This can be done using the \lstinline|sort| and \lstinline|head|
 commands.
 
 Lets see how we actually do this using pipes.
@@ -908,7 +908,7 @@ Let's go over each command one by one and see what it does.
 
 \textbf{tr 'A-Z' 'a-z'}
 
-\texttt{tr} is a command that translates characters. The first argument
+\lstinline|tr| is a command that translates characters. The first argument
 is the set of characters to be translated, and the second argument is
 the set of characters to translate to. Here, we are translating all
 uppercase letters to lowercase.
@@ -941,14 +941,14 @@ pictures or conversations in it, `and what is the use of a book,'
 
 \begin{remark}
   Since the text is really big, I am  going to filter all the
-  intermediate outputs also through the \texttt{head} command.
+  intermediate outputs also through the \lstinline|head| command.
 \end{remark}
 
 \textbf{tr -cd 'a-z '}
 
-The \texttt{-c} option is used to complement the set of characters.
-The \texttt{-d} option is used to delete the characters. Here, we are
-telling the \texttt{tr} command to delete all characters except lowercase
+The \lstinline|-c| option is used to complement the set of characters.
+The \lstinline|-d| option is used to delete the characters. Here, we are
+telling the \lstinline|tr| command to delete all characters except lowercase
 letters and spaces. This is done to remove all punctuation and special
 characters. Observe the difference in output now.
 
@@ -961,13 +961,13 @@ alices adventures in wonderland                alices adventures in wonderland  
   After we have removed all the punctuation, the text is now
   only a single line. This is because we have removed all the
   characters, including the newline characters.
-  Thus to restrict the output, I am using the \texttt{head -c500}
-  instead of \texttt{head -n20}.
+  Thus to restrict the output, I am using the \lstinline|head -c500|
+  instead of \lstinline|head -n20|.
 \end{remark}
 
 \textbf{tr ' ' '\textbackslash n'}
 
-The \texttt{tr} command is used to translate characters. Here, we are
+The \lstinline|tr| command is used to translate characters. Here, we are
 translating spaces to newline characters. This is done to split the
 text into words. We are doing this so that each word is on a new line.
 This is helpful as the sort and uniq commands work on lines.
@@ -1001,7 +1001,7 @@ alices
 Now we have each word on a new line.
 But observe that there are many empty lines.
 This is because of the multiple spaces between words and spaces around
-punctuation. We can remove these empty lines using the \texttt{grep .}
+punctuation. We can remove these empty lines using the \lstinline|grep .|
 command.
 \sidenote{
   We will learn more about regular expressions in the \refch{regex} chapter.
@@ -1032,14 +1032,14 @@ alice
 \end{lstlisting}
 
 Now we are almost there. We have each word on a new line. Now we can
-pass this entire stream of words to the \texttt{sort} command, this
+pass this entire stream of words to the \lstinline|sort| command, this
 will sort the words.
 
 \textbf{sort}
 
 Sort by default sorts the words in lexicographical order. This is
 useful as repeated words would be consecutive. This is important
-as the \texttt{uniq} command only works on consecutive lines only.
+as the \lstinline|uniq| command only works on consecutive lines only.
 
 \begin{lstlisting}[language=bash]
 $ tr 'A-Z' 'a-z' < alice_in_wonderland.txt  | tr -cd 'a-z ' | tr ' ' '\n' | grep . | sort | head -20
@@ -1065,17 +1065,17 @@ a
 a
 \end{lstlisting}
 
-If you run the command yourself without the \texttt{head} command, you
+If you run the command yourself without the \lstinline|head| command, you
 can see that the words are sorted. The repeated words are consecutive.
-In the above output we can see that the word \texttt{a} is repeated
-many times. Now we can use the \texttt{uniq} command to count the
+In the above output we can see that the word \lstinline|a| is repeated
+many times. Now we can use the \lstinline|uniq| command to count the
 number of times each word is repeated.
 
 \textbf{uniq -c}
 
-The \texttt{uniq} command is used to remove consecutive duplicate lines.
+The \lstinline|uniq| command is used to remove consecutive duplicate lines.
 However, it also can count the number of times each line is repeated
-using the \texttt{-c} option.
+using the \lstinline|-c| option.
 
 \begin{lstlisting}[language=bash]
 $ tr 'A-Z' 'a-z' < alice_in_wonderland.txt  | tr -cd 'a-z ' | tr ' ' '\n' | grep . | sort | uniq -c | head -20
@@ -1103,17 +1103,17 @@ $ tr 'A-Z' 'a-z' < alice_in_wonderland.txt  | tr -cd 'a-z ' | tr ' ' '\n' | grep
 
 Great! Now we have the count of each word. However, the words are
 still sorted by the word. We want to sort the words by the count
-of the word. This can be done using the \texttt{sort} command.
+of the word. This can be done using the \lstinline|sort| command.
 
 \textbf{sort -nr}
 
 Sort by default sorts in lexicographical order. However, we want to
-sort by the count of the word. The \texttt{-n} option is used to sort
-the lines numerically. The \texttt{-r} option is used to sort in
+sort by the count of the word. The \lstinline|-n| option is used to sort
+the lines numerically. The \lstinline|-r| option is used to sort in
 reverse order.
 
 \begin{exercise}
-  Try to run the same command without the \texttt{-n} option.
+  Try to run the same command without the \lstinline|-n| option.
   Observe how the sorting makes sense alphabetically, but not
   numerically.
 \end{exercise}
@@ -1142,7 +1142,7 @@ $ tr 'A-Z' 'a-z' < alice_in_wonderland.txt  | tr -cd 'a-z ' | tr ' ' '\n' | grep
     158 with
 \end{lstlisting}
 
-Finally, we have the top 20 words in the file \texttt{alice\_in\_wonderland.txt}
+Finally, we have the top 20 words in the file \lstinline|alice\_in\_wonderland.txt|
 along with the count of each word.
 
 Although the above command is a single line
@@ -1169,7 +1169,7 @@ connected and remains mapped to the terminal. This is because the
 standard error is a separate stream from the standard output.
 
 However, we can connect the standard error to the standard input of
-another process using the \texttt{2>\&1} operator. This is useful when
+another process using the \lstinline|2>\&1| operator. This is useful when
 we want to process the error messages of a command.
 
 \begin{lstlisting}[language=bash]
@@ -1183,7 +1183,7 @@ $ ls -d /home /nonexistant 2>&1 | wc
 This is same as redirecting both the streams to a single file as
 demostrated earlier.
 
-However, there is a shorter way to do this using the \texttt{|\&}
+However, there is a shorter way to do this using the \lstinline||\&|
 syntactic sugar.
 
 \begin{lstlisting}[language=bash]
@@ -1191,19 +1191,19 @@ $ ls -d /home /nonexistant |& wc
       2      10      61
 \end{lstlisting}
 
-This does the exact same thing as \texttt{2>\&1} followed by the pipe.
+This does the exact same thing as \lstinline|2>\&1| followed by the pipe.
 
 \subsection{Piping to and From Special Files}
 
-As we discussed earlier, there are some special files in the \texttt{/dev}
+As we discussed earlier, there are some special files in the \lstinline|/dev|
 directory.
 
 \textbf{/dev/null}
 
-The \texttt{/dev/null} file is a special file that discards all the data
+The \lstinline|/dev/null| file is a special file that discards all the data
 that is written to it. It is like a black hole. All the data that is
 not needed can be written to this file. Usually errors are written to
-the \texttt{/dev/null} file.
+the \lstinline|/dev/null| file.
 
 \begin{lstlisting}[language=bash]
 $ ls -d /nonexistant /home 2> /dev/null
@@ -1215,7 +1215,7 @@ space is not wasted.
 
 \textbf{/dev/zero}
 
-The \texttt{/dev/zero} file is a special file that provides an infinite
+The \lstinline|/dev/zero| file is a special file that provides an infinite
 stream of null bytes. This is useful when you want to provide an infinite
 stream of data to a process.
 
@@ -1225,30 +1225,30 @@ $ ls -lh zero.txt
 -rw-r--r-- 1 sayan sayan 1.0K Jul  4 15:04 zero.txt
 \end{lstlisting}
 
-Here we are taking the first 1024 bytes from the \texttt{/dev/zero}
-and writing it to the file \texttt{zero.txt}. The file \texttt{zero.txt}
-is 1.0K in size. This is because the \texttt{/dev/zero} file provides
+Here we are taking the first 1024 bytes from the \lstinline|/dev/zero|
+and writing it to the file \lstinline|zero.txt|. The file \lstinline|zero.txt|
+is 1.0K in size. This is because the \lstinline|/dev/zero| file provides
 an infinite stream of null bytes, of which $1024$ bytes are taken.
 
 \begin{warn}
-  Make sure to always use \texttt{head} or any other limiter when
-  working with \texttt{/dev/zero} or \texttt{/dev/random} as they
+  Make sure to always use \lstinline|head| or any other limiter when
+  working with \lstinline|/dev/zero| or \lstinline|/dev/random| as they
   are infinite streams. Forgetting this can lead to the disk being
   filled up. Head with the default parameter will also not work,
   since it depends on presence of newline characters, which is
   not there in an infinite stream of zeros. That is why we are
-  using a byte count limiter using the \texttt{-c} option.
-  If you forget to add the limiter, you can press \texttt{Ctrl+C}
+  using a byte count limiter using the \lstinline|-c| option.
+  If you forget to add the limiter, you can press \lstinline|Ctrl+C|
   as quickly as possible to stop the process and then remove the
-  file using \texttt{rm}.
+  file using \lstinline|rm|.
 \end{warn}
 
 \textbf{/dev/random and /dev/urandom}
 
-The \texttt{/dev/random} and \texttt{/dev/urandom} files are special
-files that are infinite suppliers of random bytes. The \texttt{/dev/random}
+The \lstinline|/dev/random| and \lstinline|/dev/urandom| files are special
+files that are infinite suppliers of random bytes. The \lstinline|/dev/random|
 file is a blocking random number generator. This means that it will
-block if there is not enough entropy. The \texttt{/dev/urandom} file
+block if there is not enough entropy. The \lstinline|/dev/urandom| file
 is a non-blocking random number generator. This means that it will
 not block even if there is not enough entropy. Both can be used to
 generate random numbers.
@@ -1289,7 +1289,7 @@ and can be accessed by any process that has the permission to access
 the file.
 
 Try out the following example. First create a named pipe using the
-\texttt{mkfifo} command.
+\lstinline|mkfifo| command.
 
 \begin{lstlisting}[language=bash]
 $ mkfifo pipe1
@@ -1346,8 +1346,8 @@ Ensure that a named pipe is created.
 $ grep linux pipe1
 \end{lstlisting}
 
-This process is looking for lines containing the word \texttt{linux}
-in the file \texttt{pipe1}. Initially it will simply block.
+This process is looking for lines containing the word \lstinline|linux|
+in the file \lstinline|pipe1|. Initially it will simply block.
 Grep is a command that does not wait for the entire file to be read.
 It starts printing output as soon as a line containing the pattern
 is read.
@@ -1359,11 +1359,11 @@ $ tree / > pipe1
 
 This command is attempting to list out each and every file on
 the filesystem. This takes a lot of time. However, since
-we are using a named pipe, the \texttt{grep} command will start
+we are using a named pipe, the \lstinline|grep| command will start
 running as soon as the first line is written to the pipe.
 
 You can now observe the first terminal will start printing
-some lines containing the word \texttt{linux} as soon as the
+some lines containing the word \lstinline|linux| as soon as the
 second terminal starts writing to the pipe.
 
 Now try the same with a regular file.
@@ -1384,14 +1384,14 @@ longer in this method. Not to mention the disk space wasted
 due to this.
 
 \begin{remark}
-  Remember that when we use redirection (\texttt{>}) to write to a file,
+  Remember that when we use redirection (\lstinline|>|) to write to a file,
   the shell truncates the file. But when we use a named pipe, the shell
   knows that the file is a named pipe and does not truncate the file.
 \end{remark}
 
 \subsection{Tee Command}
 
-The \texttt{tee} command is a command that reads from the standard
+The \lstinline|tee| command is a command that reads from the standard
 standard input and writes to the standard output and to a file.
 It is very useful when you want to save the output of a command
 but also want to see the output on the terminal.
@@ -1431,13 +1431,13 @@ $
 \end{lstlisting}
 
 \begin{remark}
-  The \texttt{diff} command is used to compare two files. If the
-  files are the same, then the \texttt{diff} command will not print
-  anything. If the files are different, then the \texttt{diff} command
+  The \lstinline|diff| command is used to compare two files. If the
+  files are the same, then the \lstinline|diff| command will not print
+  anything. If the files are different, then the \lstinline|diff| command
   will print the lines that are different.
 \end{remark}
 
-We can also append to the file using the \texttt{-a} option.
+We can also append to the file using the \lstinline|-a| option.
 
 \begin{lstlisting}[language=bash]
 $ ls -d /home | tee output.txt
@@ -1470,16 +1470,16 @@ of the subshell in the current shell.
 There are two ways to do command substitution.
 
 \begin{enumerate}
-  \item Using backticks \texttt{`command`} - this is the legacy way
+  \item Using backticks \lstinline|`command`| - this is the legacy way
     of doing command substitution. It is not recommended to use this
     as it is difficult to read and can be confused with single quotes.
     It is also harder to nest.
-  \item Using the \texttt{\$(command)} syntax - this is the recommended
+  \item Using the \lstinline|$(command)| syntax - this is the recommended
     way of doing command substitution. It is easier to read and nest.
 \end{enumerate}
 
 \marginnote{
-  Throughout this book, we will use the \texttt{\$(command)} syntax
+  Throughout this book, we will use the \lstinline|$(command)| syntax
   and not the backticks.
 }
 
@@ -1488,9 +1488,9 @@ $ echo "Today is $(date)"
 Today is Thu Jul  4 09:05:30 AM IST 2024
 \end{lstlisting}
 
-Here we are using the \texttt{\$(date)} command substitution to get
+Here we are using the \lstinline|$(date)| command substitution to get
 the current date and time and then using it as an argument to the
-\texttt{echo} command.
+\lstinline|echo| command.
 
 \begin{lstlisting}[language=bash]
 $ myname="$(whoami)"
@@ -1541,12 +1541,12 @@ number of bytes in 1MiB
   while Kibi, Mebi, Gibi are IEC prefixes.
 }
 and then using it as an argument to the head command.
-This results in creation of a file \texttt{random.txt} of size 1MiB.
+This results in creation of a file \lstinline|random.txt| of size 1MiB.
 
 \subsection{Using variables in arithmetic expansion}
 
 We can also use variables in arithmetic expansion.
-We dont have to use the \texttt{\$} operator to access the value of
+We dont have to use the \lstinline|$| operator to access the value of
 the variable inside the arithmetic expansion.
 
 \begin{lstlisting}[language=bash]
@@ -1557,28 +1557,28 @@ $ echo $((a+b))
 \end{lstlisting}
 
 There are other ways to do arithmetic in bash, such as using the
-\texttt{expr} command, or using the \texttt{let} command. However,
-the \texttt{\$\{\}} syntax is the most recommended way to do simple
+\lstinline|expr| command, or using the \lstinline|let| command. However,
+the \lstinline|$(())| syntax is the most recommended way to do simple
 arithmetic with variables in bash.
 
 \section{Process Substitution}
 
 Process substitution is a way to provide the output of a process
-as a file. This is done by using the \texttt{<(command)} syntax.
+as a file. This is done by using the \lstinline|<(command)| syntax.
 
 Some commands do not accept standard input. They only accept
 a filename as an argument. This is the exact opposite of the
-issue we had with the \texttt{read} command, which accepted
+issue we had with the \lstinline|read| command, which accepted
 only standard input and not a filename. There we used the
-\texttt{<} operator to redirect the standard input from a file.
+\lstinline|<| operator to redirect the standard input from a file.
 
-The \texttt{diff} command is a command that compares two files
+The \lstinline|diff| command is a command that compares two files
 and prints out differences. It does not accept standard input.
 If we want to compare differences between the output of two
 processes, we can use process substitution.
 
 Imagine you have two directories and you want to compare the
-files in the two directories. You can use the \texttt{diff}
+files in the two directories. You can use the \lstinline|diff|
 command to compare the two directories.
 
 \begin{lstlisting}[language=bash]
@@ -1591,13 +1591,13 @@ file2 file3 file4
 \end{lstlisting}
 
 We can see that the two directories have some common files
-(\texttt{file2} and \texttt{file3}) and some different files
-(\texttt{file1} in dir1 and \texttt{file4} in dir2).
+(\lstinline|file2| and \lstinline|file3|) and some different files
+(\lstinline|file1| in dir1 and \lstinline|file4| in dir2).
 
 However, if we have a lot of files, it is difficult to see
 manually which files are different.
 
-Let us first try to save the output of the two \texttt{ls}
+Let us first try to save the output of the two \lstinline|ls|
 commands to files and then compare the files using diff.
 
 \begin{lstlisting}[language=bash]
@@ -1612,12 +1612,12 @@ $ diff dir1.txt dir2.txt
 > file4
 \end{lstlisting}
 
-Great! We can see that the file \texttt{file1} is present only
-in \texttt{dir1} and the file \texttt{file4} is present only
-in \texttt{dir2}. All other files are common.
+Great! We can see that the file \lstinline|file1| is present only
+in \lstinline|dir1| and the file \lstinline|file4| is present only
+in \lstinline|dir2|. All other files are common.
 
-However observe that we had to create two files \texttt{dir1.txt}
-and \texttt{dir2.txt} to store the output of the \texttt{ls}
+However observe that we had to create two files \lstinline|dir1.txt|
+and \lstinline|dir2.txt| to store the output of the \lstinline|ls|
 commands. This is not efficient. If the directories contained
 a million files, then we would have to store tens or
 hundreds of megabytes of data in the files.
@@ -1641,7 +1641,7 @@ $ diff dir1.fifo dir2.fifo
 
 Et voila! We have the same output as before, but without the
 data actually being stored in the filesystem. The data is
-simply stored in the memory till the \texttt{diff} command
+simply stored in the memory till the \lstinline|diff| command
 reads it. However observe that we had to create two named
 pipes, and also run the ls processes in the background as
 otherwise they would block.
@@ -1686,8 +1686,8 @@ running in the subshell.
 tar cf >(bzip2 -c > file.tar.bz2) folder1
 \end{lstlisting}
 
-This calls \texttt{tar cf /dev/fd/?? folder1},
-and \texttt{bzip2 -c > file.tar.bz2}.
+This calls \lstinline|tar cf /dev/fd/?? folder1|,
+and \lstinline|bzip2 -c > file.tar.bz2|.
 
 \marginnote{
   This example is lifted from
@@ -1696,7 +1696,7 @@ and \texttt{bzip2 -c > file.tar.bz2}.
   refer the same.
 }
 
-Because of the \texttt{/dev/fd/<n>} system feature,
+Because of the \lstinline|/dev/fd/<n>| system feature,
 the pipe between both commands does not need to be named.
 This can be emulated as
 
@@ -1710,11 +1710,11 @@ rm pipe
 \begin{remark}
   tar is a command that is used to create archives.
   It simply puts all the files and directories in a single file.
-  It does not perform any compression. The \texttt{c} option is
-  used to create an archive. The \texttt{f} option is used to
-  mention the name of the archive. The \texttt{bzip2} command
-  is used to compress files. The \texttt{-c} option is used to
-  write the compressed data to the standard output. The \texttt{>}
+  It does not perform any compression. The \lstinline|c| option is
+  used to create an archive. The \lstinline|f| option is used to
+  mention the name of the archive. The \lstinline|bzip2| command
+  is used to compress files. The \lstinline|-c| option is used to
+  write the compressed data to the standard output. The \lstinline|>|
   operator is used to redirect the standard output to a file.
   We will cover tar and zips in more detail later.
 \end{remark}
@@ -1737,27 +1737,26 @@ in this chapter.
 \begin{table*}[h!]
   \caption{Pipes, Streams, and Redirection syntax}
   \labtab{pipesyntax}
-  \begin{tabular}{c c c}
+  \begin{tabular}{c c l}
     \toprule
-    \texttt{Syntax} & \texttt{Command} & \texttt{Description} \\
+    \lstinline|Syntax| & \lstinline|Command| & \lstinline|Description| \\
     \midrule
-    \texttt{;} & Command Separator & Run multiple commands in a single line\\
-    \texttt{\&\&} & Logical AND & Run the second command only if the first command succeeds\\
-    \texttt{||} & Logical OR & Run the second command only if the first command fails\\
-    \texttt{>} & Output Redirection & Redirect the stdout of the process to a file\\
-    \texttt{>>} & Output Redirection (Append) & Append the stdout of the process to a file\\
-    \texttt{<} & Input Redirection & Redirect the stdin of the process from a file\\
-    \texttt{2>} & Error Redirection & Redirect the stderr of the process to a file\\
-    \texttt{2>\&1} & Error Redirection & Redirect the stderr of the process to the stdout\\
-    \texttt{<<EOF} & Here Document & Redirect the stdin of the process from a block of text\\
-    \texttt{<<<} & Here String & Redirect the stdin of the process from a string\\
-    \texttt{|} & Pipe & Connect the stdout of one process to the stdin of another process\\
-    \texttt{|\&} & Pipe Stderr & Connect the stderr of one process to the stdin of another process\\
-    \texttt{\$(command)} & Command Substitution & Run a command and use the output in the current shell\\
-    \texttt{\$((expression))} & Arithmetic Expansion & Evaluate an arithmetic expression\\
-    \texttt{<(command)} & Process Substitution & Provide the output of a process as a file\\
-    \texttt{>(command)} & Process Substitution & Provide the input to a process from a file\\
+    \lstinline|;| & Command Separator & Run multiple commands\\ & & in a single line\\
+    \lstinline|&&| & Logical AND & Run the second command only \\ & & if the first command succeeds\\
+    \lstinline|||| & Logical OR & Run the second command \\ & & only if the first command fails\\
+    \lstinline|>| & Output Redirection & Redirect the stdout of \\ & & the process to a file\\
+    \lstinline|>>| & Output Redirection & Append the stdout of the \\ & & process to a file\\
+    \lstinline|<| & Input Redirection & Redirect the stdin of \\ & & the process from a file\\
+    \lstinline|2>| & Error Redirection & Redirect the stderr of \\ & & the process to a file\\
+    \lstinline|2>\&1| & Error Redirection & Redirect the stderr of the \\ & & process to the stdout\\
+    \lstinline|<<EOF| & Here Document & Redirect the stdin of \\ & & the process from a block of text\\
+    \lstinline|<<<| & Here String & Redirect the stdin of \\ & & the process from a string\\
+    \lstinline||| & Pipe & Connect the stdout of one process \\ & & to the stdin of another process\\
+    \lstinline||\&| & Pipe Stderr & Connect the stderr of one process \\ & & to the stdin of another process\\
+    \lstinline|$(command)| & Command Substitution & Run a command and use \\ & & the output in the current shell\\
+    \lstinline|$((expression))| & Arithmetic Expansion & Evaluate an arithmetic \\ & & expression\\
+    \lstinline|<(command)| & Process Substitution & Provide the output of \\ & & a process as a file\\
+    \lstinline|>(command)| & Process Substitution & Provide the input to a \\ & & process from a file\\
     \bottomrule
   \end{tabular}
 \end{table*}
-

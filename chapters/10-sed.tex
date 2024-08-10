@@ -721,6 +721,52 @@ However, for the number $10$, both the conditions are satisfied, and the order o
 This is because the \lstinline|p| command prints the line immediately, but the \lstinline|a| command appends the text to the hold space, and prints it only when the next line is read.
 \end{remark}
 
+\subsection{Shebang}
+
+If we are running a \lstinline|sed| script directly from the shell without specifying the interpreter, we need to add the shebang in the first line of the script.
+
+\begin{lstlisting}
+#!/bin/sed -f
+\end{lstlisting}
+
+\[
+  \text{or}
+\]
+
+\begin{lstlisting}
+#!/usr/bin/sed -f
+\end{lstlisting}
+
+This indicates to the shell that the interpretter to use to run this script is sed.
+
+The \lstinline|-f| flag is required to make sed read the script from the script file.
+
+\begin{remark}
+  The bash shell simply invokes the command in the script's shebang along with all of the arguments and appends the path of the script file as the last argument of the paramater list.
+\end{remark}
+
+\marginnote{
+  Note that the script file has to be made executable using the \lstinline|chmod| command.
+  This is a security feature to prevent accidental execution of random untrusted scripts.
+}
+\marginnote{
+  Note that we have also specified the \lstinline|-n| flag to suppress the default printing of the line.
+}
+\begin{lstlisting}[language=bash]
+$ cat script.sed
+#!/bin/sed -nf
+a Hello
+bx
+a World
+:x
+a Universe
+$ chmod u+x script.sed
+$ ./script.sed <<< ""
+Hello
+Universe
+\end{lstlisting}
+
+
 \section{Branching and Flow Control}
 
 Sed supports branching and flow control commands to create more complex transformations using loop and if-else conditions.
@@ -939,3 +985,62 @@ There are other ways of performing the same action, such as using \lstinline|t| 
 \begin{exercise}
   Try to implement the same script using the \lstinline|t| and \lstinline|P| commands.
 \end{exercise}
+
+\subsection{If-Else}
+
+We can also use \textbf{labels} and \textbf{branching} to emulate the if-else syntax.
+
+\marginnote{
+  We need to use Extended Regular Expressions (ERE) if we are using the parenthesis grouping and pipe-or syntax of ERE without escaping them. This is why we have used the \lstinline|-E| flag. We can also drop it and escape the parantheses and pipes.\\\\
+  The substitution adds the text "is an odd/even number" at the end of each number.
+  Substituting \lstinline|$| simply appends to the end of the line.
+}
+\begin{lstlisting}[language=bash]
+$ cat script.sed
+/(1|3|5|7|9)$/{
+  s/$/ is an odd number/
+  bx
+}
+s/$/ is an even number/
+:x
+$ seq 10 | sed -Ef script.sed
+1 is an odd number
+2 is an even number
+3 is an odd number
+4 is an even number
+5 is an odd number
+6 is an even number
+7 is an odd number
+8 is an even number
+9 is an odd number
+10 is an even number
+\end{lstlisting}
+
+Here, the first command group is addressed explicitly for only those lines which end in odd digits. If the number is odd, it will enter this block, append the addage that the number is odd, and then branch to the end of the script and move on to next line.
+
+However, if the number is not odd, it will not enter this command group, and thus not execute the branch. Thus it will execute the second substitution.
+
+\subsection{If-elif-else}
+
+Similarly we can construct a \textbf{if-elif-else} ladder.
+
+\begin{lstlisting}[language=bash]
+$ cat script.sed
+/(1|3|5|7|9)$/{
+  s/$/ is an odd number/
+  bx
+}
+/0$/{
+  s/$/ is zero/
+  bx
+}
+s/$/ is an even number/
+:x
+$ seq 0 5 | sed -Ef script.sed
+0 is zero
+1 is an odd number
+2 is an even number
+3 is an odd number
+4 is an even number
+5 is an odd number
+\end{lstlisting}
