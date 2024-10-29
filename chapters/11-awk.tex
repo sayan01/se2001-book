@@ -1835,17 +1835,597 @@ As visible, the first check fails as the regex is case sensitive, however the se
 
 \section{Control Structures}
 
+Just like any programming language, awk supports control structures like if-else, for, while, and do-while loops, which can be used to control the flow of the program and create programs for any use case.
+
 \subsection{if-else}
+
+Conditional branching is done using the \lstinline|if-else| construct in awk. The syntax is similar to that of other programming languages.
+
+\subsubsection{if}
+
+\begin{lstlisting}[language=bash]
+$ cat script.awk
+BEGIN{
+  x = 5
+  if(x > 0){
+    print "Positive"
+  }
+}
+$ awk -f script.awk
+Positive
+\end{lstlisting}
+
+The \lstinline|if| statement checks if the value of \lstinline|x| is greater than zero and prints \lstinline|Positive| if it is.
+Any boolean expression can be used in the \lstinline|if| statement.
+
+\begin{remark}
+A non-zero value is considered true and a zero value is considered false in awk, similar to other programming languages and unlike shell scripting.
+\end{remark}
+
+We can also use the regex matching operator in the \lstinline|if| statement.
+
+\begin{lstlisting}[language=bash]
+$ cat script.awk
+BEGIN{
+  x = "Hello"
+  if(x ~ /l+/){
+    print "Matched"
+  }
+}
+$ awk -f script.awk
+Matched
+\end{lstlisting}
+
+Here we are checking if the string \lstinline|x| contains one or more \lstinline|l| characters and printing \lstinline|Matched| if it does.
+
+\subsubsection{if-else}
+
+\begin{lstlisting}[language=bash]
+$ cat script.awk
+{
+  if($1 > 0){
+    print "Positive"
+  } else {
+    print "Negative"
+  }
+}
+$ awk -f script.awk <<< "1"
+Positive
+$ awk -f script.awk <<< "-1"
+Negative
+\end{lstlisting}
+
+Now we can conditionally perform one block of code or another based on the value of the expression.
+Since boolean expressions can have only two values, we can use the \lstinline|else| keyword to execute a block of code if the expression evaluates to false.
+This ensures that one of the two blocks of code is always executed.
+\footnote{
+  Unless there is a runtime error or the program is terminated.
+}
+
+However, note that not all real world scenarios are boolean in nature. For example, all numbers cannot be classified as either positive or negative. Since zero is neither positive nor negative. We can use the \lstinline|else if| construct to handle such cases.
+
+\subsubsection{if-else if}
+
+\begin{lstlisting}[language=bash]
+$ cat script.awk
+{
+  if($1 > 0){
+    print "Positive"
+  } else if($1 < 0){
+    print "Negative"
+  } else {
+    print "Zero"
+  }
+}
+$ awk -f script.awk <<< "1"
+Positive
+$ awk -f script.awk <<< "-1"
+Negative
+$ awk -f script.awk <<< "0"
+Zero
+\end{lstlisting}
+
+Now the program can handle all cases, positive, negative, and zero.
+
+We can add as many \lstinline|else if| blocks as required to handle all the cases.
+
+The program will try to find the first block whose condition is true and execute that block. If no block is found then the \lstinline|else| block is executed.
+
+If a block is found then the program will not check the conditions of the other blocks.
+
+\begin{lstlisting}[language=bash]
+$ cat script.awk
+BEGIN {
+  x = 15
+  if(x % 5 == 0){
+    print "Divisible by 5"
+  } else if(x % 3 == 0){
+    print "Divisible by 3"
+  }
+  else if(x % 2 == 0){
+    print "Divisible by 2"
+  }
+}
+$ awk -f script.awk
+Divisible by 5
+\end{lstlisting}
+
+Even though the number is divisible by 3 and 5, only the first block is executed as the program stops checking the conditions once a block is matched.
+
+\subsection{Ternary Operator}
+
+The ternary operator is a shorthand for the \lstinline|if-else| construct. It is used to assign a value to a variable based on a condition.
+
+\begin{lstlisting}[language=bash]
+$ cat script.awk
+{
+  print ($1 > 0) ? "Positive" : "Negative"
+}
+$ awk -f script.awk <<< "1"
+Positive
+$ awk -f script.awk <<< "-1"
+Negative
+\end{lstlisting}
 
 \subsection{for loop}
 
+The \lstinline|for| loop is used to iterate over a sequence of values. 
+
+AWK includes both the C-style \lstinline|for| loop and the \lstinline|for-in| loop.
+
 \subsubsection{C-style for loop}
+
+\begin{lstlisting}[language=bash]
+$ cat script.awk
+BEGIN{
+  for(i = 1; i <= 5; i++){
+    print i
+  }
+}
+$ awk -f script.awk
+1
+2
+3
+4
+5
+\end{lstlisting}
+
+The \lstinline|for| loop has three parts separated by semicolons. The first part is the initialization, the second part is the condition, and the third part is the increment or decrement.
+
+When the loop is first encountered, the initialization part is executed. Then the condition is checked. If the condition is true, then the block of code is executed. After the block of code is executed, the increment part is executed. Then the condition is checked again. This process is repeated until the condition is false.
+
+This means that the variable \lstinline|i| is incremented by one in each iteration and the loop runs until \lstinline|i| is less than or equal to $5$.
+After the loop is done, the value of \lstinline|i| is $6$.
+\sidenote{
+  If this is not clear why the value of \lstinline|i| is $6$, try dry-running the code on a piece of paper to get hang of how C-style for loops work.
+}
+
+However, the value of \lstinline|i| can be changed inside the loop as well.
+
+\begin{lstlisting}[language=bash]
+$ cat script.awk
+BEGIN{
+  for(i = 1; i <= 5; i++){
+    print i
+    if(i == 3){
+      i = 6
+    }
+  }
+}
+$ awk -f script.awk
+1
+2
+3
+\end{lstlisting}
+
+The upadte rule can have any kind of operation, not just increments.
+
+\begin{lstlisting}[language=bash]
+$ cat script.awk
+BEGIN{
+  for(i = 1; i <= 1024; i *= 2){
+    print i
+  }
+}
+$ awk -f script.awk
+1
+2
+4
+8
+16
+32
+64
+128
+256
+512
+1024
+\end{lstlisting}
+
+Here we are doubling the value of \lstinline|i| in each iteration to print the first ten powers of $2$.
+
 
 \subsubsection{for-in loop}
 
+The \lstinline|for-in| loop is used to iterate over the elements of an array. 
+However, awk does not have indexed arrays, so the \lstinline|for-in| loop is used to iterate over the keys of an associative array.
+
+\begin{remark}
+  The order of the keys in an associative array is not guaranteed, so the order of the keys in the \lstinline|for-in| loop is not guaranteed.
+\end{remark}
+
+\begin{lstlisting}[language=bash]
+$ cat script.awk
+BEGIN {
+    assoc["key1"] = "val1"
+    assoc["key2"] = "val2"
+    assoc["key3"] = "val3"
+    for (key in assoc)
+        print key, assoc[key];
+}
+$ awk -f script.awk
+key3 val3
+key1 val1
+key2 val2
+\end{lstlisting}
+
+Here we are iterating over the keys of the associative array \lstinline|assoc| and printing the key and value of each element.
+The order of the keys is not guaranteed to be same as the order of insertion.
+
+
+\subsection{Iterating over fields}
+
+The biggest use-case of for-loops in awk is to iterate over the fields of a record.
+
+\begin{lstlisting}[language=bash]
+$ cat script.awk
+{
+  for(i = 1; i <= NF; i++){
+    print i, $i
+  }
+}
+$ grep '^[^#]' /etc/passwd | head -n1 
+nobody:*:-2:-2:Unprivileged User:/var/empty:/usr/bin/false
+$ grep '^[^#]' /etc/passwd | head -n1 | awk -F: -f script.awk
+1 nobody
+2 *
+3 -2
+4 -2
+5 Unprivileged User
+6 /var/empty
+7 /usr/bin/false
+\end{lstlisting}
+
 \subsection{while loop}
 
+The while loop in awk is similar to the while loop in other programming languages.
+
+\begin{lstlisting}[language=bash]
+$ cat script.awk
+BEGIN{
+  i = 1
+  while(i <= 5){
+    print i
+    i++
+  }
+}
+$ awk -f script.awk
+1
+2
+3
+4
+5
+\end{lstlisting}
+
+The \lstinline|while| loop is used to execute a block of code as long as the condition is true.
+This is useful if you do not know how many times the loop is supposed to run.
+We can also use the \lstinline|break| and \lstinline|continue| statements inside the loop to break out of the loop or skip the current iteration.
+
+\begin{lstlisting}[language=bash]
+$ cat script.awk
+BEGIN{
+  i = 1
+  while(i <= 10){
+    if(i == 3){
+      i++
+      continue
+    }
+    print i
+    i++
+    if(i == 5){
+      break
+    }
+  }
+}
+$ awk -f script.awk
+1
+2
+4
+\end{lstlisting}
+
+This script skips the iteration when \lstinline|i| is $3$ and breaks out of the loop when \lstinline|i| is $5$.
+
+We can also match regex inside the condition.
+
+\begin{lstlisting}[language=bash]
+$ cat script.awk
+{
+  i = 1
+  while($i ~ /^[A-Z]/){
+    print i, $i
+    i++
+  }
+}
+$ cat data.txt
+Hello World
+This is a test
+$ awk -f script.awk data.txt
+1 Hello
+2 World
+1 This
+\end{lstlisting}
+
+The script prints the fields of each record as long as the field starts with an uppercase letter.
+
 \subsection{do-while loop}
+The **do loop** is a variation of the while looping statement.
+The do loop executes the body once and then repeats the body as long as the condition is true. 
+
+\begin{lstlisting}[language=bash]
+$ cat script.awk
+BEGIN{
+  i = 1
+  do {
+    print i
+    i++
+  } while(i <= 5)
+}
+$ awk -f script.awk
+1
+2
+3
+4
+5
+\end{lstlisting}
+
+This means that even if the condition is false, the body is executed at least once.
+There is no difference with the while loop after the first iteration.
+
+\begin{lstlisting}[language=bash]
+$ cat script.awk
+BEGIN{
+  i = 6
+  do {
+    print i
+    i++
+  } while(i <= 5)
+}
+$ awk -f script.awk
+6
+\end{lstlisting}
+
+\subsection{switch-case}
+
+**Switch Case** is a control structure that allows a variable to be tested for equality against a list of values.
+Each value is called a case, and the variable being switched on is checked for each case.
+
+\begin{remark}
+  Switch case is a **gawk** extension and is not available in POSIX awk.
+\end{remark}
+
+The switch statement allows the evaluation of an expression and the execution of statements based on a case match.
+Case statements are checked for a match in the order they are defined.
+If no suitable case is found, the default section is executed, if supplied.
+
+Each case contains a single constant, be it numeric, string, or regexp.
+The switch expression is evaluated, and then each case's constant is compared against the result in turn.
+
+**Syntax**:
+\begin{lstlisting}[language=bash]
+switch (expression) {
+case value or regular expression:
+    case-body
+default:
+    default-body
+}
+\end{lstlisting}
+
+Control flow in the switch statement works as it does in C.
+Once a match to a given case is made, the case statement bodies execute until a \lstinline|break|,
+\lstinline|continue|, \lstinline|next|, \lstinline|nextfile|, or \lstinline|exit| is encountered,
+or the end of the switch statement itself.
+
+We will discuss \lstinline|next| and \lstinline|nextfile| in a later subsection.
+
+\begin{lstlisting}[language=bash]
+$ cat script.awk
+{
+  switch($0){
+    case 1:
+      print "One"
+      break
+    case 2:
+      print "Two"
+      break
+    case 3:
+      print "Three"
+      break
+    case 4:
+      print "Four"
+      break
+    case 5:
+      print "Five"
+      break
+    default:
+      print "Default"
+  }
+}
+$ gawk -f script.awk <<< 5
+Five
+$ gawk -f script.awk <<< 2
+Two
+$ gawk -f script.awk <<< 6
+Default
+\end{lstlisting}
+
+Here we are matching the value of the record against the cases and printing the corresponding value.
+Observe that we need to specify the keyword \lstinline|break| after each case.
+If we however do not use it, then the program will continue to execute the next case as well.
+
+\begin{lstlisting}[language=bash]
+$ cat script.awk
+{
+  switch($0){
+    case 1:
+      print "One"
+    case 2:
+      print "Two"
+    case 3:
+      print "Three"
+    case 4:
+      print "Four"
+    case 5:
+      print "Five"
+    default:
+      print "Default"
+  }
+}
+$ gawk -f script.awk <<< 5
+Five
+Default
+$ gawk -f script.awk <<< 2
+Two
+Three
+Four
+Five
+Default
+\end{lstlisting}
+
+This behaviour, although might seem counter-intuitive, is useful in some cases.
+For example, if we want to execute the same block of code for multiple cases, then we can do so without repeating the code.
+
+\begin{lstlisting}[language=bash]
+$ cat script.awk
+{
+  switch($0 % 10){
+    case 0: 
+        print "Multiple of 10"
+    case 5:
+        print "Multiple of 5"
+        break
+    default:
+        print "Not a multiple of 5 or 10"
+  }
+}
+$ gawk -f script.awk <<< 15
+Multiple of 5
+$ gawk -f script.awk <<< 20
+Multiple of 10
+Multiple of 5
+$ gawk -f script.awk <<< 7
+Not a multiple of 5 or 10
+\end{lstlisting}
+
+However, unlike the **break** keyword, the **continue** keyword does not directly affect the switch statement, but rather the loop that encloses it.
+
+\begin{lstlisting}[language=bash]
+$ cat script.awk
+BEGIN {
+    for (i = 1; i <= 3; i++) {
+        switch (i) {
+            case 1:
+                print "Case 1"
+                continue
+            case 2:
+                print "Case 2"
+                break
+            case 3:
+                print "Case 3"
+        }
+        print "End of loop iteration", i
+    }
+}
+$ gawk -f script.awk
+Case 1
+Case 2
+End of loop iteration 2
+Case 3
+End of loop iteration 3
+\end{lstlisting}
+
+\subsubsection{Matching Regex}
+
+We can also match regex in the case statement. This is unlike most programming languages where only constants are allowed.
+
+\begin{lstlisting}[language=bash]
+$ cat script.awk
+{
+  switch($0){
+    case /^[A-Z]+$/:
+      print "Strictly Uppercase"
+      break
+    case /^[a-z]+$/:
+      print "Strictly Lowercase"
+      break
+    default:
+      print "Neither"
+  }
+}
+$ gawk -f script.awk <<< "HELLO"
+Strictly Uppercase
+$ gawk -f script.awk <<< "hello"
+Strictly Lowercase
+$ gawk -f script.awk <<< "Hello"
+Neither
+\end{lstlisting}
+
+
+\subsection{break}
+
+The break statement jumps out of the innermost for, while, or do loop that encloses it.
+
+\begin{lstlisting}[language=bash]
+$ cat script.awk
+{
+    num = $1
+    for (divisor = 2; divisor * divisor <= num; divisor++) {
+        if (num % divisor == 0)
+            break
+    }
+    if (num % divisor == 0)
+        printf "Smallest divisor of %d is %d\n", num, divisor
+    else
+        printf "%d is prime\n", num
+}
+$ awk -f script.awk <<< 15
+Smallest divisor of 15 is 3
+$ awk -f script.awk <<< 17
+17 is prime
+\end{lstlisting}
+
+Here we are finding the smallest divisor of a number. If the number is prime, then the smallest divisor is the number itself.
+
+\subsection{continue}
+
+The continue statement skips the rest of the loop body and starts the next iteration of the loop.
+
+\begin{lstlisting}[language=bash]
+$ cat script.awk
+{
+    for (i = 1; i <= 10; i++) {
+        if (i % 2 == 0)
+            continue
+        print i
+    }
+}
+$ awk -f script.awk
+1
+3
+5
+7
+9
+\end{lstlisting}
+
+Here we are printing all the odd numbers from $1$ to $10$.
 
 \subsection{next and nextfile}
 
