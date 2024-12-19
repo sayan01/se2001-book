@@ -860,7 +860,7 @@ find which word is present the most number of times. You can either
 write a program in C or Python, etc., or you can use the power of
 pipes to do it in a single line using simple GNU coreutils.
 
-I have a file \lstinline|alice\_in\_wonderland.txt| which contains the
+I have a file \lstinline|alice_in_wonderland.txt| which contains the
 entire text of the book Alice in Wonderland. I want to find the words
 that are present the most number of times.
 
@@ -1142,7 +1142,7 @@ $ tr 'A-Z' 'a-z' < alice_in_wonderland.txt  | tr -cd 'a-z ' | tr ' ' '\n' | grep
     158 with
 \end{lstlisting}
 
-Finally, we have the top 20 words in the file \lstinline|alice\_in\_wonderland.txt|
+Finally, we have the top 20 words in the file \lstinline|alice_in_wonderland.txt|
 along with the count of each word.
 
 Although the above command is a single line
@@ -1154,7 +1154,7 @@ processing. Still, it is very readable. This is the power of pipes.
 
 \begin{remark}
   Usually, when we come across such one-liners, it may initially
-  seem to complicated to understand. The key to understanding such
+  seem too complicated to understand. The key to understanding such
   one-liners is to break them down into smaller parts and understand
   them one component at a time from left to right. Feel free to
   execute each command separately and observe the output like we

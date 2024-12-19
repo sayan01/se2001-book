@@ -5,21 +5,21 @@
 
 Awk is programming language meant for processing structured data in rows and columns.
 
-% \begin{marginfigure}
-%   \includegraphics{aho}
-%   \caption{Alfred Aho}
-%   \labfig{aho}
-% \end{marginfigure}
-% \begin{marginfigure}
-%   \includegraphics{weinberger}
-%   \caption{Peter Weinberger}
-%   \labfig{weinberger}
-% \end{marginfigure}
-% \begin{marginfigure}
-%   \includegraphics{kernighan}
-%   \caption{Brian Kernighan}
-%   \labfig{kernighan}
-% \end{marginfigure}
+\begin{marginfigure}
+  \includegraphics{aho}
+  \caption{Alfred Aho}
+  \labfig{aho}
+\end{marginfigure}
+\begin{marginfigure}
+  \includegraphics{weinberger}
+  \caption{Peter Weinberger}
+  \labfig{weinberger}
+\end{marginfigure}
+\begin{marginfigure}
+  \includegraphics{kernighan}
+  \caption{Brian Kernighan}
+  \labfig{kernighan}
+\end{marginfigure}
 
 The name \textbf{AWK} comes from the initials of its creators:
 \begin{itemize}
@@ -813,7 +813,7 @@ It is left as an exercise to the reader to explain the above command and how it 
 
 Then we can use the \lstinline|FIELDWIDTHS| variable to split the records by the field width and extract the unique years and terms.
 \sidenote{
-  In this case we already know the answer as we ourself craeted the data using those parameters, but assume that the data was not created by us and we want to extract these details from the data.
+  In this case we already know the answer as we ourself created the data using those parameters, but assume that the data was not created by us and we want to extract these details from the data.
 }
 
 \begin{lstlisting}[language=bash]
@@ -2429,62 +2429,1141 @@ Here we are printing all the odd numbers from $1$ to $10$.
 
 \subsection{next and nextfile}
 
+\begin{definition}[next]
+  The next statement forces awk to immediately stop processing the current record and go on to the next record.
+  This means that no further rules are executed for the current record, and the rest of the current rule's action isn't executed.
+\end{definition}
 
-\dots BEGINFILE and ENDFILE
+This is similar to how \lstinline|continue| skips the iteration in a for loop.
+\textbf{awk} internally has a loop that reads the input line by line and processes it.
+The \lstinline|next| statement skips the current line and moves to the next line.
+
+\begin{lstlisting}[language=bash]
+$ cat script.awk
+FNR == NR {
+  a[$0]=1
+  next
+}
+$0 in a{
+  print
+}
+$ cat fruits.txt
+apple
+banana
+orange
+kiwi
+coconut
+$ cat colors.txt
+red
+green
+blue
+orange
+yellow
+purple
+$ awk -f script.awk fruits.txt colors.txt
+orange
+\end{lstlisting}
+
+In the above script we use an associative array to store the lines of the first file.
+Then we check if the line of the second file is present in the associative array.
+If we do not use the \lstinline|next| statement, then the program will print all the lines of the first file as all of them are present in the dictionary.
+However we are only interested in the lines that are present in the second file as well, so we skip the next check for the lines of the first file.
+
+If the next statement causes the end of the input to be reached, then the code in any END rules is executed. 
+The next statement is not allowed inside \textit{BEGINFILE} and \textit{ENDFILE} rules, we will discuss these rules in a later section.
+
+\begin{remark}
+According to the POSIX standard, the behavior is undefined if the next statement is used in a BEGIN or END rule. gawk treats it as a syntax error.
+\end{remark}
+
+\subsubsection{nextfile}
+
+\begin{definition}[nextfile]
+  The nextfile statement forces awk to immediately stop processing the current input file and go on to the next input file.
+  This means that no further rules are executed for the current line, and the rest of the current rule's action isn't executed.
+  It skips all the remaining lines of the current file and moves to the next file.
+\end{definition}
+
+Upon execution of the nextfile statement, FILENAME is updated to the name of the next data file listed on the command line,
+FNR is reset to one, and processing starts over with the first rule in the program.
+If the nextfile statement causes the end of the input to be reached, then the code in any END rules is executed.
+An exception to this is when nextfile is invoked during execution of any statement in an END rule;
+in this case, it causes the program to stop immediately. 
+
+\begin{lstlisting}[language=bash]
+$ cat script.awk
+BEGINFILE{
+  if(ARGIND==1){
+    pattern = ARGV[1]
+    nextfile
+  }
+}
+$0 ~ pattern {
+  print FILENAME, FNR, $0
+}
+$ cat colors.txt
+red
+green
+blue
+orange
+yellow
+purple
+$ cat fruits.txt
+apple
+banana
+orange
+kiwi
+coconut
+$ gawk -f script.awk orange colors.txt fruits.txt
+colors.txt 4 orange
+fruits.txt 3 orange
+\end{lstlisting}
+
+Note that we need to use \lstinline|gawk| to run the script as \lstinline|awk| does not support the \lstinline|BEGINFILE| statement.
+
+Here we are emulating the \lstinline|grep| command to search for a pattern in multiple files.
+We are passing the pattern as the first argument and the files as the rest of the arguments.
+The \lstinline|BEGINFILE| rule is executed before the first record of each file.
+It sets the pattern to the first argument and skips the rest of the file.
+The \lstinline|nextfile| statement skips the rest of the file and moves to the next file.
+
+\subsection{exit}
+
+The exit statement causes awk to immediately stop executing the current rule and to stop processing input; any remaining input is ignored.
+It can also optionally take an exit status, which is returned to the calling process.
+
+\begin{remark}
+When an exit statement is executed from a BEGIN rule, the program stops processing everything immediately.
+No input records are read. However, if an END rule is present, as part of executing the exit statement, the END rule is executed.
+\end{remark}
+
+\subsection{BEGINFILE and ENDFILE}
+Two special kinds of rule, \lstinline|BEGINFILE| and \lstinline|ENDFILE|, give you "hooks" into \lstinline|gawk|'s command-line file processing loop.
+As with the \lstinline|BEGIN| and \lstinline|END| rules,
+\lstinline|BEGINFILE| rules in a program execute in the order they are read by \lstinline|gawk|.
+Similarly, all \lstinline|ENDFILE| rules also execute in the order they are read.
+
+The bodies of the \lstinline|BEGINFILE| rules execute just before \lstinline|gawk| reads the first record from a file.
+\lstinline|FILENAME| is set to the name of the current file, and \lstinline|FNR| is set to zero.
+
+We have already seen an example of the \lstinline|BEGINFILE| rule in the previous section.
+\lstinline|BEGINFILE| are very useful to check if a given argument is a file or not.
+It can also be used to perform error checking on unreadable files.
+
+The \lstinline|ENDFILE| rule is called when \lstinline|gawk| has finished processing the last record in an input file.
+For the last input file, it will be called before any \lstinline|END| rules. 
+The \lstinline|ENDFILE| rule is executed even for empty input files.
+
+\begin{remark}
+  The \lstinline|BEGINFILE| and \lstinline|ENDFILE| rules are a \lstinline|gawk| extension and are not available in POSIX awk.
+\end{remark}
+
+The \lstinline|next| statement is not allowed inside either a \lstinline|BEGINFILE| or an \lstinline|ENDFILE| rule.
+The \lstinline|nextfile| statement is allowed only inside a \lstinline|BEGINFILE| rule, not inside an \lstinline|ENDFILE| rule.
+
 
 \section{Printing}
 
+In awk, majority of the output is done using the \lstinline|print| and \lstinline|printf| functions.
+
 \subsection{print}
+
+The \lstinline|print| statement is used to print the output to the standard output.
+It can take multiple arguments and prints them separated by the value of the \lstinline|OFS| variable.
+The \lstinline|print| statement automatically appends a newline character at the end of the output.
+
+\begin{lstlisting}[language=bash]
+$ cat script.awk
+BEGIN{
+  print "Hello", "World"
+}
+$ awk -f script.awk
+Hello World
+$ awk -v OFS="," -f script.awk
+Hello,World
+\end{lstlisting}
+
+Note that the \lstinline|OFS| variable is set to a space by default.
+
+The quotes are required, otherwise the \lstinline|print| statement will treat them as variables,
+which being undefined will be replaced by an empty string.
+
+In \lstinline|awk| if two strings are separated by a space, then they are concatenated.
+
+\begin{lstlisting}[language=bash]
+$ cat script.awk
+BEGIN{
+  print "Hello" "World"
+}
+$ awk -f script.awk
+HelloWorld
+\end{lstlisting}
+
+There is no special syntax for concatenation, just place the strings next to each other.
+This is useful when we have a lot of variables to interpolate with strings.
+
+\begin{lstlisting}[language=bash]
+$ cat script.awk
+BEGIN{
+  OFS="\t"
+}
+{
+  sum1 += $1
+  sum2 += $2
+  sum3 += $3
+}
+END{
+  print "", "Column1", "Column2", "Column3"
+  print "Sum", sum1, sum2, sum3
+  print "Mean", sum1/NR, sum2/NR, sum3/NR
+}
+$ cat data.ssv
+12 21 42
+11 22 45
+14 27 40
+$ awk -f script.awk data.ssv
+        Column1 Column2 Column3
+Sum     37      70      127
+Mean    12.3333 23.3333 42.3333
+\end{lstlisting}
+
+
 
 \subsection{printf}
 
-\subsection{OFS and ORS}
+\lstinline|awk| also supports \textbf{formatted printing} using the \lstinline|printf| function.
+The \lstinline|printf| function is similar to the \lstinline|printf| function in C.
+It takes a format string and a list of arguments to print.
+
+\begin{lstlisting}[language=bash]
+$ cat script.awk
+BEGIN{
+  printf "Hello %s\n", "World"
+}
+$ awk -f script.awk
+Hello World
+\end{lstlisting}
+
+The format string can contain conversion specifiers that start with a percent sign.
+The conversion specifier is replaced by the corresponding argument.
+The conversion specifier can also contain flags, width, and precision.
+
+\begin{lstlisting}[language=bash]
+$ cat script.awk
+BEGIN{
+  printf "Hello %10s\n", "World"
+}
+$ awk -f script.awk
+Hello      World
+\end{lstlisting}
+
+Here the \lstinline|%10s| specifier prints the string in a field of width $10$.
+If the string is less than $10$ characters, then the remaining characters are filled with spaces.
+
+Similarly, we can format decimal number as well.
+
+\begin{lstlisting}[language=bash]
+$ cat script.awk
+BEGIN{
+  printf "The value of pi is %.2f\n", 3.14159
+}
+$ awk -f script.awk
+The value of pi is 3.14
+\end{lstlisting}
+
+The format specifiers are listed in \reftab{format-specifiers}.
+\begin{table*}[h!]
+    \centering
+    \begin{tabular}{l l}
+        \textbf{Format Specifier} & \textbf{Description} \\
+        a, A & Hexadecimal floating-point number \\
+        c & ASCII character \\
+        d, i & Decimal integer \\
+        e, E & Floating-point number in scientific notation \\
+        f & Floating-point number \\
+        g, G & Use \%e or \%f, whichever is shorter \\
+        o & Unsigned octal value \\
+        s & String \\
+        u & Unsigned decimal integer \\
+        x, X & Unsigned hexadecimal integer \\
+        \% & Literal \% \\
+    \end{tabular}
+    \caption{Awk Format Specifiers}
+    \labtab{format-specifiers}
+\end{table*}
+
+\newpage
+
+Similarly, we can use modifiers to format the output.
+The modifiers appear after the \lstinline|%| and before the conversion specifier.
+
+\begin{itemize}
+  \item \textbf{Flags}: The flags modify the output format. The flags are:
+    \begin{itemize}
+      \item \lstinline|-|: Left-justify the output.
+      \item \lstinline|+|: Always print a sign character.
+      \item \lstinline|0|: Pad the output with zeros.
+      \item \lstinline| |: If the number is positive, print a space character.
+      \item \lstinline|#|: Use an alternative form" for certain control letters. 
+      \begin{itemize}
+        \item For \lstinline|%o|, supply a leading zero. 
+        \item For \lstinline|%x| and \lstinline|%X|, supply a leading \lstinline|0x| or \lstinline|0X| for a nonzero result.
+        \item For \lstinline|%e|, \lstinline|%E|, \lstinline|%f|, and \lstinline|%F|, the result always contains a decimal point.
+        \item For \lstinline|%g| and \lstinline|%G|, trailing zeros are not removed from the result.
+      \end{itemize}
+      \item \lstinline|'|: For decimal conversions, insert commas every three digits to the left of the decimal point (thousands separator).
+    \end{itemize}
+  \item \textbf{Width}: The width specifies the minimum number of characters to print.
+  \item \textbf{Precision}: A period followed by an integer constant specifies the precision to use when printing. 
+    The precision specifies the number of decimal places to print.
+    The meaning varies depending on the conversion specifier.
+    \begin{itemize}
+    \item \lstinline|%d|, \lstinline|%i|, \lstinline|%o|, \lstinline|%u|, \lstinline|%x|, \lstinline|%X|: Minimum number of digits to print.
+    \item \lstinline|%e|, \lstinline|%E|, \lstinline|%f|, \lstinline|%F|: Number of digits to the right of the decimal point.
+    \item \lstinline|%g|, \lstinline|%G|: Maximum number of significant digits.
+    \item \lstinline|%s|: Maximum number of characters from the string that should print.
+    \end{itemize}
+\end{itemize}
+
+
+\subsection{OFS}
+
+As we saw earlier, the \lstinline|print| statement prints the output separated by the value of the \lstinline|OFS| variable.
+The \lstinline|OFS| variable is the output field separator and is set to a space by default.
+We can set the \lstinline|OFS| variable to any value we want.
+
+\begin{lstlisting}[language=bash]
+$ cat script.awk
+BEGIN{
+  OFS = ","
+  print "Hello", "World"
+}
+$ awk -f script.awk
+Hello,World
+\end{lstlisting}
+
+It can also be changed using the \lstinline|-v| option.
+
+\begin{lstlisting}[language=bash]
+$ awk -v OFS="," 'BEGIN{print "Hello", "World"}'
+Hello,World
+$ awk -v OFS="\t" 'BEGIN{print "Hello", "World"}'
+Hello   World
+\end{lstlisting}
+
+We can also change the value while iterating over the records.
+
+\begin{lstlisting}[language=bash]
+$ cat script.awk
+NR%2==0{
+  OFS = ","
+  print $1, $2, $3
+}
+NR%2==1{
+  OFS = "\t"
+  print $1, $2, $3
+}
+$ cat data.ssv
+12 21 42
+11 22 45
+14 27 40
+$ awk -f script.awk data.ssv
+12      21      42
+11,22,45
+14      27      40
+\end{lstlisting}
+\subsection{ORS}
+
+The \lstinline|ORS| variable is the output record separator and is set to a newline by default.
+It is used to separate the records in the output.
+
+\begin{lstlisting}[language=bash]
+$ cat script.awk
+BEGIN{
+  ORS = ","
+}
+1
+$ cat data.txt
+Hello
+World
+$ awk -f script.awk data.txt
+Hello,World,
+\end{lstlisting}
+
+\begin{remark}
+The \textbf{1} is a shorthand for \lstinline|{print}|. It is used to print the record as it is.
+\end{remark}
+
+\subsubsection{Concatenating n records}
+
+We can use the \lstinline|ORS| variable to concatenate the output of multiple records by conditionally changing it.
+
+\begin{lstlisting}[language=bash]
+$ cat script.awk
+{
+  ORS = NR % 5 ? "," : "\n"
+  print
+}
+$ seq 10 | awk -f script.awk
+1,2,3,4,5
+6,7,8,9,10
+\end{lstlisting}
+
+Here we are printing the records separated by a comma and a newline after every $5$ records.
+The \lstinline|NR % 5| is used to check if the record number is a multiple of $5$.
+If it is not, then we print a comma, otherwise we print a newline.
 
 \section{Files and Command Line Arguments}
 
-\subsection{FILENAME, ARGV and ARGC}
+Awk can take any number of arguments to its command line.
+All the arguments are assumed to be relative or absolute paths to files to be processed.
+The files are processed in the order they are passed to the command line, left to right.
+
+\begin{lstlisting}[language=bash]
+$ cat script.awk
+{
+  print FILENAME, $0
+}
+$ awk -f script.awk fruits.txt colors.txt
+fruits.txt apple
+fruits.txt banana
+fruits.txt orange
+fruits.txt kiwi
+fruits.txt coconut
+colors.txt red
+colors.txt green
+colors.txt blue
+colors.txt orange
+colors.txt yellow
+colors.txt purple
+\end{lstlisting}
+
+However, we can also access the command line arguments using the \lstinline|ARGV| array.
+
+\begin{lstlisting}[language=bash]
+$ cat script.awk
+BEGIN{
+  print ARGV[1]
+  print ARGV[2]
+}
+$ awk -f script.awk fruits.txt colors.txt
+fruits.txt
+colors.txt
+\end{lstlisting}
+
+\subsection{FILENAME}
+
+The \lstinline|FILENAME| variable contains the name of the current input file.
+This variable is automatically updated by \textbf{awk} as it reads the input files.
+As soon as the input file changes, the \lstinline|FILENAME| variable is updated.
+
+In \lstinline|gawk|, the \lstinline|BEGINFILE| rule is executed after the \lstinline|FILENAME| variable is updated.
+So we can use the \lstinline|FILENAME| variable to check if the argument is really a file or not.
+
+\subsection{ARGC and ARGV}
+
+The command-line arguments available to awk programs are stored in an array called \lstinline|ARGV|.
+\lstinline|ARGC| is the number of command-line arguments present.
+Unlike most awk arrays, \lstinline|ARGV| is indexed from $0$ to $\text{ARGC} - 1$.
+
+\begin{lstlisting}[language=bash]
+$ cat script.awk
+BEGIN{
+  for(i = 0; i < ARGC; i++){
+    print ARGV[i]
+  }
+}
+$ awk -f script.awk fruits.txt colors.txt
+awk
+fruits.txt
+colors.txt
+\end{lstlisting}
+
+The names \lstinline|ARGC| and \lstinline|ARGV|, as well as the convention of indexing the array from $0$ to $\text{ARGC} - 1$,
+are derived from the C language's method of accessing command-line arguments.
+
+\begin{remark}
+  The \lstinline|ARGV| array does not include the flags passed to \lstinline|awk|,
+  nor does it include the path to the script file, or the script text.
+\end{remark}
 
 \section{Input using getline}
 
+The \lstinline|getline| function is used to read input from a file or a pipe.
+The getline function is used in several different ways, such as follows.
+
+\begin{itemize}
+  \item Getline without arguments
+  \item Getline into a variable
+  \item Getline with input file
+  \item Getline into a variable from a file
+  \item Getline with a pipe
+  \item Getline into a variable from a pipe
+  \item Getline with a coprocess
+  \item Getline into a variable from a coprocess
+\end{itemize}
+
+We will briefly cover each of these methods.
+
 \subsection{getline without arguments}
+
+The getline function can be used without arguments to read input from the current input file.
+It reads the next record from the current input file and assigns it to the \lstinline|$0| variable.
+It also splits it up into the fields as per the value of the \lstinline|FS| variable.
+
+This is useful if you've finished processing the current record,
+but want to do some special processing on the next record right now.
+This form of the getline function sets \lstinline|NF|, \lstinline|NR|, \lstinline|FNR|, \lstinline|RT|, and the value of \lstinline|$0|.
+
+This is not the same as the \lstinline|next| statement,
+which skips the current record and starts processing the next record from the first rule.
+
+\begin{remark}
+The new value of \lstinline|$0| is used to test the patterns of any subsequent rules.
+The original value of \lstinline|$0| that triggered the rule that executed getline is lost.
+By contrast, the \lstinline|next| statement reads a new record but immediately begins processing it normally,
+starting with the first rule in the program. 
+\end{remark}
+
+\begin{lstlisting}[language=bash]
+$ cat script.awk
+#!/usr/bin/env gawk -f
+
+/start/{
+    started = 1
+}
+{
+    # Keep reading lines until we find one without the word "skip"
+    while (started && $0 !~ /stop/) {
+        # Read the next line
+        getline
+    }
+    started = 0
+    # Print the line if it doesn't contain "skip"
+    print $0
+}
+$ cat data.txt
+This is the first line
+of the file.
+However, in the second line
+we may start to ignore some lines.
+We are still ignoring,
+as long as we dont encounter stop.
+This is last line.
+$ ./script.awk data.txt
+This is the first line
+of the file.
+However, in the second line
+as long as we dont encounter stop.
+This is last line.
+\end{lstlisting}
+
+Observe that the \lstinline|getline| function reads the next line from the file.
 
 \subsection{getline into variable}
 
+We can also use the \lstinline|getline| function to read the next line into a variable.
+
+You can use \lstinline|getline var| to read the next record from \lstinline|awk|'s input into the variable \lstinline|var|.
+No other processing is done.
+For example, suppose the next line is a comment or a special string, and you want to read it without triggering any rules.
+This form of \lstinline|getline| allows you to read that line and store it in a variable so that the main read-a-line-and-check-each-rule loop of awk never sees it.
+
+\begin{lstlisting}[language=bash]
+$ cat script.awk
+{
+  if ((getline tmp) > 0) {
+    print tmp
+    print $0
+  } else
+  print $0
+}
+$ cat data.txt
+Hello
+World
+Swap
+Lines
+$ awk -f script.awk data.txt
+World
+Hello
+Lines
+Swap
+\end{lstlisting}
+
+This script reads the next line and prints it before the current line.
+This effectively swaps every two consecutive lines.
+
+The \lstinline|getline| function used in this way sets only the variables \lstinline|NR|,
+\lstinline|FNR|, and \lstinline|RT| (and, of course, \lstinline|var|).
+The record is not split into fields, so the values of the fields (including \lstinline|$0|) and the value of \lstinline|NF| do not change.
+
 \subsection{getline with input file}
+
+We can also read from any arbitrary file using the \lstinline|getline| function, using \textbf{redirection}.
+
+\begin{lstlisting}[language=bash]
+$ cat script.awk
+{
+  if($0 ~ /file/){
+    getline < "data2.txt"
+  }
+  print 
+}
+$ cat data.txt
+This is the first line
+of the first
+file.
+This is second line.
+$ cat data2.txt
+Hello world
+$ awk -f script.awk data.txt
+This is the first line
+of the first
+Hello world
+This is second line.
+\end{lstlisting}
+
+Here we are reading the next line from \lstinline|data2.txt| when the current line contains the word \textit{file}.
+This does not change the value of \lstinline|NR| and \lstinline|FNR|.
+However, it reads the next line from the file and splits it according to \lstinline|FS| and updates the value of \lstinline|$0| and \lstinline|$NF|.
 
 \subsection{getline into variable from file}
 
+Similar to reading the next line into a variable, we can also read from a file into a variable.
+In this version, no variables are set by the \lstinline|getline| function.
+
+\begin{lstlisting}[language=bash]
+$ cat script.awk
+1
+/file/{
+  getline tmp < "data2.txt"
+  print tmp
+}
+$ cat data.txt
+We can print the next line of another
+file anytime we want:
+Lets print the next line
+of the file.
+$ cat data2.txt
+Line1
+Line2
+$ awk -f script.awk data.txt
+We can print the next line of another
+file anytime we want:
+Line1
+Lets print the next line
+of the file.
+Line2
+\end{lstlisting}
+
+Here we are reading the next line from \lstinline|data2.txt| when the current line contains the word \textit{file}.
+Observe that multiple calls to \lstinline|getline| will read the next line from the file.
+This means that \textbf{awk} maintains a pointer to the file and reads the next line each time \lstinline|getline| is called.
+
+This is important when we use \lstinline|getline| multiple times but may want to read the same line again.
+
+To ensure that the file is read from the beginning each time, we can close the file using the \lstinline|close| function.
+
+\begin{lstlisting}[language=bash]
+$ cat script.awk
+{
+  if (NF == 2 && $1 == "@include") {
+    while ((getline line < $2) > 0)
+          print line
+    close($2)
+  } else
+    print
+}
+$ cat data.txt
+This file is the parent file
+Here we can include lines from other files
+@include lib1.txt
+and from another file
+@include lib2.txt
+Repeatations are allowed
+@include lib1.txt
+$ cat lib1.txt
+Library1:
+lorem ipsum
+dolor sit amet
+$ cat lib2.txt
+Library2:
+lorem ipsum dolor
+sit amet
+$ awk -f script.awk data.txt
+This file is the parent file
+Here we can include lines from other files
+Library1:
+lorem ipsum
+dolor sit amet
+and from another file
+Library2:
+lorem ipsum dolor
+sit amet
+Repeatations are allowed
+Library1:
+lorem ipsum
+dolor sit amet
+\end{lstlisting}
+
 \subsection{getline with pipe}
+
+Using pipes, we can also execute any arbitrary shell command and read its output using \lstinline:command | getline:.
+In this case, the string command is run as a shell command and its output is piped into awk to be used as input.
+This form of getline reads one record at a time from the pipe.
+
+\begin{lstlisting}[language=bash]
+$ cat script.awk
+{
+  if($0 ~ /@date/){
+    "date" | getline
+  }
+  print 
+}
+$ cat data.txt
+This is the first line
+where we print the date
+@date
+Last line
+$ awk -f script.awk data.txt
+This is the first line
+where we print the date
+Mon Nov  4 18:17:50 IST 2024
+Last line
+\end{lstlisting}
+
+Here we are reading the output of the \lstinline|date| command into the variable \lstinline|$0|,
+when the current line contains the word \textit{@date}.
+
+When using pipes, \lstinline|awk| keeps the pipe open even if we read just a single line.
+We can read more than one line using the same \lstinline|getline| command,
+which resumes reading from the original execution instead of running the command again.
+
+\begin{lstlisting}[language=bash]
+$ cat script.awk
+/^@get/{
+  "seq 5" | getline
+}
+1
+$ cat data.txt
+This is the first line
+where we get the sequence
+@get
+We can continue reading using
+@get
+and
+@get
+and so on
+$ awk -f script.awk data.txt
+This is the first line
+where we get the sequence
+1
+We can continue reading using
+2
+and
+3
+and so on
+\end{lstlisting}
+
+Here we are reading the output of the \lstinline|seq 5| command into the variable \lstinline|$0|,
+when the current line contains the word \textit{@get}.
+Awk by default keeps the pipe opens and resumes reading from the pipe.
+However, to force the pipe to close, we can use the \lstinline|close| function.
+
+\begin{lstlisting}[language=bash]
+$ cat script.awk
+/^@get/{
+  "seq 5" | getline
+  close("seq 5")
+}
+1
+$ cat data.txt
+This is the first line
+where we get the sequence
+@get
+We can continue reading using
+@get
+and
+@get
+and so on
+$ awk -f script.awk data.txt
+This is the first line
+where we get the sequence
+1
+We can continue reading using
+1
+and
+1
+and so on
+\end{lstlisting}
+
+In this case, the pipe gets closed after reading the first line.
+So in the next call to \lstinline|getline|, the command is executed again.
+
+Using this, we can create a loop to read the output of a command multiple times.
+
+\begin{lstlisting}[language=bash]
+$ cat script.awk
+{
+  if ($1 == "@execute") {
+    tmp = substr($0, 10)        # Remove "@execute"
+    while ((tmp | getline) > 0)
+      print
+    close(tmp)
+  } else
+    print
+}
+$ cat data.txt
+We can see our username using
+@execute whoami
+and we can see who all are logged in using
+@execute who
+$ awk -f script.awk data.txt
+We can see our username using
+sayan
+and we can see who all are logged in using
+sayan            console      Oct 28 11:50 
+sayan            ttys000      Oct 30 02:53 
+\end{lstlisting}
+
+This variation of getline splits the record into fields, sets the value of NF, and recomputes the value of \lstinline|$0|.
+The values of \lstinline|NR| and \lstinline|FNR| are not changed. \lstinline|RT| is set.
 
 \subsection{getline into a variable from a pipe}
 
+Similarly, we can read the output of a command into a variable.
+
+\begin{lstlisting}[language=bash]
+$ cat script.awk
+{
+  if($0 ~ /@date/){
+    "date" | getline tmp
+    print tmp
+  }
+  print 
+}
+$ cat data.txt
+This is the first line
+where we print the date
+@date
+Last line
+$ awk -f script.awk data.txt
+This is the first line
+where we print the date
+Mon Nov  4 18:50:55 IST 2024
+@date
+Last line
+\end{lstlisting}
+
+In this version, we can retain the original line as \lstinline|$0| is not overwritten.
+
+This is useful when we want to read the output of a command and use it in the same record.
+
+In this version of \lstinline|getline|, none of the predefined variables are changed and the record is not split into fields. However, \lstinline|RT| is set.
+
 \subsection{getline with coprocess}
+
+Reading input into getline from a pipe is a one-way operation.
+The command that is started with \lstinline:command| getline: only sends data to your \lstinline|awk| program.
+
+On occasion, you might want to send data to another program for processing and then read the results back.
+\lstinline|gawk| allows you to start a coprocess, with which two-way communications are possible.
+This is done with the \lstinline:|&: operator.
+Typically, you write data to the coprocess first and then read the results back, as shown in the following:
+
+\begin{lstlisting}[language=bash]
+print "some query" |& "db_server"
+"db_server" |& getline
+\end{lstlisting}
+which sends a query to \lstinline|db_server| and then reads the results.
+
+This can also be done using a variable.
+
+\begin{remark}
+This is a \lstinline|gawk| extension and is not available in POSIX awk.
+\end{remark}
 
 \section{Redirection and Piping}
 
+In \lstinline|awk|, we can use \textbf{redirection} and \textbf{piping} to read from files and write to files.
+
+There are four forms of output redirection: 
+\begin{itemize}
+  \item output to a file,
+  \item output appended to a file,
+  \item output through a pipe to another command, and
+  \item output to a coprocess.
+
+\end{itemize}
+
 \subsection{Output Redirection}
 
-\subsection{Input Redirection}
+\begin{lstlisting}[language=bash]
+print "Hello, World" > "output.txt"
+\end{lstlisting}
+When this type of redirection is used, the output-file is erased before the first output is written to it.
+Subsequent writes to the same output-file do not erase output-file, but append to it.
+\marginnote{
+This is different from how you use redirections in shell scripts.
+}
+If output-file does not exist, it is created. 
+
+\begin{lstlisting}[language=bash]
+$ cat script.awk
+{
+  print $1 > "firstnames.txt"
+  print $2 > "lastnames.txt"
+}
+$ cat names.txt
+John Doe
+Jane Smith
+$ awk -f script.awk names.txt
+$ cat firstnames.txt
+John
+Jane
+$ cat lastnames.txt
+Doe
+Smith
+\end{lstlisting}
+
+\subsection{Appending}
+
+\begin{lstlisting}[language=bash]
+print "Hello, World" >> "output.txt"
+\end{lstlisting}
+
+This redirection prints the items into the preexisting output file named output-file.
+The difference between this and the single-\lstinline|>| redirection is that the old contents (if any) of output-file are not erased.
+Instead, the awk output is appended to the file.
+If output-file does not exist, then it is created.
 
 \subsection{Piping to other commands}
 
-\subsection{Piping to a variable}
+It is possible to send output to another program through a pipe instead of into a file.
+This redirection opens a pipe to the command, and writes the output through this pipe to another process created to execute the command.
 
-\section{Running Shell Commands}
+\begin{lstlisting}[language=bash]
+$ cat script.awk
+{
+  print $0 | "wc -w"
+}
+$ cat data.txt
+This is the first line
+of the file.
+$ awk -f script.awk data.txt
+8
+\end{lstlisting}
+
+Even though \lstinline|awk| runs for each line one by one and sends the output to the \lstinline|wc -w| command,
+the \lstinline|wc -w| command reads the entire input and prints the word count.
+This is because the pipe remains open until the \lstinline|awk| program finishes execution,
+or the pipe is closed using the \lstinline|close| function.
+
+To print the number of words of each line, we can close the pipe after each line.
+
+\begin{lstlisting}[language=bash]
+$ cat script.awk
+{
+  print $0 | "wc -w"
+  close("wc -w")
+}
+$ cat data.txt
+This is the first line
+of the file.
+$ awk -f script.awk data.txt
+    5
+    3
+\end{lstlisting}
+
+\subsection{Piping to a coprocess}
+
+This redirection prints the items to the input of command.
+The difference between this and the single-\lstinline:|: redirection is that the output from command can be read with getline.
+Thus, command is a \textbf{coprocess}, which works together with but is subsidiary to the \lstinline|awk| program.
+
+This feature is a \lstinline|gawk| extension, and is not available in POSIX \lstinline|awk|.
+
 
 \subsection{system}
 
-\subsection{getline and pipe}
+We can also run shell commands using the \lstinline|system| function.
+The \lstinline|system| function runs the shell command and returns the exit status of the command.
 
-\subsection{Closing the files or commands}
+\begin{lstlisting}[language=bash]
+$ cat script.awk
+{
+  system("echo " $0 " | wc -w" )
+}
+$ cat data.txt
+This is the first line
+of the file.
+$ awk -f script.awk data.txt
+    5
+    3
+\end{lstlisting}
+
+Here we are running the \lstinline|wc -w| command on each line using the \lstinline|system| function.
+
+\begin{remark}
+Note that we do not need to close the command when using the \lstinline|system| function.
+\end{remark}
+
 
 \section{Examples}
 
+Finally, to end this long chapter on \textbf{awk}, we will go through some examples to understand how to use \textbf{awk} in real life scenarios.
+
 \subsection{Finding the Frequency}
+
+Awk can be used to find the frequency of words in a file.
+
+\begin{lstlisting}[language=bash]
+$ cat script.awk
+BEGIN{
+  FPAT="[A-Za-z0-9]+"
+  OFS=":"
+  }
+{
+  for(i = 1; i <= NF; i++){
+    words[$i]++
+  }
+}
+END{
+  for(word in words){
+    print words[word], word 
+  }
+}
+
+$ ls -l alice.txt # too big to print
+-rw-r--r--@ 1 sayan  staff  148574 Nov  4 23:35 alice.txt
+$ gawk -f script.awk alice.txt | sort -nr | head
+1527:the
+802:and
+725:to
+615:a
+545:I
+527:it
+509:she
+500:of
+456:said
+396:Alice
+\end{lstlisting}
+
+Let us understand the script.
+
+\begin{itemize}
+  \item \textbf{FPAT}: The \lstinline|FPAT| variable is a gawk extension that allows you to define the field using a regular expression.
+  Here we are defining a field as any alphanumeric character of any non-zero length.
+  \item \textbf{OFS}: The \lstinline|OFS| variable is set to a colon to separate the frequency and the word.
+  \item \textbf{words}: This is an associative array that stores the frequency of each word.
+  \item \textbf{END}: At the end, we iterate over the \lstinline|words| array and print the frequency and the word.
+  \item \textbf{sort -nr}: We sort the output in reverse numerical order.
+  \item \textbf{head}: We print the first $10$ lines.
+\end{itemize}
+
+Similarly, we can simplify the script to find frequencies of the lines instead.
+
+\begin{lstlisting}[language=bash]
+$ cat script.awk
+{
+  lines[$0]++
+}
+END{
+  for(line in lines){
+    print lines[line], line
+  }
+}
+$ cat data.txt
+apple
+orange
+apple
+banana
+$ awk -f script.awk data.txt
+2 apple
+1 orange
+1 banana
+\end{lstlisting}
 
 \subsection{Descriptive Statistics}
 
+We can also use \textbf{awk} to calculate the mean, median, and mode of a set of numbers.
+
+\begin{lstlisting}[language=bash]
+$ cat script.awk
+{
+  sum += $1
+  numbers[$1]++
+  lines[NR] = $1
+}
+END{
+  n = asorti(numbers, sorted)
+  mean = sum / NR
+  asort(lines)
+  median = (NR % 2) ? lines[(NR + 1) / 2] : (lines[NR / 2] + lines[NR / 2 + 1]) / 2
+  mode = 0
+  for(i = 1; i <= n; i++){
+    if(numbers[sorted[i]] > mode){
+      mode = sorted[i]
+    }
+  }
+  print "Mean:", mean
+  print "Median:", median
+  print "Mode:", mode
+}
+$ for i in {1..10000}; do echo $RANDOM ; done > numbers.txt
+$ ls -l numbers.txt
+-rw-r--r--@ 1 sayan  staff  56626 Nov  4 23:45 numbers.txt
+$ awk -f script.awk numbers.txt
+Mean: 16466.5
+Median: 16418
+Mode: 5551
+\end{lstlisting}
+
+Here we are calculating the mean, median, and mode of a set of numbers.
+Let us understand the script.
+
+\begin{itemize}
+  \item \textbf{sum}: We are calculating the sum of all the numbers.
+  \item \textbf{numbers}: This is an associative array that stores the frequency of each number.
+  \item \textbf{lines}: This is an array that stores the numbers in the order they appear.
+  \item \textbf{asort}: This function sorts the array \lstinline|lines|.
+  \item \textbf{asorti}: This function sorts the array \lstinline|numbers| and returns the number of elements in the array.
+  \item \textbf{mean}: We calculate the mean by dividing the sum by the number of elements.
+  \item \textbf{median}: We calculate the median by checking if the number of elements is odd or even.
+  \item \textbf{mode}: We calculate the mode by iterating over the sorted array and finding the number with the highest frequency.
+\end{itemize}
+
 \subsection{Semi-Quoted CSV Handing}
 
+We can also handle semi-quoted CSV files using \textbf{gawk}'s \lstinline|FPAT| variable.
+
+\begin{lstlisting}[language=bash]
+$ cat script.awk
+BEGIN{
+  FPAT = "([^,]+)|(\"[^\"]+\")"
+  OFS = ","
+}
+{
+  for(i = 1; i <= NF; i++){
+    gsub("^[^\"]*$", "\"&\"", $i)
+  }
+  print
+}
+$ cat data.csv
+a,b,c
+1,2,3
+"a word",sometimes quoted,"sometimes, with commas"
+$ gawk -f script.awk data.csv
+"a","b","c"
+"1","2","3"
+"a word","sometimes quoted","sometimes, with commas"
+\end{lstlisting}
+
+Here we are handling semi-quoted CSV files and converting them into fully quoted CSV files.
+
+
+
+
 Students are encouraged to go through some other examples listed
-\href{here}{https://www.pement.org/awk/awk1line.txt} and try to understand how they work. Further it is beneficial to try to create scripts of their own to solve problems they face using \textbf{bash}, \textbf{sed}, and \textbf{awk}.
+\href{https://www.pement.org/awk/awk1line.txt}{here} and try to understand how they work.
+Further it is beneficial to try to create scripts of their own to solve problems they face using \textbf{bash}, \textbf{sed}, and \textbf{awk}.
