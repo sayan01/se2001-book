@@ -1280,7 +1280,7 @@ X inside 6
 X outside 5
 \end{lstlisting}
 
-Howecer, if we pass an array to a function, then the array is passed by reference. This means that the function can change the array and the changes will be reflected in the array used by the caller to pass the array to the function.
+However, if we pass an array to a function, then the array is passed by reference. This means that the function can change the array and the changes will be reflected in the array used by the caller to pass the array to the function.
 
 \begin{lstlisting}[language=bash]
 $ cat script.awk
@@ -2167,7 +2167,7 @@ $ awk -f script.awk data.txt
 The script prints the fields of each record as long as the field starts with an uppercase letter.
 
 \subsection{do-while loop}
-The **do loop** is a variation of the while looping statement.
+The \textbf{do while} loop is a variation of the while looping statement.
 The do loop executes the body once and then repeats the body as long as the condition is true. 
 
 \begin{lstlisting}[language=bash]
@@ -2205,11 +2205,11 @@ $ awk -f script.awk
 
 \subsection{switch-case}
 
-**Switch Case** is a control structure that allows a variable to be tested for equality against a list of values.
+\textbf{Switch Case} is a control structure that allows a variable to be tested for equality against a list of values.
 Each value is called a case, and the variable being switched on is checked for each case.
 
 \begin{remark}
-  Switch case is a **gawk** extension and is not available in POSIX awk.
+  Switch case is a \textbf{gawk} extension and is not available in POSIX awk.
 \end{remark}
 
 The switch statement allows the evaluation of an expression and the execution of statements based on a case match.
@@ -2219,7 +2219,7 @@ If no suitable case is found, the default section is executed, if supplied.
 Each case contains a single constant, be it numeric, string, or regexp.
 The switch expression is evaluated, and then each case's constant is compared against the result in turn.
 
-**Syntax**:
+\textbf{Syntax}:
 \begin{lstlisting}[language=bash]
 switch (expression) {
 case value or regular expression:
@@ -2325,7 +2325,7 @@ $ gawk -f script.awk <<< 7
 Not a multiple of 5 or 10
 \end{lstlisting}
 
-However, unlike the **break** keyword, the **continue** keyword does not directly affect the switch statement, but rather the loop that encloses it.
+However, unlike the \lstinline|break| keyword, the \lstinline|continue| keyword does not directly affect the switch statement, but rather the loop that encloses it.
 
 \begin{lstlisting}[language=bash]
 $ cat script.awk

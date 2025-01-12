@@ -20,3 +20,5 @@ makeglossaries main
 
 # Compile document
 pdflatex main
+
+cp main.pdf "Navigating Linux.pdf"
