@@ -21,11 +21,10 @@ to the shell in which they are created.
   It is created using the \lstinline{export} command. It can be accessed
   using the \$ followed by the name of the variable (e.g. \$HOME) or
   using the \lstinline{printenv} command.
-  They are part of the environment in which a process runs. For example,
-  a running process can query the value of the
-  TEMP/TMPDIR environment variable to discover a suitable location to store
-  temporary files, or the HOME or USER variable
-  to find the directory structure owned by the user running the process.
+  They are part of the environment in which a process runs. 
+  A running process can thus access the value of the environment variable
+  HOME to find the home directory of the user running the process,
+  or the PATH variable to find the directories to search for commands.
 \end{definition}
 
 \begin{definition}[Shell Variables]
@@ -44,7 +43,10 @@ $ var="Hello World"
 
 This creates a shell variable \lstinline{var} with value \lstinline{Hello World}.
 If the value of our variable contains spaces, we need to enclose it in quotes.
-It is important to note that there should be \textbf{no spaces} around the \lstinline{=} operator.
+
+\begin{remark}
+Note that there should be \textbf{no spaces} around the \lstinline{=} operator.
+\end{remark}
 
 Variable names can contain letters, numbers, and underscores, but they cannot start with a number.
 
@@ -66,7 +68,7 @@ $ export var
 
 \section{Printing Variables to the Terminal}
 
-To access the value of a variable, we use the \lstinline{\$} operator followed by the name of the variable.
+To access the value of a variable, we use the \lstinline|$| operator followed by the name of the variable.
 It is only used when we want to get the value of the variable, and not for setting the value.
 
 \begin{lstlisting}[language=bash]

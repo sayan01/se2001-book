@@ -1391,7 +1391,7 @@ due to this.
 
 \subsection{Tee Command}
 
-The \lstinline|tee| command is a command that reads from the standard
+The \lstinline|tee| command is a command that reads from the 
 standard input and writes to the standard output and to a file.
 It is very useful when you want to save the output of a command
 but also want to see the output on the terminal.
@@ -1687,7 +1687,11 @@ tar cf >(bzip2 -c > file.tar.bz2) folder1
 \end{lstlisting}
 
 This calls \lstinline|tar cf /dev/fd/?? folder1|,
-and \lstinline|bzip2 -c > file.tar.bz2|.
+and \lstinline|bzip2 -c < /dev/fd/?? > file.tar.bz2|.
+\sidenote{
+  Here I have used \lstinline|??| as the file descriptor number.
+  In actuality, the file descriptor number will be a number that is not already in use.
+}
 
 \marginnote{
   This example is lifted from

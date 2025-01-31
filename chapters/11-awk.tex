@@ -1148,11 +1148,12 @@ If we have a set of code that performs a specific operation and might be re-used
 
 Awk has support for functions, and we can define our own functions in awk.
 
-When a function is called, expressions that create the function’s actual parameters are evaluated completely before the call is performed.
+When a function is called, the parameters are first evaluated, and then the function is called with the evaluated parameters.
 
 \subsection{User-defined Functions}
 
-Definitions of functions can appear anywhere between the rules of an awk program. There is no need to put the definition of a function before all uses of the function. This is because awk reads the entire program before starting to execute any of it.
+AWK reads the entire programme first, parses it, and only then starts executing it.
+Thus, definitions of functions can appear anywhere in the program, not just before their first use.
 
 Syntax of a function definition is as follows:
 
@@ -1164,9 +1165,10 @@ function name(parameter-list) {
 
 The name of a function has to follow the same rules as that of a variable and cannot be a name that is already used by a variable, array, or built-in functions.
 
-\lstinline|parameter-list| is an optional list of the function’s arguments and local variable names, separated by commas. When the function is called, the argument names are used to hold the argument values given in the call.
+\lstinline|parameter-list| is an optional list of the function’s arguments and local variable names, separated by commas. 
+When the function is called, the values passed to the function are assigned to the argument names in the order they are passed.
 
-A function cannot have two parameters with the same name, nor may it have a parameter with the same name as the function itself.
+The parameter list needs to have unique argument names, they cannot also be the same as the function name.
 
 The parameter list does not enforce the number of arguments passed to the function, and the function can be called with fewer arguments as well.
 Any argument that is not passed is treated as an empty string in string contexts and zero in numeric contexts.

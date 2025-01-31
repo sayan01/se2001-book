@@ -1,3 +1,49 @@
-% \setchapterpreamble[u]{\margintoc}
 \chapter{Package Management}
 \labch{pacman}
+
+\section{Introduction}
+
+Just like smartphones have an app store to install trusted and verified applications, Linux distributions also follow a similar procedure.
+To install applications and command line utilities on a Linux system, we use a package manager.
+
+\begin{definition}
+    A \textbf{package manager} is an application that allows the user to search for, 
+    and download and install software packages from a given list of trusted repositories of applications for that distribution.
+    The package manager also handles the dependency management of the packages and updating the installed packages.
+\end{definition}
+
+This is in contrast to how software is installed on Windows, where the user has to download the software from the internet, and then install it manually.
+This can be a security risk, as the user has to trust the source of the software, and also has to manually update the software.
+
+The package manager can be a command line tool, or a graphical tool. 
+Historically, all package managers were command line tools, but now most distributions have a graphical package manager as well.
+The package manager for Debian based distributions is \lstinline{apt}, for Red Hat based distributions is \lstinline{yum} or \lstinline{dnf}, and for Arch based distributions is \lstinline{pacman}.
+Ubuntu, being a Debian based distribution, uses \lstinline{apt} as its package manager.
+
+\begin{remark}
+  \lstinline|apt| by itself is not a package manager, but a dependency resolution tool to the package manager \lstinline|dpkg|.
+  Similarly, \lstinline|rpm| is the package manager for Red Hat based distributions, whereas \lstinline|yum| and \lstinline|dnf| are dependency resolution tools.
+  Using \lstinline|dpkg| or \lstinline|rpm| directly is not required and recommended, as they do not handle dependencies.
+\end{remark}
+
+\begin{table}
+    \centering
+    \begin{tabular}{c c}
+        \hline
+        \textbf{Distribution} & \textbf{Package Manager} \\
+        \hline
+        Debian & \lstinline|apt| \\
+        RHEL & \lstinline|dnf| \\
+        Arch & \lstinline|pacman| \\
+        NixOS & \lstinline|nix| \\
+        Gentoo & \lstinline|portage| \\
+        \hline
+    \end{tabular}
+    \caption{Package Managers for Different Distributions}
+    \labtab{package-managers}
+\end{table}
+
+There are also cross-distribution package managers like \lstinline|flatpak| and \lstinline|snap|,
+which allow the user to install applications that are not in the distribution's repositories.
+
+Finally, we also have \textbf{AppImages}, which are self-contained applications that do not require installation.
