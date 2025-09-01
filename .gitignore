@@ -1,10 +1,15 @@
 Navigating Linux.pdf
+main.pdf
 *.aux
+*.bak
+*.bbl
 *.bcf
+*.blg
+*.fdb_latexmk
+*.fls
 *.glg
 *.glo
 *.gls
-*.glsdefs
 *.idx
 *.ilg
 *.ind
@@ -14,7 +19,7 @@ Navigating Linux.pdf
 *.mw
 *.nlo
 *.nls
-*.run.xml
 *.toc
 *.xdy
+*.xml
 .DS_Store
