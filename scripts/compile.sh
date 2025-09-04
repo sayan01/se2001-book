@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # Compile document
 pdflatex -interaction=nonstopmode main
@@ -21,4 +21,4 @@ makeglossaries main
 # Compile document
 pdflatex main
 
-cp main.pdf "Navigating Linux.pdf"
+mv main.pdf "Navigating Linux.pdf"
