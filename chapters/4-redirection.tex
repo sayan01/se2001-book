@@ -147,7 +147,7 @@ they are actually a subshell. The commands inside the parentheses
 are executed in a subshell. The exit status of the subshell is the
 exit status of the last command executed in the subshell.
 
-We can see the subshell count using the \lstinline|echo \$BASH\_SUBSHELL|.
+We can see the subshell count using the \lstinline|echo $BASH_SUBSHELL|.
 
 \begin{lstlisting}[language=bash]
 $ echo $BASH_SUBSHELL
@@ -532,7 +532,7 @@ error message are mangled, the same size of the output.
 }
 
 The correct way to redirect both the standard output and the standard
-error to the same file is to use the \lstinline|2>\&1| operator.
+error to the same file is to use the \lstinline|2>&1| operator.
 This means that the standard error is redirected to the standard output.
 Here, the \lstinline|1| is the file descriptor for the standard output.
 The \lstinline|&| is used to tell the shell that the \lstinline|1| is a file
@@ -545,7 +545,7 @@ ls: cannot access '/nonexistant': No such file or directory
 /home
 \end{lstlisting}
 
-However, the order is important. The \lstinline|2>\&1| operator should
+However, the order is important. The \lstinline|2>&1| operator should
 be placed at the end of the command. If it is placed at the beginning,
 then the standard error will be redirected to the standard output, which,
 at that point, is the terminal. Then the standard output will be redirected
@@ -1169,7 +1169,7 @@ connected and remains mapped to the terminal. This is because the
 standard error is a separate stream from the standard output.
 
 However, we can connect the standard error to the standard input of
-another process using the \lstinline|2>\&1| operator. This is useful when
+another process using the \lstinline|2>&1| operator. This is useful when
 we want to process the error messages of a command.
 
 \begin{lstlisting}[language=bash]
@@ -1183,7 +1183,7 @@ $ ls -d /home /nonexistant 2>&1 | wc
 This is same as redirecting both the streams to a single file as
 demostrated earlier.
 
-However, there is a shorter way to do this using the \lstinline||\&|
+However, there is a shorter way to do this using the \lstinline@|&@
 syntactic sugar.
 
 \begin{lstlisting}[language=bash]
@@ -1191,7 +1191,7 @@ $ ls -d /home /nonexistant |& wc
       2      10      61
 \end{lstlisting}
 
-This does the exact same thing as \lstinline|2>\&1| followed by the pipe.
+This does the exact same thing as \lstinline|2>&1| followed by the pipe.
 
 \subsection{Piping to and From Special Files}
 
@@ -1752,11 +1752,11 @@ in this chapter.
     \lstinline|>>| & Output Redirection & Append the stdout of the \\ & & process to a file\\
     \lstinline|<| & Input Redirection & Redirect the stdin of \\ & & the process from a file\\
     \lstinline|2>| & Error Redirection & Redirect the stderr of \\ & & the process to a file\\
-    \lstinline|2>\&1| & Error Redirection & Redirect the stderr of the \\ & & process to the stdout\\
+    \lstinline|2>&1| & Error Redirection & Redirect the stderr of the \\ & & process to the stdout\\
     \lstinline|<<EOF| & Here Document & Redirect the stdin of \\ & & the process from a block of text\\
     \lstinline|<<<| & Here String & Redirect the stdin of \\ & & the process from a string\\
-    \lstinline||| & Pipe & Connect the stdout of one process \\ & & to the stdin of another process\\
-    \lstinline||\&| & Pipe Stderr & Connect the stderr of one process \\ & & to the stdin of another process\\
+    \lstinline@|@ & Pipe & Connect the stdout of one process \\ & & to the stdin of another process\\
+    \lstinline@|&@ & Pipe Stderr & Connect the stderr of one process \\ & & to the stdin of another process\\
     \lstinline|$(command)| & Command Substitution & Run a command and use \\ & & the output in the current shell\\
     \lstinline|$((expression))| & Arithmetic Expansion & Evaluate an arithmetic \\ & & expression\\
     \lstinline|<(command)| & Process Substitution & Provide the output of \\ & & a process as a file\\

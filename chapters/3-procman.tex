@@ -130,7 +130,7 @@ be killed, as the child process is owned by the shell.
 If you are using a linux operating system with a GUI server (X or Wayland),
 try the following to understand how process ownership works.
 
-Open two terminals, in the first one, run \lstinline|echo \$\$| to see the
+Open two terminals, in the first one, run \lstinline|echo $$| to see the
 process ID of that shell.
 It should print out a random string of digits, that is the PID of the shell.
 Then run a GUI application, such as \textbf{firefox}.
@@ -555,7 +555,7 @@ The signal number for \textbf{SIGCONT} is 18.
 \begin{exercise}
   Try to pause a job using the \textbf{SIGSTOP} signal, then resume it using the
   \textbf{SIGCONT} signal.
-  Open firefox from a terminal using \lstinline|firefox \&| and note the PID,
+  Open firefox from a terminal using \lstinline|firefox &| and note the PID,
   then pause it using
   \lstinline|kill -19 <PID>|,
   try to click on the firefox window, and see if it responds.

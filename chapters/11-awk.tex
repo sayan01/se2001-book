@@ -864,7 +864,7 @@ The \lstinline|OFMT| variable is used to set the output format of numbers.
 
 This is a C-style format string, and it is used to convert numbers to strings during printing.
 
-The default value is \lstinline|"\%.6g"|.
+The default value is \lstinline|"%.6g"|.
 
 \begin{lstlisting}[language=bash]
 $ cat script.awk
@@ -886,7 +886,7 @@ Average: 5
 In this example, we are calculating the average of the numbers in the records.
 The input were the numbers from $1$ to $10$.
 The actual average is $5.5$ as seen in the first line of output where the \lstinline|OFMT| is not modified yet.
-After that, the \lstinline|OFMT| is set to \lstinline|"\%d"|, which is the format string for integers, and then the average is printed again, but this time as an integer, so the fractional part gets truncated.
+After that, the \lstinline|OFMT| is set to \lstinline|"%d"|, which is the format string for integers, and then the average is printed again, but this time as an integer, so the fractional part gets truncated.
 
 \textbf{ORS}:
 

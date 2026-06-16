@@ -494,12 +494,6 @@ This may seem inconveniently placed at the top left corner,
 but this was because the original vi was developed on a
 ADM-3A terminal, which had the \lstinline|Esc| key to the left
 of the \textbf{Q} key, where modern keyboards have the \lstinline|Tab| key.
-\sidenote{
-  Since the placement of the Escape key is inconvenient
-  in modern keyboard layouts, many people remap the
-  Escape key to the \lstinline|Caps Lock| key either in vim
-  or in the operating system itself.
-}
 
 Also, the choice of h,j,k,l for navigation was because
 the ADM-3A terminal did not have arrow keys,
@@ -676,7 +670,7 @@ directly use ed commands on our file in the buffer.
     \midrule
     Show the \textbf{P}rompt & \lstinline|P| \\
     Command Format & \lstinline|[addr[,addr]]cmd[params]| \\
-    Commands for location & \lstinline|1| \lstinline|.| \lstinline|$| \lstinline|\%| \lstinline|+| \lstinline|-| \lstinline|,| \lstinline|;| \lstinline|/RE/| \\
+    Commands for location & \lstinline|1| \lstinline|.| \lstinline|$| \lstinline|%| \lstinline|+| \lstinline|-| \lstinline|,| \lstinline|;| \lstinline|/RE/| \\
     Commands for editing & \lstinline|f| \lstinline|p| \lstinline|a| \lstinline|c| \lstinline|d| \lstinline|i| \lstinline|j| \lstinline|s| \lstinline|m| \lstinline|u| \\
     Execute a shell \textit{command} & \lstinline|!command| \\
     \textbf{e}dit a file & \lstinline|e filename| \\
@@ -792,7 +786,7 @@ line-4 end of file
 \end{lstlisting}
 
 To print out all the lines of the file,
-we can use the \lstinline|,| or \lstinline|\%| with \lstinline|p| command.
+we can use the \lstinline|,| or \lstinline|%| with \lstinline|p| command.
 
 \begin{lstlisting}[language=bash]
 *,p
@@ -903,7 +897,7 @@ Mon Jun 10 11:37:42 PM IST 2024
 
 The output after running the \lstinline|r !date| command
 is the number of characters read into the buffer.
-We can then print the entire buffer using the \lstinline|\%p| command.
+We can then print the entire buffer using the \lstinline|%p| command.
 
 The read data is appended to the end of the file.
 
@@ -1292,7 +1286,7 @@ paragraph, spelling error, etc.
     \lstinline|w| & move to the beginning of the next word \\
     \lstinline|e| & move to the end of the current word \\
     \lstinline|b| & move to the beginning of the previous word \\
-    \lstinline|\%| & move to the matching parenthesis, bracket, or brace \\
+    \lstinline|%| & move to the matching parenthesis, bracket, or brace \\
     \lstinline|0| & move to the beginning of the current line \\
     \lstinline|$| & move to the end of the current line \\
     \lstinline|/| & search forward for a pattern \\
@@ -1389,7 +1383,7 @@ or the \lstinline|g~| command.
     \lstinline|g~$| & toggle the case from cursor till end of line \\
     \lstinline|g~{| & toggle the case from cursor till previous empty line \\
     \lstinline|g~{| & toggle the case from cursor till next empty line \\
-    \lstinline|g~\%| & toggle the case from the bracket, brace, or parenthesis till its pair \\
+    \lstinline|g~%| & toggle the case from the bracket, brace, or parenthesis till its pair \\
     \bottomrule
   \end{tabular}
 \end{table*}
@@ -1553,7 +1547,7 @@ previous occurrence of the word under the cursor.
 
 You can perform search and replace using the \lstinline|:s| command.
 The command takes a line address on which to perform the search
-and replace. Usually you can use the \lstinline|\%| address to
+and replace. Usually you can use the \lstinline|%| address to
 search in the entire file, or the \lstinline|.,$| address to
 search from cursor till the end of the file.
 
@@ -1593,7 +1587,7 @@ Some examples of addresses are shown in \reftab{address-vim}.
     \lstinline|1,/regex/| & from the first line to line containing regex \\
     \lstinline|/regex/,$| & from line containing regex to the last line \\
     \lstinline|/regex1/;/regex2/| & from line containing regex1 to line containing regex2 \\
-    \lstinline|\%| & entire file \\
+    \lstinline|%| & entire file \\
     \bottomrule
   \end{tabular}
 \end{table*}

@@ -914,9 +914,9 @@ In those cases, we can drop the colon from the operator.
 
 \begin{remark}
   \lstinline|echo ${var:-default}| will print \lstinline{default} if \lstinline{var} is absent \textbf{or} empty. \\
-  \lstinline|echo \${var-default}| will print \lstinline{default} if \lstinline{var} is absent, but not if \lstinline{var} is empty. \\
-  \lstinline|echo \${var:+default}| will print \lstinline{default} if \lstinline{var} is present \textbf{and} not empty. \\
-  \lstinline|echo \${var+default}| will print \lstinline{default} if \lstinline{var} is present,
+  \lstinline|echo ${var-default}| will print \lstinline{default} if \lstinline{var} is absent, but not if \lstinline{var} is empty. \\
+  \lstinline|echo ${var:+default}| will print \lstinline{default} if \lstinline{var} is present \textbf{and} not empty. \\
+  \lstinline|echo ${var+default}| will print \lstinline{default} if \lstinline{var} is present,
   regardless of whether \lstinline{var} is empty or not. \\
 \end{remark}
 
@@ -983,9 +983,9 @@ Hello
 
 \subsection{Prefix and Suffix Removal}
 
-The prefix and suffix of a variable can be removed using the \lstinline{#} and \lstinline{\%} operators respectively. Any glob like pattern can be matched, not just fixed strings.
+The prefix and suffix of a variable can be removed using the \lstinline{#} and \lstinline{%} operators respectively. Any glob like pattern can be matched, not just fixed strings.
 
-The match can be made greedy (longest match) by using \lstinline{##} and \lstinline{\%\%} respectively.
+The match can be made greedy (longest match) by using \lstinline{##} and \lstinline{%%} respectively.
 This applies for wildcard matching.
 
 
@@ -1050,7 +1050,7 @@ $ echo ${var/#s/S}
 linux commands
 \end{lstlisting}
 
-Similarly, we can anchor the match to the end of the string using the \lstinline{\%} operator.
+Similarly, we can anchor the match to the end of the string using the \lstinline{%} operator.
 
 \begin{lstlisting}[language=bash]
 $ var="Hello World"
@@ -1196,7 +1196,7 @@ hello
 \section{Bash Flags}
 
 There are some flags that can be set in the bash shell to change the behaviour of the shell.
-The currently set flags can be viewed using the \lstinline{echo \$-} command.
+The currently set flags can be viewed using the \lstinline{echo $-} command.
 
 \begin{lstlisting}[language=bash]
 $ echo $-
@@ -1531,7 +1531,7 @@ $ echo $arr
 
 \subsection{Length of Array}
 
-The length of the array can be found using the \lstinline{\#} operator.
+The length of the array can be found using the \lstinline{#} operator.
 
 \begin{lstlisting}[language=bash]
 $ arr=(1 2 3 4 5)

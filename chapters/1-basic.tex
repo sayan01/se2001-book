@@ -1604,16 +1604,16 @@ Rest of the format specifiers can be found in the \lstinline|date| manual page.
   \toprule
  Specifier & Description \\
  \midrule
-  \lstinline|\%Y| & Year \\
-  \lstinline|\%m| & Month \\
-  \lstinline|\%d| & Day \\
-  \lstinline|\%H| & Hour \\
-  \lstinline|\%M| & Minute \\
-  \lstinline|\%S| & Second \\
-  \lstinline|\%A| & Full weekday name \\
-  \lstinline|\%B| & Full month name \\
-  \lstinline|\%a| & Abbreviated weekday name \\
-  \lstinline|\%b| & Abbreviated month name \\
+  \lstinline|%Y| & Year \\
+  \lstinline|%m| & Month \\
+  \lstinline|%d| & Day \\
+  \lstinline|%H| & Hour \\
+  \lstinline|%M| & Minute \\
+  \lstinline|%S| & Second \\
+  \lstinline|%A| & Full weekday name \\
+  \lstinline|%B| & Full month name \\
+  \lstinline|%a| & Abbreviated weekday name \\
+  \lstinline|%b| & Abbreviated month name \\
   \bottomrule
 \end{tabular}
 \end{table}
@@ -1674,7 +1674,7 @@ There are multiple flags that can be passed to the \lstinline|cal| command to di
 \end{qs}
 
 \begin{ans}
-  \lstinline|date -d today +\%Y-\%m-\%d| will print the current date in the format
+  \lstinline|date -d today +%Y-%m-%d| will print the current date in the format
   \lstinline|YYYY-MM-DD|. The format can be changed by changing the format specifiers.
   The format specifiers are given in the \lstinline|man date| page. The \lstinline|-d today| can
   be dropped, but is mentioned to show that the date can be changed to any date.
@@ -1965,7 +1965,7 @@ The \lstinline|/proc| tree originated in System V Unix
   Unix System V is one of the first commercial versions of the Unix operating system. It was originally developed by AT\&T and first released in 1983.
 }
 , where it only gave information about each running process, using a
-\lstinline|/proc/\$PID/| format. Linux greatly extended that, adding all sorts of information about the running kernel's status. In addition to these read-only information files, Linux's \lstinline|/proc| also has writable virtual files that can change the state of the running kernel.
+\lstinline|/proc/$PID/| format. Linux greatly extended that, adding all sorts of information about the running kernel's status. In addition to these read-only information files, Linux's \lstinline|/proc| also has writable virtual files that can change the state of the running kernel.
 BSD
 \sidenote{
   BSD, or Berkeley Software Distribution, is a Unix-like operating system that was developed at the University of California, Berkeley. It was first released in 1977 and was based on the original Unix source code from AT\&T. BSD is not linux, it is a totally different kernel, with similar core utils to GNU.
@@ -2476,7 +2476,7 @@ Hello World!
 \begin{ans}
   \lstinline|ls -l| \\
   The permissions are the first 10 characters of the output.\\
-  \lstinline|stat -c \%A filename| will list only the permissions of a file.\\
+  \lstinline|stat -c %A filename| will list only the permissions of a file.\\
   There are other format specifiers of \lstinline|stat| to show different statistics
   which can be found in \lstinline|man stat|.
 \end{ans}
@@ -2505,7 +2505,7 @@ We had briefly seen that the output of \lstinline|ls -l| shows the type of the f
 
 There are 7 types of files in a linux file system as shown in \vreftab{file-types-table}.
 
-\begin{margintable}
+\begin{table}
 \caption{Types of Files}
 \labtab{file-types-table}
 \begin{tabular}{ c c }
@@ -2521,7 +2521,7 @@ There are 7 types of files in a linux file system as shown in \vreftab{file-type
   Sockets & s \\
  \bottomrule
 \end{tabular}
-\end{margintable}
+\end{table}
 
 \subsection{Regular Files}
 

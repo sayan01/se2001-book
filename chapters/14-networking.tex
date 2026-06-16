@@ -447,7 +447,7 @@ addresses to the public IP address when sending
 the packets over the internet. The assignment
 of these private IP addresses is done by the
 DHCP server
-\sidenote{
+\footnote{
   Dynamic Host Configuration Protocol (DHCP) is
   a network management protocol used on Internet
   Protocol networks whereby a DHCP server dynamically
@@ -1221,9 +1221,9 @@ The key's randomart image is:
 \end{lstlisting}
 
 Our key pair has been generated. The private key
-is stored in \lstinline|/home/username/.ssh/id\_ed25519|
+is stored in \lstinline|/home/username/.ssh/id_ed25519|
 and the public key is stored in
-\lstinline|/home/username/.ssh/id\_ed25519.pub|.
+\lstinline|/home/username/.ssh/id_ed25519.pub|.
 
 Make sure to \textbf{never} share your private key with anyone.
 Ideally, you dont even need to see the private key yourself.
@@ -1243,7 +1243,7 @@ to login to the server, and then copy the public
 key which you provide to the server.
 
 \begin{lstlisting}
-$ ssh-copy-id -i /key/to/public/key username@ipaddress
+$ ssh-copy-id -i /path/to/public/key username@ipaddress
 \end{lstlisting}
 
 \begin{remark}
@@ -1272,7 +1272,7 @@ need to somehow copy the public key to the server.
 
 If you have physical access to the server, you
 can simply copy the public key to the server
-in the \lstinline|~/.ssh/authorized\_keys| file
+in the \lstinline|~/.ssh/authorized_keys| file
 of the server.
 
 \begin{lstlisting}[language=bash]
@@ -1289,24 +1289,6 @@ $ cat ~/someoneskey.pub >> ~/.ssh/authorized_keys
   operator overwrites the file, we do not want that.
 \end{remark}
 
-\textbf{System Commands Course}
-
-However, in case of our course, you do not have access
-to the server as well. To submit your \textbf{public key},
-you have to login into the website
-\url{https://se2001.ds.study.iitm.ac.in/passwordless}
-using your institute credentials, and then submit
-your public key in the form provided.
-
-You can print out the contents of the public key
-using the \lstinline|cat| command and copy the contents
-into the form.
-
-\begin{lstlisting}[language=bash]
-[test1@rex ~]$ cat .ssh/id_ed25519.pub
-ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDxh5EuvzQkGvsqlMQW3rOkY+wyo+2d6Y5CSqNGlLs2a test1@rex
-\end{lstlisting}
-
 You should copy the entire contents of the file, including
 your username and hostname.
 
@@ -1316,7 +1298,7 @@ You can then login into the server using the \lstinline|ssh|
 command.
 
 \begin{lstlisting}[language=bash]
-$ ssh rollnumber@se2001.ds.study.iitm.ac.in
+$ ssh user@server-domain-or-IP
 \end{lstlisting}
 
 \[
@@ -1324,7 +1306,7 @@ $ ssh rollnumber@se2001.ds.study.iitm.ac.in
 \]
 
 \begin{lstlisting}[language=bash]
-$ ssh -i /path/to/private/key rollnumber@se2001.ds.study.iitm.ac.in
+$ ssh -i /path/to/private/key user@server-domain-or-IP
 \end{lstlisting}
 
 If successful, you will be logged into the server
@@ -1441,7 +1423,7 @@ authorized.
 
 
 \marginnote{
-  I have set the \lstinline|LC\_ALL| environment variable
+  I have set the \lstinline|LC_ALL| environment variable
   to the locale C while generating the
   above outputs to prevent latex errors.
   Ideally if you run the command, you will see
