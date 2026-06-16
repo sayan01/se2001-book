@@ -121,8 +121,8 @@
 
 % Set the default page layout
 \RequirePackage[
-	paperwidth=210\hscale,
-	paperheight=297\vscale,
+	paperwidth=6in, % KDP 6x9 trim
+	paperheight=9in, % KDP 6x9 trim
 ]{geometry}
 
 % Command to choose among the three possible layouts
@@ -137,7 +137,7 @@
 	\newgeometry{
 		top=27.4\vscale,
 		bottom=27.4\vscale,
-		inner=24.8\hscale,
+		inner=0.875in, % KDP gutter (502pp; buffer above 0.75" min)
 		textwidth=107\hscale,
         marginparsep=6.2\hscale,
 		marginparwidth=47.7\hscale,
@@ -150,7 +150,7 @@
 	\newgeometry{
 		top=27.4\vscale,
 		bottom=27.4\vscale,
-		inner=24.8\hscale,
+		inner=0.875in, % KDP gutter (502pp; buffer above 0.75" min)
 		outer=24.8\hscale,
 		marginparsep=0mm,
 		marginparwidth=0mm,
