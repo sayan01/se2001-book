@@ -749,7 +749,7 @@ important tools are listed in \reftab{networktools}.
 \begin{table*}[h!]
   \caption{Network Tools}
   \labtab{networktools}
-  \begin{tabular}{c l}
+  \begin{tabularx}{\linewidth}{c >{\raggedright\arraybackslash}X}
     \toprule
     \textbf{Tool} & \textbf{Description} \\
     \midrule
@@ -764,7 +764,7 @@ important tools are listed in \reftab{networktools}.
     \lstinline|nmap| & Network port scanner \\
     \lstinline|wireshark| & Network protocol analyzer and packet sniffer \\
     \bottomrule
-  \end{tabular}
+  \end{tabularx}
 \end{table*}
 
 \textbf{ip}
@@ -914,7 +914,7 @@ a domain name is the \lstinline|dig| command.
 It can also reverse lookup the IP address to find
 the associated domain name.
 
-\begin{lstlisting}[language=bash]
+\begin{lstlisting}[language=bash, basicstyle=\scriptsize\ttfamily]
 $ dig google.com
 
 ; <<>> DiG 9.18.27 <<>> google.com
@@ -957,7 +957,7 @@ ns1.google.com.		158183	IN	AAAA	2001:4860:4802:32::a
 And we can then feed the IP address to dig again, to find
 the domain name associated with the IP address.
 
-\begin{lstlisting}[language=bash]
+\begin{lstlisting}[language=bash, basicstyle=\scriptsize\ttfamily]
 $ dig -x 172.217.163.206
 
 ; <<>> DiG 9.18.27 <<>> -x 172.217.163.206
@@ -1204,7 +1204,7 @@ have to always enter the passphrase whenever you
 use the key. We can continue without a passphrase
 for now by pressing enter.
 
-\begin{lstlisting}[language=bash]
+\begin{lstlisting}[language=bash, basicstyle=\footnotesize\ttfamily]
 Enter passphrase (empty for no passphrase):
 Enter same passphrase again:
 

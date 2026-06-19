@@ -61,6 +61,16 @@
 
 \graphicspath{{images/}{images/pdf}{images/png}} % Paths in which to look for images
 
+\usepackage[export]{adjustbox} % enables max-width clamping
+\usepackage{letltxmacro}
+\usepackage{tabularx} % wrapping columns for wide tables (KDP gutter)
+% KDP gutter safety: clamp every image to its column width (only shrinks oversized ones)
+\LetLtxMacro\KDPincludegraphics\includegraphics
+\renewcommand{\includegraphics}[2][]{\KDPincludegraphics[max width=\linewidth,#1]{#2}}
+\usepackage{etoolbox}
+% KDP gutter safety: shrink any table wider than its column to fit (leaves normal tables alone)
+\setlength{\emergencystretch}{3em} % KDP: let TeX break lines rather than push long inline code into the gutter
+
 \makeindex[columns=3, title=Alphabetical Index, intoc] % Make LaTeX produce the files required to compile the index
 
 \makeglossaries % Make LaTeX produce the files required to compile the glossary

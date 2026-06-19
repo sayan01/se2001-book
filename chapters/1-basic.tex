@@ -33,7 +33,7 @@ So what is \textbf{Ubuntu}? \textbf{Ubuntu} is one of the many \textit{distribut
   \item
     \textbf{Arch Linux} - A community-driven distribution known for its simplicity and customizability. It is a \textit{rolling release} distribution, which means that it is continuously updated. It is a bare-bones distribution that lets the user decide which packages they want to install.
     \begin{itemize}
-      \item \textbf{Manjaro} - A distribution based on Arch Linux which is known for its user-friendliness. It is a rolling release distribution that is easier to install for new users. It uses a different repository for packages with additional testing.
+      \item \textbf{Manjaro} - A distribution based on Arch Linux which is known for its user friendliness. It is a rolling release distribution that is easier to install for new users. It uses a different repository for packages with additional testing.
       \item \textbf{EndeavourOS} - A distribution based on Arch Linux which is known for its simplicity and minimalism. It is a rolling release distribution that is easier to install for new users. It uses the same repository for packages as \textbf{Arch Linux}.
       \item \textbf{Artix Linux} - It uses the \textbf{OpenRC} init system instead of \textbf{systemd}. It also offers other \textit{init systems} like \textbf{runit}, \textbf{s6}, \textbf{dinit}.
     \end{itemize}
@@ -3157,7 +3157,10 @@ the \lstinline|.| in the directory is 1 link,
 and all the subdirectories have a \lstinline|..| entry pointing to the directory, which is 1 link each.
 
 \[
-  \text{Number of links to a directory} = \text{Number of subdirectories} + 2
+  \begin{aligned}
+    &\text{Number of links to a directory} \\
+    &= \text{Number of subdirectories} + 2
+  \end{aligned}
 \]
 
 This formula always stands because a user cannot create additional hard links to a directory.

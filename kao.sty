@@ -77,7 +77,7 @@
 \@ifclasswith{\@baseclass}{a2paper}{\setlength{\hscale}{2mm}\setlength{\vscale}{2mm}}{}
 \@ifclasswith{\@baseclass}{a3paper}{\setlength{\hscale}{1.414mm}\setlength{\vscale}{1.414mm}}{}
 \@ifclasswith{\@baseclass}{a4paper}{\setlength{\hscale}{1mm}\setlength{\vscale}{1mm}}{}
-\@ifclasswith{\@baseclass}{a5paper}{\setlength{\hscale}{0.704mm}\setlength{\vscale}{0.704mm}}{}
+\@ifclasswith{\@baseclass}{a5paper}{\setlength{\hscale}{6in}\divide\hscale by 210 \setlength{\vscale}{9in}\divide\vscale by 297}{}% KDP: scaled so 210\hscale=6in, 297\vscale=9in (6x9 trim, consistent layout)
 \@ifclasswith{\@baseclass}{a6paper}{\setlength{\hscale}{0.5mm}\setlength{\vscale}{0.5mm}}{}
 \@ifclasswith{\@baseclass}{b0paper}{\setlength{\hscale}{4.761mm}\setlength{\vscale}{4.761mm}}{}
 \@ifclasswith{\@baseclass}{b1paper}{\setlength{\hscale}{3.367mm}\setlength{\vscale}{3.367mm}}{}
@@ -137,7 +137,7 @@
 	\newgeometry{
 		top=27.4\vscale,
 		bottom=27.4\vscale,
-		inner=0.875in, % KDP gutter (502pp; buffer above 0.75" min)
+		inner=29\hscale, % KDP gutter (~0.83in, buffer above 0.75" min)
 		textwidth=107\hscale,
         marginparsep=6.2\hscale,
 		marginparwidth=47.7\hscale,
@@ -150,7 +150,7 @@
 	\newgeometry{
 		top=27.4\vscale,
 		bottom=27.4\vscale,
-		inner=0.875in, % KDP gutter (502pp; buffer above 0.75" min)
+		inner=29\hscale, % KDP gutter (~0.83in, buffer above 0.75" min)
 		outer=24.8\hscale,
 		marginparsep=0mm,
 		marginparwidth=0mm,
@@ -647,7 +647,7 @@
 	\floatsetup[figure]{% Captions for figures
 		margins=hangoutside,% Put captions in the margins
 		facing=yes,%
-		capposition=beside,%
+		capposition=bottom,% KDP: captions below float (margin captions clipped at 6x9 gutter)
 		capbesideposition={bottom,outside},%
 		capbesideframe=yes,%
 		capbesidewidth=\marginparwidth,% Width of the caption equal to the width of the margin
@@ -662,7 +662,7 @@
 	\floatsetup[table]{% Captions for tables
 		margins=hangoutside,% Put captions in the margin
 		facing=yes,%
-		capposition=beside,%
+		capposition=bottom,% KDP: captions below float (margin captions clipped at 6x9 gutter)
 		capbesideposition={top,outside},%
 		%capbesideposition=outside,
 		capbesideframe=yes,%
@@ -682,7 +682,7 @@
 	\floatsetup[lstlisting]{% Captions for lstlistings
 		margins=hangoutside,% Put captions in the margin
 		facing=yes,%
-		capposition=beside,%
+		capposition=bottom,% KDP: captions below float (margin captions clipped at 6x9 gutter)
 		capbesideposition={top,outside},%
 		%capbesideposition=outside,
 		capbesideframe=yes,%
@@ -693,7 +693,7 @@
 	\floatsetup[listing]{% Captions for listings (minted package)
 		margins=hangoutside,% Put captions in the margin
 		facing=yes,%
-		capposition=beside,%
+		capposition=bottom,% KDP: captions below float (margin captions clipped at 6x9 gutter)
 		capbesideposition={top,outside},%
 		%capbesideposition=outside,
 		capbesideframe=yes,%
@@ -702,16 +702,15 @@
 		floatwidth=\textwidth,%Width of the figure equal to the width of the text
 	}%
 	\captionsetup*[lstlisting]{%
-		format=llap,%
+		format=plain,% KDP: was llap (left-overlap into margin), clipped at gutter
 		labelsep=space,%
 		singlelinecheck=no,%
-		belowskip=-0.6cm,%
 	}%
 \else%
 	\floatsetup[figure]{% Captions for figures
 		margins=hangright,% Put captions in the margins
 		facing=yes,%
-		capposition=beside,%
+		capposition=bottom,% KDP: captions below float (margin captions clipped at 6x9 gutter)
 		capbesideposition={bottom,right},%
 		capbesideframe=yes,%
 		capbesidewidth=\marginparwidth,% Width of the caption equal to the width of the margin
@@ -726,7 +725,7 @@
 	\floatsetup[table]{% Captions for tables
 		margins=hangright,% Put captions in the margin
 		facing=yes,%
-		capposition=beside,%
+		capposition=bottom,% KDP: captions below float (margin captions clipped at 6x9 gutter)
 		capbesideposition={top,right},%
 		%capbesideposition=outside,
 		capbesideframe=yes,%
@@ -746,7 +745,7 @@
 	\floatsetup[lstlisting]{% Captions for lstlisting
 		margins=hangright,% Put captions in the margin
 		facing=yes,%
-		capposition=beside,%
+		capposition=bottom,% KDP: captions below float (margin captions clipped at 6x9 gutter)
 		capbesideposition={top,right},%
 		%capbesideposition=outside,
 		capbesideframe=yes,%
@@ -757,7 +756,7 @@
 	\floatsetup[listing]{% Captions for listing (minted package)
 		margins=hangright,% Put captions in the margin
 		facing=yes,%
-		capposition=beside,%
+		capposition=bottom,% KDP: captions below float (margin captions clipped at 6x9 gutter)
 		capbesideposition={top,right},%
 		%capbesideposition=outside,
 		capbesideframe=yes,%
@@ -766,10 +765,9 @@
 		floatwidth=\textwidth,% Width of the figure equal to the width of the text
 	}%
 	\captionsetup*[lstlisting]{%
-		format=llap,%
+		format=plain,% KDP: was llap (left-overlap into margin), clipped at gutter
 		labelsep=space,%
 		singlelinecheck=no,%
-		belowskip=-0.6cm,%
 	}%
 \fi%
 }
@@ -1267,6 +1265,7 @@
 	showtabs=false,
 	numbers=left,
 	numbersep=1em,
+	xleftmargin=1.5em, % keep line numbers inside the text block (KDP gutter)
 	%frame=lines,
 	frame=l,
 	framerule=.7pt,

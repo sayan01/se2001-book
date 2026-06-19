@@ -1068,7 +1068,7 @@ Although both \lstinline|seq| and the \textbf{range expansion} bash syntax have 
 \begin{table*}[h!]
   \caption{Differences between range expansion and seq command}
   \labtab{rangevsseq}
-  \begin{tabular}{l l}
+  \begin{tabularx}{\linewidth}{>{\raggedright\arraybackslash}X >{\raggedright\arraybackslash}X}
     \toprule
     \textbf{Range Expansion} & \textbf{Seq Command} \\
     \midrule
@@ -1079,7 +1079,7 @@ Although both \lstinline|seq| and the \textbf{range expansion} bash syntax have 
     Output is space separated & Output is newline separated \\
     Start range cannot be omitted & Start range is 1 by default \\
     \bottomrule
-  \end{tabular}
+  \end{tabularx}
 \end{table*}
 
 \textbf{Letters:}
@@ -2171,7 +2171,7 @@ In this chapter, we learned about the control flow constructs in bash, and how t
 \begin{table*}[h!]
   \caption{Summary of the bash constructs}
   \labtab{bash-constructs}
-  \begin{tabular}{ll}
+  \begin{tabularx}{\linewidth}{l >{\raggedright\arraybackslash}X}
     \toprule
     \textbf{Construct} & \textbf{Description} \\
     \midrule
@@ -2191,5 +2191,5 @@ In this chapter, we learned about the control flow constructs in bash, and how t
     \lstinline|exec| & Run arbritary commands in the current shell. \\
     \lstinline|getopts| & Parse command line arguments. \\
     \bottomrule
-  \end{tabular}
+  \end{tabularx}
 \end{table*}
