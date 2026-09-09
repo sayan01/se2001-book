@@ -944,7 +944,7 @@ Since sed does not re-process the appended lines in the next cycle, the next lin
 
 \subsection{Join Multiline Strings}
 
-If we have a file where long lines are hard-wrapped using a \lstinline|\\| character at the end of the line, we can use the \lstinline|N| command to join the lines and recreate the real file.
+If we have a file where long lines are hard-wrapped using a \lstinline|\| character at the end of the line, we can use the \lstinline|N| command to join the lines and recreate the real file.
 
 \begin{lstlisting}[language=bash]
 $ cat data
@@ -975,10 +975,10 @@ Like this.
 \end{lstlisting}
 
 In this script, we first are defining a label \lstinline|x|.
-Then we are checking if the line ends with a \lstinline|\\| character.
+Then we are checking if the line ends with a \lstinline|\| character.
 If it does, then we are appending the next line to the pattern space.
-Then we are substituting the \lstinline|\\| and the newline character with an empty string, this joins the word-wrapped lines back.
-Finally, we are branching back to the label \lstinline|x| to check if the current pattern space still has a \lstinline|\\| at the end.
+Then we are substituting the \lstinline|\| and the newline character with an empty string, this joins the word-wrapped lines back.
+Finally, we are branching back to the label \lstinline|x| to check if the current pattern space still has a \lstinline|\| at the end.
 
 There are other ways of performing the same action, such as using \lstinline|t| and \lstinline|P|.
 

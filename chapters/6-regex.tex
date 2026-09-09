@@ -807,7 +807,7 @@ alternation has the lowest precedence, and thus the start of line anchor is not 
 Let us now see a more complex example of alternation similar to previous example of brackets.
 
 \begin{lstlisting}[language=bash]
-$ echo "sometimes (not always) we use parentheses (round brackets) or brackets [square brackets] to clarify some part of a sentence (or phrase)." | grep "([^)]\+)\|\[[^\]\+\]" -o
+$ echo "sometimes (not always) we use parentheses (round brackets) or brackets [square brackets] to clarify some part of a sentence (or phrase)." | grep "([^)]\+)\|\[[^]]\+\]" -o
 (not always)
 (round brackets)
 [square brackets]
